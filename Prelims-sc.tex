@@ -1,0 +1,156 @@
+
+
+
+
+This chapter contains all auxiliary definitions to intoduce  the problem of Verifying  Sequential Consistency as appeared in \cite{gibbons}. Particularly it introduces the problem of interest and the relevant theorems for Part A of the thesis. We later shall explore a variant of the VSC problem under weak memory models in Part B. 
+
+
+\section{Concurrent Programming}
+
+We will fix a finite set $\varset$ of variables (also called memory locations) and a finite value set $\valset$ representing the domain of the variables. There are two kinds of \emph{memory operations}: reading value $d$ on variable $x$, denoted succinctly as $\rd(x, d)$, and writing value $d$ on variable $x$, denoted as $\wt(x, d)$. Let $\opset$ denote the set of memory operations. Since $\varset$ and $\valset$ are finite, $\Sigma$ is finite, and can be seen as a finite alphabet. We make use of standard notations $\Sigma^*$ (resp. $\Sigma^+$) to denote the set of words (resp. non-empty words) from the alphabet $\Sigma$. 
+
+\noindent{\bf{Threads}} A \emph{thread} $\thread$ is a finite (non-empty) sequence of memory operations. In order to distinguish between memory operations appearing in different threads, we equip threads with a unique identifier. Throughout, we assume there are $k$ threads, for some $k \in \nats$, and each thread has an identifier in $\{1, 2, \dots, k\}$. Hence, a thread with identifier $i$ can be seen as a word in $(\{i\} \times \Sigma)^+$. An example of a thread with identifier $2$ would be: 
+\begin{align*}
+(2: \wt(x, 4)) (2: \rd(y, 3)) (2: \rd(x, 1))
+\end{align*}
+where $x, y \in \varset$ and $4, 3, 1 \in \valset$. For convenience of exposition, we will call a pair consisting of an identifier and a memory operation as an \emph{event}. Therefore, each thread is a sequence of events with each of them having the same identifier. Since it is a sequence, there is a natural \emph{program order} associated with the events appearing in a thread.
+
+\smallskip 
+
+\noindent{\bf{Concurrent Programs}} A \emph{concurrent program} $\program$ is given by a set of threads $S_1, \dots, S_k$, with $S_i$ having identifier $i$. Let $\eventset$ be the set of all events appearing in $\prog$.  There is a natural \emph{program order} $\po$ induced on $\eventset$: for $e_1, e_2 \in \eventset$, we say $e_1~\po~e_2$ if $e_1, e_2$ belong to the same thread, and $e_1$ immediately precedes $e_2$ in the thread sequence. An \emph{interleaving} $\inter$ of $\program$ is an enumeration of $\eventset$ such that the program order is maintained. A \emph{partial interleaving} is an interleaving of some subset of $\eventset$. Any interleaving is also a partial interleaving.
+
+
+\smallskip 
+
+\noindent{\bf{Conflicting Pair of Read and Write}} A write $\wt(x,d)$ and a read $\rd(x,d')$ are said to be in conflict when they are on the same variable $x$ 
+and $d \neq d'$. 
+ 
+\section{Sequential Consistency}
+
+The model has been first proposed by \cite{SC-Lamport78}. Under  sequentially consistent memory any write or read operations  involving the memory is immediately visible to all the processes of the program. Also, the execution of events in a thread sequence respects the program order ($\po$).
+Any partial interleaving $\sigma$ is \emph{sequentially consistent} (SC) if for every $\rd(x, d)$ operation appearing in $\sigma$, there is a preceding $\wt(x, d)$ in $\sigma$ with no other writes conflicting with $\rd(x, d)$ in between. Alternatively, in any interleaving, each read observes the value of the last write (in this interleaving) made to the memory location.  
+
+\paragraph*{Verifying Sequential Consistency} Any memory model is  implemented via hardware or software protocols. As the correctness of concurrent  programs depends on the chosen memory model, a faithful implementation of memory models is essential. 
+ Gibbons and Korach~\cite{gibbons} in  \emph{testing shared memories},  presents a way to test whether an observed execution of a multi-threaded program \emph{is consistent with} the (rules of the) underlying memory model. The work by Gibbons and Korach is on SC. 
+Let us recall the probem of verifying sequential consistency (VSC) as given in \cite{gibbons}
+
+\begin{center}
+  \fbox{%
+    \begin{minipage}{0.98\textwidth}
+      \noindent \textsc{\textbf{VSC-problem}: Verifying Sequential Consistency} 
+
+      \medskip
+
+     
+      \noindent \textbf{Instance:} A concurrent program $\program$. 
+
+      \medskip
+
+      \noindent \textbf{Question:} Is there an interleaving of $\program$ which is sequentially consistent?
+    \end{minipage}%
+  }
+\end{center}
+
+The set of sequences $S_1, \dots, S_k$ forms our observed execution. A ``Yes'' answer to the question above indicates that the observed execution admits an SC behaviour, while a ``No'' answer shows the memory implementation can violate sequential consistency.
+
+Gibbons and Korach~\cite{gibbons} established that the VSC problem is $\NP$-complete. It seems exhaustively exploring all exponentially many possible interleavings is unavoidable. Naturally one might try to find some tractable fragmant of the VSC-problem by bounding other parameters of the program like threads or variables. But the problem still remained hard (see Table 1 of [\cite{gibbons}]).
+
+In Part A of this thesis we have studied the problem by restricting the number of preemtions to be allowed in an interleaving. A preemption occurs when the control switches from one  process to another process without completely executing  the former process. The following definition would make the concept clear. 
+
+\noindent{\bf{Preemptions}} Take a concurrent program $\prog = (S_1, \dots, S_k)$. Let $\sigma = a_1 a_2 \dots a_m$, with each $a_j \in \eventset$, be a partial interleaving of $\prog$. We say that a \emph{preemption} occurs at position $j \in \{1, \dots, m-1\}$ if $a_j$ and $a_{j+1}$ belong to different threads, and $a_j$ is not the last event of its thread. For $\pp \in \nats$, we say that $\sigma$ has $\pp$ preemptions if there are exactly $\pi$ positions in $\sigma$ where preemptions occur. Figure~\ref{fig-onewriter-example} shows some examples.
+
+\begin{figure}[h]
+   \def\ystep{0.5}
+
+\centering
+	\scalebox{.7}{
+\begin{tikzpicture}[yscale=1]
+\node (t01) at (-.2, 1.5*\ystep) {$P_1$};
+\node (t02) at (1.5, 1.5*\ystep) {$P_2$};
+\node (t03) at (3.2, 1.5*\ystep) {$P_3$};
+
+
+
+  \node (t11) at (-.2, 0*\ystep) {$1:\wt(x,1)$};
+    \node (t12) at (1.5, 0*\ystep) {$2:\rd(x,2)$};
+  
+    \node (t13) at (3.2, 0*\ystep) {$3:\rd(x,1)$};
+    
+    \node (t21) at (-.2, -2*\ystep) {$1:\wt(x,2)$};
+    \node (t22) at (1.5, -2*\ystep) {$2:\wt(y,1)$}; 
+    
+  
+    
+    
+    \node (t31) at (-.2, -4*\ystep) {$1:\rd(y,1)$};
+   
+ 
+    \draw[po] (t11) -- (t21);
+    \draw[po] (t21) -- (t31); 
+    
+    \draw[po] (t12) -- (t22);
+    \end{tikzpicture}}
+    
+     \caption{The partial interleaving $(1:w(x,1))(3:r(x,1))(1:w(x,2))$ has only one preemption  at $(1:w(x,1))$ while the interleaving $(1:w(x,1))(3:r(x,1))(1:w(x,2)) (2:r(x,2)) (2:w(y,1)) (1:r(y,1))$ has two preemptions at $(1:w(x,1))$ and $(1:w(x,2))$.}\label{fig-onewriter-example}
+     
+\end{figure}
+
+But why shall we bound preemptions?
+
+Empirical evidence showed that several bugs in multithreaded programs can be caught with very
+few preemptions  \cite{QadeerMusuvati}\cite{DBLP:conf/tacas/QadeerR05}   which has resulted in the study of DPOR methods geared
+towards finding interleavings with bounded preemptions \cite{vafaedis}.  
+
+With this motivation let us define the following variation of VSC-problem $\pi$.
+
+ 
+
+\begin{center}
+  \fbox{%
+    \begin{minipage}{0.98\textwidth}
+      \noindent \textsc{\textbf{VSC$^\pp$-problem}: Verifying Sequential Consistency under $\pp$ preemptions} 
+
+      \medskip
+
+      \noindent \textbf{Fixed:} A constant $\pp \in \mathbb{N}\cup\{0\}$
+
+      \medskip 
+
+      \noindent \textbf{Instance:} A concurrent program $\program$. 
+
+      \medskip
+
+      \noindent \textbf{Question:} Is there an interleaving of $\program$ containing at most $\pp$ preemptions which is sequentially consistent?
+    \end{minipage}%
+  }
+\end{center}
+
+The complexity of the above problem differs with the structure of the program. We have classified the programs into \onewriter~, \twowriter~, and \threewriter~ and studied the corresponding complexity.   
+
+\noindent{\bf{Classification of programs}} In our analysis, we classify programs based on the number of threads that write to a variable. A concurrent program is said to be \onewriter\ if for every variable $x$, there is a single thread with write operations of the form $\wt(x, d)$. Multiple threads can have read operations $\rd(x, d)$ though. Similarly, a concurrent program is said to be \twowriter\ (resp. \threewriter) if there are at most two (resp. three) threads with write operations to each variable. Figures~\ref{fig-onewriter-example} and \ref{fig:example-algo} give examples of \onewriter\ programs.
+
+In later chapters we shall show how the  the complexity of VSC$^\pp$ differs based on whether the program of interest is \onewriter{} or \twowriter{} or \threewriter{} and prove the following theorems. 
+
+
+First theorem is a tractable result for VSC$^\pp$ when the progam is  \onewriter{}. Note that the VSC-problem for \onewriter{} was $\np$-hard \cite{gibbons}.
+
+\begin{theorem}\label{th:onewriter} \vscp  admits a polynomial-time solution for \onewriter\ programs.  
+\end{theorem}
+
+The second theorem states that for multiple writers the VSC$^\pp$ problem becomes $\np$-hard.
+
+\begin{theorem}\label{th:NPhardness}
+\vscp is $\NP$-complete, for all $\pi \ge 0$. Hardness holds even for \twowriter\ programs. 
+\end{theorem}
+
+The third result gives a conditional lower bound under the Exponential Time Hypothesis (ETH). ETH states that there is no $2^{o(k)} \cdot (k + m)^{\mathcal{O}(1)}$ algorithm for 3-CNF satisfiability, with $k$ being the number of variables and $m$ the number of clauses. 
+
+\begin{theorem} \label{scFinegrained}\label{th:Finegrained}
+Under ETH, there is no $2^{o(k)} \cdot n^{\mathcal{O}(1)}$ algorithm for \vscp where $k$ is the number of threads, $n$ is the total number of operations.
+\end{theorem}
+
+
+The proofs of all the above theorem constitute of Part A of this thesis. Part B shall deal with the VSC problem through the lense of weak memory model. These memory models may deviate from stringent SC behaviour and allow re-ordering of memory operations to enhance performance. This would lead to more possible interleavings of a concurrent program as was allowed under $\scmm$.
+
+We particularly care about C-11  memory models in this thesis and shall formally define all the axioms along with the C-11 variant of the problem later in Part B. 
+

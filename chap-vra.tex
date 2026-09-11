@@ -1,0 +1,37 @@
+
+The problem of consistency testing asks whether a given observed execution can be consistent with a particular memory model. The $\vm$ problem is an extension of the fundamental VSC-problem introduced by Gibbons and Korach  \cite{gibbons}. Later, Cantin et al.\cite{CantinLS05} proved that the problem remains NP-complete even with a single memory
+location (but with unboundedly many threads) which also implies NP-completness for all memory
+models that adhere to the “SC-per-location” property, such as  RA, SRA and Relaxed.  Charkraborty et al. \cite{ChakrabortyKMP24} asked 'how hard is weak-memory testing?' when the input parameters are bounded. They showed that the complexity of consistency testing for weak memory models including $\ramm$, $\sramm$ and $\wramm$ is NP-hard even when the syntactic parameters like number of threads, variables and values are fixed. The only thing that remained unbounded were the number of events. Does this tells us that there can never be any kind of parameterization?
+
+We now ask similar question but choose a different parameter. We choose to bound the number of threads (writers) writing to a variable. The results show that the problem remains $\NP$-hard for $\twowriter$ but becomes  polynomial for $\onewriter$.  Here is a summarization of the  hardness results for $\ramm$ and its variants.
+
+\begin{itemize}
+\item For \onewriter\ programs, we prove that there is no $\mathcal{O}(n^{\frac{3}{2} - \epsilon})$-time algorithm, under the Boolean Matrix Multiplication (BMM) hypothesis, for any $\epsilon > 0$. 
+\item When we consider \twowriter\ programs (those where each variable is written into by atmost two threads), the problem continues to be $\np$-complete. 
+\item Furthermore, when we consider \threewriter\ programs, the problem admits a conditional lower bound under the Exponential Time Hypothesis (ETH): there is no $2^{o(k)} \cdot n^{\mathcal{O}(1)}$ algorithm, where $k$ is the number of threads, and $n$ is the total number of operations.
+\end{itemize}
+The results provide a tight complexity picture while bounding the number of writer threads per memory location, with \onewriter\ giving polynomial-time, \twowriter\ being $\NP$-hard and \threewriter\ allowing a stronger conditional lower bound. 
+
+
+%\begin{restatable}{theorem}{thmwracorrectness}
+%A partial execution graph $\expartial = \tuple{\E, \po}$ of a one-writer system is consistent for $\ramm$, $\sramm$ and $\wramm$ iff Algorithm~\ref{algo:one-writer-wra} returns $\expartial$ is $\wramm$-consistent. Moreover, the algorithm runs in time $\mathcal{O}(n^3)$ where $n = |E|$ and returns the smallest $\rf$  that is $\wramm$-consistent, if one exists.
+%\end{restatable}
+
+%We also have the following conditional lower bound assuming the Boolean Matrix Multiplication (BMM) hypothesis which states that: There is no $\mathcal{O}(n^{3-\epsilon})$ algorithm for Boolean Matrix Multiplication, for any $\epsilon > 0$. 
+
+%\begin{restatable}{theorem}{thmwracorrectness}
+%A partial execution graph $\expartial = \tuple{\E, \po}$ of a one-writer system is consistent for $\sramm$, $\ramm$ and $\wramm$ iff  Algorithm~\ref{algo:one-writer-wra} returns $\expartial$ is $\wramm$-consistent. Moreover, the algorithm runs in time $\mathcal{O}(n^3)$ where $n = |E|$ and returns the smallest $\rf$  that is $\wramm$-consistent, if one exists.
+%\end{restatable}
+
+%For multiple writers the problem becomes NP-Complete. Infact the problem has a fine grained lower bound if the Exponential Time  Hypothesis is true.
+
+%\begin{theorem}\label{thm:eth-hardness}
+ %   Under ETH, there is no $2^{o(k)} \cdot n^{\mathcal{O}(1)}$ algorithm for the $\vm$-problem with $\MemModel \in \{ \sramm, \ramm, \wramm\}$, $k$ being the number of threads, and $n$ the number of events. The result holds even while restricting the input instance to \threewriter\ execution graphs.
+%\end{theorem}
+
+%\begin{theorem}
+%\label{thm:two-writer-hardness}
+   % The $\vm$ problem is $\NP$-complete for $\MemModel \in \{\sramm, \ramm, \wramm\}$, even when restricted to \twowriter\ execution graphs.
+%\end{theorem}
+
+ This chapter will only have theorems and proofs for $\onewriter$ programs. The other results will be reflected in the next chapter. 

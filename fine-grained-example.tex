@@ -1,0 +1,98 @@
+Table~\ref{tab:example-finegrainedwra} gives an instance of the fine-grained hardness reduction for \threewriter~ and (Figure~\ref{example-Execution-ra}) gives the execution graph for it. The execution graph is constructed for $x_1=1, x_2=0, x_3=0$, a satisfying assignment for $\varphi$. The $\rf$ and $\mo$-edges follow the rule of construction for them given in the reduction we discussed before. The $\rf$ synthesis is as follows:
+\begin{itemize}
+    \item $\tuple{T_{x_1}:\wt(c_1,1)}~\rf~\tuple{T_f:\rd(c_1,1)}$, $\tuple{T_{x_1}:\wt(c_2,1)}~\rf~\tuple{T_f:\rd(c_2,1)}$
+    \item $\tuple{T_1^1:\wt(s_1,2)}~\rf~\tuple{T_f:\rd(s_1,2)}$, $\tuple{T_1^0:\wt(s_1,1)}~\rf~\tuple{T_f:\rd(s_1,1)}$
+    \item $\tuple{T_2^0:\wt(s_2,2)}~\rf~\tuple{T_f:\rd(s_2,2)}$, $\tuple{T_2^1:\wt(s_2,1)}~\rf~\tuple{T_f:\rd(s_2,1)}$
+    \item $\tuple{T_3^0:\wt(s_3,2)}~\rf~\tuple{T_f:\rd(s_3,2)}$, $\tuple{T_3^1:\wt(s_3,1)}~\rf~\tuple{T_f:\rd(s_3,1)}$
+\end{itemize}
+
+All other $\rf$-edges are trivial. They are not reflected in Figure~\ref{example-Execution-ra}. Let us construct the $\mo$-edges.
+\begin{itemize}
+ \item $\tuple{T_1^1:\wt{s_1,2}} \xra{\mo}\allowbreak \tuple{T_1^0:\wt{s_1,1}}$ , $\tuple{T_1^1:\wt{s_1,1}} \xra{\mo}\allowbreak \tuple{T_1^0:\wt{s_1,1}}$
+ 
+ \item $\tuple{T_j^0:\wt{s_j,2}} \xra{\mo}\allowbreak \tuple{T_j^1:\wt{s_j,1}}$, $\tuple{T_j^0:\wt{s_j,1}} \xra{\mo}\allowbreak \tuple{T_j^1:\wt{s_j,1}}$ for $j=2,3$
+ 
+ \item $\tuple{T_{x_j}:\wt{c_1,1}} \xra{\mo}\allowbreak \tuple{T_{x_1}:\wt{c_1,1}}$, $\tuple{T_{x_j}:\wt{c_2,1}} \xra{\mo}\allowbreak \tuple{T_{x_1}:\wt{c_2,1}}$ for $j=1,2$.
+\end{itemize}
+
+Other $\mo$ edges follow the direction of $\po$ and are not explicitly constructed in Figure~\ref{example-Execution-ra}. Note that the resulting execution graph satisfies all the memory axioms of $\sramm$ (Refer Table~\ref{table:ax:models-2}).
+\begin{table}[h]
+    
+\noindent
+\begin{minipage}{0.15\textwidth}
+\centering
+\begin{tabular}{c | c}
+    $T_1^1$ & $T_1^0$ \\
+    $\wt(s_1,1)$~& ~$\wt(s_1,1)$ \\ 
+    $\wt(s_1,2)$~& ~$\wt(s_1,2)$ \\ 
+    $\wt(v_1, 1)$~& ~$\wt(v_1, 0)$ \\
+
+\end{tabular}
+\vspace{.1cm}
+
+\begin{tabular}{c | c}
+    $T_2^1$ & $T_2^0$ \\
+    $\wt(s_2,1)$~& ~$\wt(s_2,1)$ \\ 
+    $\wt(s_2,2)$~& ~$\wt(s_2,2)$ \\ 
+    $\wt(v_2, 1)$~& ~$\wt(v_2, 0)$ \\
+\end{tabular}
+\vspace{.1cm}
+
+\begin{tabular}{c | c}
+    $T_3^1$ & $T_3^0$ \\
+    $\wt(s_3,1)$~& ~$\wt(s_3,1)$ \\ 
+    $\wt(s_3,2)$~& ~$\wt(s_3,2)$ \\ 
+    $\wt(v_3, 1)$~& ~$\wt(v_3, 0)$ \\
+   
+\end{tabular}
+
+\end{minipage}
+\hfill
+\begin{minipage}{0.15\textwidth}
+\centering
+\centering
+\begin{tabular}{c | c}
+    $T_{x_1}$ & $T_{\neg x_1}$ \\
+    $\rd(v_1,1)$ ~& ~$\rd(v_1,0)$ \\ 
+    $\wt(c_1,1)$~ &  \\ 
+    $\wt(c_2, 1)$~&  \\
+
+\end{tabular}
+\vspace{.1cm}
+
+\begin{tabular}{c | c}
+   $T_{x_2}$ & $T_{\neg x_2}$ \\
+    $\rd(v_2,1)$ ~& ~$\rd(v_2,0)$ \\ 
+    $\wt(c_1,1)$~ & ~$\wt(c_2,1)$ \\ 
+    
+\end{tabular}
+\vspace{.1cm}
+
+\begin{tabular}{c | c}
+    $T_{x_3}$ & $T_{\neg x_3}$ \\
+    $\rd(v_3,1)$ ~& ~$\rd(v_3,0)$ \\ 
+    $\wt(c_1,1)$~ & ~$\wt(c_2,1)$ \\ 
+    
+   
+\end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}{0.15\textwidth}
+\centering
+\begin{tabular}{c}
+    $T_f$ \\
+    $\rd(c_1, 1)$ \\
+    $\rd(c_2, 1)$ \\
+    $\rd(s_1, 2)$ \\
+    $\rd(s_1, 1)$ \\
+    $\rd(s_2, 2)$ \\
+    $\rd(s_2, 1)$ \\
+    $\rd(s_3, 2)$ \\
+    $\rd(s_3, 1)$ \\
+
+\end{tabular}
+\end{minipage}
+\vspace{2em}
+\caption{$\varphi=(x_1\lor x_2\lor x_3)\land (x_1 \lor \neg x_2\lor \neg x_3)$}
+    \label{tab:example-finegrainedwra}
+\end{table}

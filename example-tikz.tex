@@ -1,0 +1,164 @@
+\begin{figure*}% 
+\begin{center}
+ \begin{tikzpicture}[scale =1,yscale=2, 
+    op/.style={draw, fill=white, rounded corners, minimum width=1.25cm, minimum height=0.55cm, 
+               inner sep=2pt, font=\small},
+    thread/.style={font=\small\bfseries},
+    >=stealth
+]
+
+% ------------------------------------------------------------
+% First group: T_i^1 and T_i^0
+% ------------------------------------------------------------
+
+% T_1^1 / T_1^0
+\node[thread] (T11) at (0, 0.9) {$T_1^1$};
+\node[thread] (T10) at (2.0, 0.9) {$T_1^0$};
+
+\node[op] (s11a) at (0, 0.2) {$\wt(s_1,1)$};
+\node[op] (s11b) at (0,-0.5) {$\wt(s_1,2)$};
+\node[op] (v11)  at (0,-1.2) {$\wt(v_1,1)$};
+
+\draw[po] (s11a) to (s11b);
+\draw[po] (s11b) to (v11);
+
+
+
+\node[op] (s10a) at (2.0, 0.2) {$\wt(s_1,1)$};
+\node[op] (s10b) at (2.0,-0.5) {$\wt(s_1,2)$};
+\node[op] (v10)  at (2.0,-1.2) {$\wt(v_1,0)$};
+
+\draw[po] (s10a) to (s10b);
+\draw[po] (s10b) to (v10);
+
+\draw[mo] (s11b) to node[above] {$\mo$} (s10a);
+\draw[mo] (s11a) to (s10a);
+
+% T_2^1 / T_2^0
+\node[thread] (T21) at (0,-2.4) {$T_2^1$};
+\node[thread] (T20) at (2.0,-2.4) {$T_2^0$};
+
+\node[op] (s21a) at (0,-3.1) {$\wt(s_2,1)$};
+\node[op] (s21b) at (0,-3.8) {$\wt(s_2,2)$};
+\node[op] (v21)  at (0,-4.5) {$\wt(v_2,1)$};
+
+\draw[po] (s21a) to (s21b);
+\draw[po] (s21b) to (v21);
+
+\node[op] (s20a) at (2.0,-3.1) {$\wt(s_2,1)$};
+\node[op] (s20b) at (2.0,-3.8) {$\wt(s_2,2)$};
+\node[op] (v20)  at (2.0,-4.5) {$\wt(v_2,0)$};
+
+\draw[po] (s20a) to (s20b);
+\draw[po] (s20b) to (v20);
+\draw[mo] (s20b) to node[above] {$\mo$} (s21a);
+\draw[mo] (s20a) to (s21a);
+
+% T_3^1 / T_3^0
+\node[thread] (T31) at (0,-5.7) {$T_3^1$};
+\node[thread] (T30) at (2.0,-5.7) {$T_3^0$};
+
+\node[op] (s31a) at (0,-6.4) {$\wt(s_3,1)$};
+\node[op] (s31b) at (0,-7.1) {$\wt(s_3,2)$};
+\node[op] (v31)  at (0,-7.8) {$\wt(v_3,1)$};
+
+\draw[po] (s31a) to (s31b);
+\draw[po] (s31b) to (v31);
+
+\node[op] (s30a) at (2.0,-6.4) {$\wt(s_3,1)$};
+\node[op] (s30b) at (2.0,-7.1) {$\wt(s_3,2)$};
+\node[op] (v30)  at (2.0,-7.8) {$\wt(v_3,0)$};
+
+\draw[po] (s30a) to (s30b);
+\draw[po] (s30b) to (v30);
+\draw[mo] (s30b) to node[above] {$\mo$} (s31a);
+\draw[mo] (s30a) to (s31a);
+% ------------------------------------------------------------
+% Second group: T_xi and T_not xi
+% ------------------------------------------------------------
+
+% T_x1 / T_not x1
+\node[thread] (Tx1)  at (5.0, 0.9) {$T_{x_1}$};
+\node[thread] (Tnx1) at (7.0, 0.9) {$T_{\neg x_1}$};
+
+\node[op] (rv11) at (5.0,0.2) {$\rd(v_1,1)$};
+\node[op] (c11)  at (5.0,-0.5) {$\wt(c_1,1)$};
+\node[op] (c21)  at (5.0,-1.2) {$\wt(c_2,1)$};
+
+\draw[po] (rv11) to (c11);
+\draw[po] (c11) to (c21);
+
+\node[op] (rv10) at (7.0,0.2) {$\rd(v_1,0)$};
+
+% T_x2 / T_not x2
+\node[thread] (Tx2)  at (5.0,-2.4) {$T_{x_2}$};
+\node[thread] (Tnx2) at (7.0,-2.4) {$T_{\neg x_2}$};
+
+\node[op] (rv21) at (5.0,-3.1) {$\rd(v_2,1)$};
+\node[op] (c12)  at (5.0,-3.8) {$\wt(c_1,1)$};
+
+\draw[po] (rv21) to (c12);
+
+
+\node[op] (rv20) at (7.0,-3.1) {$\rd(v_2,0)$};
+\node[op] (c22)  at (7.0,-3.8) {$\wt(c_2,1)$};
+
+\draw[po] (rv20) to (c22);
+
+% T_x3 / T_not x3
+\node[thread] (Tx3)  at (5.0,-5.7) {$T_{x_3}$};
+\node[thread] (Tnx3) at (7.0,-5.7) {$T_{\neg x_3}$};
+
+\node[op] (rv31) at (5.0,-6.4) {$\rd(v_3,1)$};
+\node[op] (c13)  at (5.0,-7.1) {$\wt(c_1,1)$};
+
+\draw[po] (rv31) to (c13);
+
+\node[op] (rv30) at (7.0,-6.4) {$\rd(v_3,0)$};
+\node[op] (c23)  at (7.0,-7.1) {$\wt(c_2,1)$};
+
+\draw[po] (rv30) to (c23);
+\draw[mo, bend left=45] (c12.west) to (c11);
+\draw[mo, bend left=5] (c22.west) to (c21);
+\draw[mo, bend left=50] (c13.west) to (c11.west);
+\draw[mo, bend right=55] (c23.east) to (c21.east);
+
+% ------------------------------------------------------------
+% Final thread T_f
+% ------------------------------------------------------------
+
+\node[thread] (Tf) at (10.0,0.9) {$T_f$};
+
+\node[op] (fc1) at (10.0,0.2) {$\rd(c_1,1)$};
+\node[op] (fc2) at (10.0,-0.5) {$\rd(c_2,1)$};
+\node[op] (fs12) at (10.0,-1.2) {$\rd(s_1,2)$};
+\node[op] (fs11) at (10.0,-1.9) {$\rd(s_1,1)$};
+\node[op] (fs22) at (10.0,-2.6) {$\rd(s_2,2)$};
+\node[op] (fs21) at (10.0,-3.3) {$\rd(s_2,1)$};
+\node[op] (fs32) at (10.0,-4.0) {$\rd(s_3,2)$};
+\node[op] (fs31) at (10.0,-4.7) {$\rd(s_3,1)$};
+
+%po for Tf
+\draw[po] (fc1) to (fc2);
+\draw[po] (fc2) to (fs12);
+\draw[po] (fs12) to (fs11);
+\draw[po] (fs11) to (fs22);
+\draw[po] (fs22) to (fs21);
+\draw[po] (fs21) to (fs32);
+\draw[po] (fs32) to (fs31);
+
+%rf edges
+
+\draw[rf] (c11) to (fc1);
+\draw[rf] (c21) to (fc2);
+\draw[rf, bend right=8] (s11b) to (fs12);
+\draw[rf, bend right=25] (s10a) to (fs11);
+\draw[rf, bend left=10] (s20b) to (fs22);
+\draw[rf, bend left=10] (s21a) to (fs21);
+\draw[rf, bend left=0] (s30b) to (fs32);
+\draw[rf, bend left=0] (s31a) to (fs31);
+\end{tikzpicture}%
+\end{center}
+\caption{Execution graph for Table~\ref{tab:example-finegrainedwra}:The trivial $\rf$-edges are omitted}
+\label{example-Execution-ra}
+\end{figure*}%

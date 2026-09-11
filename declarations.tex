@@ -1,0 +1,527 @@
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{claim}{Claim}
+\newtheorem{proposition}{Proposition}
+\newtheorem{example}{Example}
+\newcommand\xvar{x}
+\newcommand\yvar{y}
+\newcommand\pb{c}
+\newcommand\varset{{\mathbb X}}
+\newcommand\regset{{\mathcal R}}
+\newcommand\zeroval{0}
+\newcommand\valset{{\mathbb V}}
+\newcommand\threadset{{\mathcal T}}
+\newcommand\procset{{\mathcal T}}
+\newcommand\lbl\ell
+\newcommand\action\lbl
+\newcommand\movesto[1]{\xrightarrow{#1}{}}
+\newcommand\lmovesto[1]{\stackrel{#1}\leadsto}
+\newcommand\runs{{\it Runs}}
+\newcommand\truns{{\it TRuns}}
+\newcommand{\setcomp}[2]{\left\{{#1}\mid {#2}\right\}}
+\newcommand\succof[1]{{\tt succ}\!\left(#1\right)}
+\newcommand\run\rho
+\newcommand\thread{S} 
+\newcommand\program{\mathsf{Prog}}
+\newcommand{\inter}{\rho} 
+\newcommand\hh{h}
+\newcommand\ii{i}
+\newcommand\jj{j}
+\newcommand\kk{k}
+\newcommand\mm{m}
+\newcommand\nn{n}
+\newcommand{\init}{\mathsf{init}}
+\newcommand{\prem}{\mathsf{P}}
+\newcommand{\unn}{\mathsf{U}}
+\newcommand{\subb}{\mathsf{Sub}}
+
+\newcommand{\pp}{\pi} 
+\newcommand{\vscp}{\textsf{VSC}$^\pp$}
+\newcommand{\points}{\mathcal{P}}
+\newcommand{\opset}{\Sigma}
+\newcommand{\eventset}{\Sigma_{\program}}
+\newcommand{\enabled}{\mathsf{Enabled}}
+\newcommand{\cgraph}{\mathsf{ConflictGraph}}
+
+\newcommand{\gord}{G^{\mathsf{ord}}}
+%% Colors
+
+\colorlet{colorPO}{darkgray!80!black}
+\colorlet{colorRF}{blue}
+\colorlet{colorOB}{orange}
+\colorlet{colorCO}{red!80!black}
+\colorlet{colorMO}{red!80!black}
+\colorlet{colorFR}{olive}
+\colorlet{colorECO}{orange}
+\colorlet{colorCOM}{magenta}
+\colorlet{colorSW}{teal}
+\colorlet{colorHB}{green!40!black}
+\colorlet{colorPPO}{magenta}
+\colorlet{colorRSEQ}{green!40!black}
+\colorlet{colorSC}{violet}
+\colorlet{colorHBMO}{brown}
+\colorlet{colorPSC}{violet}
+\colorlet{colorREL}{olive}
+\colorlet{colorWB}{olive}
+\colorlet{colorRMW}{brown}
+\newcommand\prog{{\mathcal P}}
+\newcommand\memmodel{{\mathcal M}}
+\newcommand\conf\gamma
+\newcommand\terminatedconf{\conf_\downarrow}
+
+\tikzset{
+   every path/.style={>=stealth},
+   po/.style={->,draw=colorPO,shorten >=-0.5mm,shorten <=-0.5mm},
+   ppo/.style={->,draw=colorPPO,shorten >=-0.5mm,shorten <=-0.5mm},
+   sw/.style={->,draw=colorSW,shorten >=-0.5mm,shorten <=-0.5mm},
+   rf/.style={->,draw=colorRF,dashed,shorten >=-0.5mm,shorten <=-0.5mm},
+   mo/.style={->, draw=colorMO,dotted,shorten >=-0.5mm,shorten <=-0.5mm},
+    mrf/.style={->,draw=colorRF,dashed,shorten >=-0.5mm,shorten <=-0.5mm},   
+   urf/.style={->,draw=colorRF,shorten >=-0.5mm,shorten <=-0.5mm},
+   fr/.style={->,draw=colorFR,dashed,shorten >=-0.5mm,shorten <=-0.5mm},
+   hb/.style={->,draw=colorHB,thick,shorten >=-0.5mm,shorten <=-0.5mm},
+   co/.style={->,draw=colorCO,dotted,very thick,shorten >=-0.5mm,shorten <=-0.5mm},
+   rmw/.style={->,draw=colorRMW,thick,shorten >=-0.5mm,shorten <=-0.5mm},
+   rseq/.style={->,draw=colorRSEQ,thick,dotted,shorten >=-0.5mm,shorten <=-0.5mm},
+   com/.style={->,draw=colorCOM,thick,shorten >=-0.5mm,shorten <=-0.5mm},
+}
+
+\newcommand\inarr[1]{\begin{array}{@{}l@{}}#1\end{array}}
+\newcommand\inarrC[1]{\begin{array}{@{}c@{}}#1\end{array}}
+\newcommand\inpar[1]{\left(\begin{array}{@{}l@{}}#1\end{array}\right)}
+\newcommand\inparII[2]{\begin{array}{@{}l@{~~}||@{~~}l@{}}\inarr{#1}&\inarr{#2}\end{array}}
+\newcommand\inparIII[3]{\begin{array}{@{}l@{~~}||@{~~}l@{~~}||@{~~}l@{}}\inarr{#1}&\inarr{#2}&\inarr{#3}\end{array}}
+\newcommand\inparIV[4]{\begin{array}{@{}l@{~~}||@{~~}l@{~~}||@{~~}l@{~~}||@{~~}l@{}}
+\inarr{#1}&\inarr{#2}&\inarr{#3}&\inarr{#4}\end{array}}
+\newcommand\inparV[5]{\begin{array}{@{}l@{~~}||@{~~}l@{~~}||@{~~}l@{~~}||@{~~}l@{~~}||@{~~}l@{}}
+\inarr{#1}&\inarr{#2}&\inarr{#3}&\inarr{#4}&\inarr{#5}\end{array}}
+\newcommand\mytag[1]{\tag{\textsf{#1}}}
+\newcommand\inparVI[6]{\begin{array}{@{}l@{~~}||@{~~}l@{~~}||@{~~}l@{~~}||@{~~}l@{~~}||@{~~}l@{~~}||@{~~}l@{}}
+\inarr{#1}&\inarr{#2}&\inarr{#3}&\inarr{#4}&\inarr{#5}&\inarr{#6}\end{array}}
+
+%% Math
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\setpred}[2]{\{#1 \,|\, #2\}}
+\newcommand{\tup}[1]{\langle#1\rangle}
+\newcommand{\acyclic}{\mathsf{acyclic}}
+\newcommand{\dom}{\mathsf{dom}}
+\newcommand{\codom}{\mathsf{codom}}
+\newcommand{\imm}{\mathsf{imm}}
+\renewcommand{\emptyset}{\varnothing}
+\newcommand{\nats}{\mathbb{N}}
+
+%% common events and relations
+\newcommand{\R}{\mathsf{R}}
+\newcommand{\W}{\mathsf{W}}
+\newcommand{\E}{\mathsf{E}}
+\newcommand{\F}{\mathsf{F}}
+\newcommand{\RMW}{\mathsf{RMW}}
+\newcommand{\phase}{\mathsf{phase}}
+
+
+
+\newcommand{\RRMW} {\R\cup\RMW}
+
+\newcommand{\WRMW} {\W\cup\RMW}
+
+
+%% C11
+
+\newcommand{\scmm}{\mathsf{SC}}
+\newcommand{\wramm}{\mathsf{WRA}}
+\newcommand{\ramm}{\mathsf{RA}}
+\newcommand{\rlxmm}{\mathsf{Relaxed}}
+\newcommand{\sramm}{\mathsf{SRA}}
+\newcommand{\rcmm}{\mathsf{RC20}}
+\newcommand{\psmm}{\mathsf{PS}}
+\newcommand{\cmmm}{\mathsf{CM}}
+\newcommand{\ccmm}{\mathsf{CC}}
+\newcommand{\cvmm}{\mathsf{CCv}}
+\newcommand{\ctmm}{\mathsf{C11tester}}
+\newcommand{\mmorder}{\preccurlyeq}
+%
+
+\newcommand{\MOna}{\textsc{na}}
+\newcommand{\MOrlx}{\textsc{rlx}}
+\newcommand{\MOacq}{\textsc{acq}}
+\newcommand{\MOcon}{\textsc{con}}
+\newcommand{\MOacqrel}{\textsc{acq-rel}}
+\newcommand{\MOacqrlx}{\textsc{acq-rlx}}
+\newcommand{\MOrlxrel}{\textsc{rlx-rel}}
+\newcommand{\MOrlxrlx}{\textsc{rlx-rlx}}
+\newcommand{\MOrel}{\textsc{rel}}
+\newcommand{\MOsc}{\textsc{sc}}
+\newcommand\oRna   {\mathsf{R}_{\MOna}}
+\newcommand\oRrlx  {\mathsf{R}_{\MOrlx}}
+\newcommand\oRacq  {\mathsf{R}_{\MOacq}}
+\newcommand\oRsc   {\mathsf{R}_{\MOsc}}
+\newcommand\oRacqsc {\mathsf{R}_{\sqsupseteq\MOacq}}
+\newcommand\oWna  {\mathsf{W}_{\MOna}}
+\newcommand\oWrlx  {\mathsf{W}_{\MOrlx}}
+\newcommand\oWrel  {\mathsf{W}_{\MOrel}}
+\newcommand\oWsc   {\mathsf{W}_{\MOsc}}
+\newcommand\oWrelsc {\mathsf{W}_{\sqsupseteq\MOrel}}
+\newcommand\Facq{\mathsf{F}_{\MOacq}}
+\newcommand\Frel{\mathsf{F}_{\MOrel}}
+\newcommand\oCAS{\mathsf{CAS}}
+\newcommand{\tuple}[1]{\left\langle#1\right\rangle}
+\newcommand{\tuplee}[1]{\left\langle#1\right\rangle}
+
+
+%% Relations
+\newcommand{\po}{\mathsf{\color{colorPO}po}}
+\newcommand{\poloc}{\mathsf{\color{colorPO}poloc}}
+\newcommand{\rf}{\mathsf{\color{colorRF}rf}}
+\newcommand{\rfinv}{\rf^{-1}}
+\newcommand{\rv}{\mathsf{\color{colorRF}rv}}
+%\newcommand{\co}{\mathsf{\color{colorCO}co}}
+\newcommand{\eco}{\mathsf{\color{colorECO}eco}}
+\newcommand{\mo}{\mathsf{\color{colorMO}mo}}
+\newcommand{\mopartial}{\overline{\mo}}
+\newcommand{\frpartial}{\overline{\fr}}
+\newcommand{\rfpartial}{\overline{\rf}}
+\newcommand{\co}{\mathsf{\color{colorMO}mo}}
+\newcommand{\fr}{\mathsf{\color{colorFR}fr}}
+
+\newcommand{\SC}{\mathsf{\color{colorSC}sc}}
+\newcommand{\hb}{\mathsf{\color{colorHB}hb}}
+\newcommand{\hbloc}{\mathsf{\color{colorHB}hbvar}}
+\newcommand{\rfe}{\mathsf{\color{colorRF}rfe}}
+\newcommand{\coe}{\mathsf{\color{colorCO}coe}}
+\newcommand{\fre}{\mathsf{\color{colorFR}fre}}
+\newcommand{\hbmo}{\mathsf{\color{colorHBMO}hbmo}}
+\newcommand{\wb}{\mathsf{\color{colorWB}wb}}
+\newcommand{\sw}{\mathsf{\color{colorSW}sw}}
+\newcommand{\rfi}{\mathsf{\color{colorRF}rfi}}
+\newcommand{\coi}{\mathsf{\color{colorCO}coi}}
+\newcommand{\fri}{\mathsf{\color{colorFR}fri}}
+\newcommand\rloc[1]{{{#1}|_\lloc}}
+\newcommand\locx[1]{{{#1}_{x}}}
+\newcommand{\ob}[1]{\mathsf{{\color{colorOB}ob}_{#1}}}
+
+%% Program constructs and constants
+\newcommand{\bfalse}{\mathsf{false}}
+\newcommand{\btrue}{\mathsf{true}}
+\newcommand{\Cif}{\mathbf{if}}
+\newcommand{\Celse}{\mathbf{else}}
+\newcommand{\Cwhile}{\mathbf{while}}
+\newcommand{\Cassert}{\mathbf{assert}}
+\newcommand{\nw}{\mathbf{new}}
+\newcommand{\nul}{\mathbf{NULL}}
+
+\newcommand{\irr}{\mathsf{irr}}
+\newcommand{\acy}{\mathsf{acy}}
+
+%% Events and Execution
+\newcommand{\op}{\mathsf{op}}
+\newcommand{\tid}{\mathsf{tid}}
+\newcommand{\event}{e}
+\newcommand{\id}{\mathsf{id}}
+\newcommand{\llab}{\mathsf{lab}}
+\newcommand{\lloc}{\mathsf{var}}
+\newcommand{\ord}{\mathsf{ord}}
+\newcommand{\val}{\mathsf{val}}
+\newcommand{\bottom}{\perp}
+\newcommand{\rd}{\mathtt{r}}
+\newcommand{\wt}{\mathtt{w}}
+\newcommand{\fence}{\mathtt{fence}}
+\newcommand{\ud}{\mathtt{rmw}}
+\newcommand{\rmw}{\ud}
+\newcommand{\fnc}{\mathtt{F}}
+\newcommand{\ex}{\mathsf{\color{black}X}}
+\newcommand{\partialtext}{\mathsf{partial}}
+\newcommand{\expartial}{\overline{\ex}}
+\newcommand{\chainid}{\mathsf{chainId}}
+\newcommand{\chainhead}{\mathsf{chainHead}}
+\newcommand{\ypartial}{\overline{\mathsf{\color{black}Y}}}
+
+%% Complexity
+\newcommand{\WComplexity}[1]{\mathcal{W}[#1]}
+\newcommand{\NP}{\mathsf{NP}}
+\newcommand{\poly}[1]{\text{poly}(#1)}
+\newcommand{\NumEvents}{n}
+\newcommand{\NumMemory}{d}
+\newcommand{\NumThreads}{k}
+
+%% Comments
+
+% PS 
+
+\newcommand\fulfill{\mathsf{fulfill}}
+
+\newcommand{\Path}{\rightsquigarrow}
+\newcommand\mapto{\mathsf{mapsTo}}
+\newcommand\wtomsg{\mathbb{W}}
+\newcommand\rmsg{\mathsf{rmsg}}
+\newcommand\wmsg{\mathsf{wmsg}}
+\newcommand\ptoe{\mathsf{P2E}}
+\newcommand\stepptoe{\mathsf{T}}
+\newcommand\stateptoe{\mathbb{S}}
+\newcommand\simurel{\mathbb{S}}
+\newcommand\gstep{\mathsf{Gstep}}
+\newcommand\TS{TS}
+\newcommand{\ts}{\mathsf{TS}}
+\newcommand\promises{\mathsf{P}}
+\newcommand\promise{\mathsf{promise}}
+\newcommand\MS{\mathsf{MS}}
+\newcommand\TSmap{\mathcal{T\!S}}
+\newcommand\M{\mathsf{M}}
+\newcommand\TM{\mathsf{TM}}
+
+\newcommand\wmap{\mathbb{W}}
+
+\newcommand\timestamp{\mathsf{ts}}
+\newcommand\mbbp{\mathbb{P}}
+\newcommand\maxmsg{\mathsf{maxmsg}}
+
+
+
+\newcommand\np{\mathsf{NP}}
+
+\newcommand\promisem{\textsc{promise}}
+
+\newcommand\scal{\mathcal{S}}
+\newcommand\N{\mathsf{N}}
+
+\newcommand\sstate{\mathsf{state}}
+
+\newcommand\future{\mathsf{future}}
+\newcommand\silent{\mathsf{silent}}
+
+\newcommand\allbold[1]{{\boldmath\textbf{#1}}}
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+\newcommand{\MemModel}{\mathcal{M}}
+\newcommand{\cg}{\mathsf{CG}}
+
+\newcommand{\celeventester}{\textsf{C11Tester}\xspace}
+\newcommand{\Trust}{\textsf{TruSt}\xspace}
+\newcommand{\bname}[1]{\textsf{#1}}
+
+% experiments
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+\node[shape=circle,draw=colorMO,inner sep=2pt] (char) {\tiny{\textcolor{colorMO}{\textbf{#1}}}};}}
+\newcommand{\maxspeedup}{$99.3$}
+\newcommand{\avgspeedup}{$13.9$}
+\newcommand{\expsetone}{\textsf{S1}\xspace}
+\newcommand{\expsettwo}{\textsf{S2}\xspace}
+\newcommand{\crefrangeconjunction}{-}
+
+
+\newcommand{\tsomm}{\mathsf{TSO}}
+\newcommand{\psomm}{\mathsf{PSO}}
+\newcommand{\powermm}{\mathsf{POWER}}
+
+
+
+
+
+\newcommand{\finegrained}{\mathsf{Fine-grained}}
+
+\newcommand{\Sel}{\mathsf{Sel}}
+\newcommand{\Checker}{\mathsf{Checker}}
+\newcommand{\BB}{\mathsf{B}}
+\newcommand{\Start}{\mathsf{Start}}
+\newcommand{\Finish}{\mathsf{Finish}}
+
+
+\newcommand{\w}{\mathsf{write}}
+\newcommand{\re}{\mathsf{read}}
+\newcommand{\Ins}{\operatorname{Ins}}
+%variable
+\newcommand{\var}{\operatorname{var}}
+%execution
+\newcommand{\Execution}{\mathsf{E}}
+
+%relations and colours
+
+\newcommand{\gw}{\text{GoodW}}
+
+
+%operations
+\newcommand{\plus}{\raisebox{.5\height}{\scalebox{.6}{+}}}
+
+\newcommand{\xra}{\xrightarrow}
+
+
+\newcommand{\Prog}{\mathsf{Prog}}
+\newcommand{\Pp}{\mathcal{P}}
+%process
+\newcommand{\Proc}{\mathsf{Proc}}
+%process name
+\newcommand{\process}{\mathsf{P}}
+%rf relation set
+\newcommand{\relationset}{\mathsf{R}}
+\newcommand{\rfFunc}[0]{\mathsf{R_F}}
+\newcommand{\Gg}{\mathcal{G}}
+\newcommand{\RF}{\mathsf{RF}}
+\newcommand{\LW}{\mathsf{LW}}
+\newcommand{\TC}{\mathbb{TC}}
+\newcommand{\PC}{\mathbb{PC}}
+\newcommand{\HB}{\mathbb{HB}}
+\newcommand{\THB}{\mathbb{THB}}
+\newcommand{\Hh}{\mathbb{H}}
+\newcommand{\PO}{\mathsf{PO}}
+
+\newcommand{\LRFH}{\mathbb{LRFH}}
+\newcommand{\LRFArr}{\mathsf{LRF}}
+\newcommand{\SW}{\mathbb{SW}}
+\newcommand{\Uu}{\mathsf{RMW}_{\mathsf{sw}}}
+\newcommand{\LWB}{\mathsf{LWB}}
+\newcommand{\LRB}{\mathsf{LRB}}
+\newcommand{\glw}{\textsf{lastWriteBefore}}
+\newcommand{\glwv}{\textsf{lastWriteVBefore}}
+\newcommand{\gfwv}{\textsf{firstWriteVAfter}}
+\newcommand{\glr}{\textsf{lastReadBefore}}
+\newcommand{\glrelw}{\textsf{lastRELWBefore}}
+\newcommand{\glrelf}{\textsf{lastRELFBefore}}
+\newcommand{\toprfchain}{\textsf{topOfWRfChain}}
+\newcommand{\HBMO}{\mathsf{HBMO}}
+\newcommand{\PHBMO}{\mathsf{PredHBMO}}
+\newcommand{\hbt}{\mathsf{HB}}
+\newcommand{\lwbhb}{\mathsf{lastWriteBeforeHB}}
+\newcommand{\fwahb}{\mathsf{firstWriteVAfterHB}}
+
+\newcommand{\AcqLst}{\mathsf{CSHist}}
+\newcommand{\AccLst}{\mathsf{AccessHist}}
+\newcommand{\RdLst}{\mathbb{RList}}
+\newcommand{\WtLst}{\mathbb{WList}}
+
+\newcommand{\mx}{\sqcup}
+\newcommand{\cle}{\sqsubseteq}
+\newcommand{\Cc}{\mathbb{C}}
+\newcommand{\CC}{\mathsf{C}}
+
+\newcommand{\Ii}{\mathbb{I}}
+\newcommand{\gId}{\mathbbm{g}}
+\newcommand{\lastGID}{\gId\mathsf{\_max}}
+\newcommand{\lastRelTime}{\mathsf{RelTime\_max}}
+\newcommand{\exec}{\mathsf{exec}}
+\newcommand{\view}[3]{{#1}_{#2}^{#3}}
+\newcommand{\last}{\mathsf{readable}}
+
+\newcommand{\krish}[1]{\textcolor{blue!80!green}{K:#1}}
+\newcommand{\sanch}[1]{\textcolor{red!50!black}{SS:#1}}
+
+%%%%%% Macros for algorithms %%%%%%%%
+\SetKwProg{myfun}{function}{}{}
+\SetKwProg{myhandler}{handler}{}{}
+\SetKwFunction{init}{Initialization}
+\SetKwFunction{getLW}{getLastWriteBeforeOffline}
+\SetKwFunction{poprop}{poPropagate}
+\SetKwFunction{joinchangedindex}{pairwiseMaxIndexes}
+\SetKwFunction{getLWB}{getLastWriteBefore}
+\SetKwFunction{getLRB}{getLastReadBefore}
+\SetKwFunction{getLRWB}{getLastReadWriteBefore}
+\SetKwFunction{initWtLst}{initWtLst}
+\SetKwFunction{initRdLst}{initRdLst}
+\SetKwFunction{initWtRdLst}{initWtRdLst}
+\SetKwFunction{get}{get}
+\SetKwFunction{getHBTS}{getHBTimestamps}
+\SetKwFunction{getTCPC}{getTopAndPositionInRFChain}
+\SetKwFunction{checkRace}{checkRace}
+\SetKwFunction{rdhandler}{readHandler}
+\SetKwFunction{wthandler}{writeHandler}
+\SetKwFunction{acqhandler}{acquire}
+\SetKwFunction{relhandler}{release}
+\SetKwInput{Input}{Input}
+\SetKwInOut{Output}{Output}
+\SetKw{Let}{let}
+\SetKw{Break}{break}
+\SetKw{NOT}{not}
+\SetKw{declare}{declare}
+\SetKw{exit}{exit}
+\SetKw{Continue}{continue}
+\SetKw{Return}{return}
+\SetKwFor{Foreach}{for each}{}{}%
+\DontPrintSemicolon
+\newcommand\mycommfont[1]{\footnotesize\ttfamily\textcolor{blue}{#1}}
+\SetCommentSty{mycommfont}
+\SetNoFillComment
+
+\def\WCoh{write-coherence}
+\def\SWCoh{strong-write-coherence}
+\def\RCoh{read-coherence}
+\def\WRCoh{weak-read-coherence}
+\def\RlxWCoh{relaxed-write-coherence}
+\def\RlxRCoh{relaxed-read-coherence}
+\def\PORF{porf-acyclicity}
+\def\OB{ob-acyclicity}
+\def\atomi{atomicity}
+
+\tikzset{
+   every path/.style={>=stealth},
+   po/.style={->,color=colorPO, thick},
+   ppo/.style={->,color=colorPPO, thick},
+   sw/.style={->,color=colorSW, thick},
+   rf/.style={->,color=colorRF,dashed, thick},
+   mrf/.style={->,color=colorRF,dashed, thick},   
+   urf/.style={->,color=colorRF, thick},
+   fr/.style={->,color=colorFR,dashed, thick},
+   hb/.style={->,color=colorHB,thick, thick},
+   mo/.style={->,color=colorMO,dotted, very thick},
+   dob/.style={->,color=colorDOB, very thick},
+   ob/.style={->,color=colorOB, very thick},
+   rmw/.style={->,color=colorRMW,thick, thick},
+   rseq/.style={->,color=colorRSEQ,thick,dotted, thick},
+   com/.style={->,color=colorCOM,thick, thick},
+}
+\newcommand\initeventset{\E_{\it init}}
+\newcommand\initof[1]{\init_{#1}}
+\newcommand\initx{\initof\xvar}
+\newcommand{\veryshortarrow}[1][3pt]{\mathrel{%
+   \hbox{\rule[\dimexpr\fontdimen22\textfont2-.2pt\relax]{#1}{.4pt}}%
+   \mkern-4mu\hbox{\usefont{U}{lasy}{m}{n}\symbol{41}}}}
+
+
+\makeatletter
+\newcommand{\labitem}[2]{%
+\def\@itemlabel{\textbf{#1}}
+\item
+\def\@currentlabel{#1}\label{#2}}
+\makeatother
+
+
+
+\newcommand{\Init}{\mathsf{Init}}
+\newcommand{\Fin}{\mathsf{Fin}}
+
+
+
+%Single Writer
+
+\SetKwFunction{ChCon}{CheckConsistency}
+\SetKwFunction{ChPCon}{CheckPreemptionBoundedConsistency}
+\SetKwComment{Comment}{/* }{ */}
+\SetKwFunction{Explore}{Explore}
+\SetKwFunction{ExploreSC}{ExploreSC}
+\SetKwFunction{enable}{EnableEvent}
+\SetKwFunction{enableth}{EnableThread}
+\SetKwFunction{enablethsc}{EnableThreadSC}
+\SetKwFunction{buildgraph}{BuildGraph}
+\SetKwProg{Fn}{Function}{:}{}
+\newcommand{\pid}[1]{pc_{#1}}
+\newcommand{\vu}[2]{Pointer_{#2}^{#1}}
+\newcommand{\writer}[1]{\mathsf{Writer}(#1)}
+\newcommand{\thr}[1]{#1.thread}
+\newcommand{\eventid}[1]{#1.id}
+\newcommand{\evar}[1]{#1.var}
+\newcommand{\eval}[1]{#1.val}
+\newcommand{\AND}{\textbf{and}}
+\newcommand{\OR}{\textbf{or}}
+\newcommand{\src}[1]{\rf(#1)}
+\newcommand{\CheckConsistency}{\textbf{CheckConsistencyRF}}
+\newcommand{\rval}[1]{#1.val_{rd}}
+\newcommand{\wval}[1]{#1.val_{w}}
+\newcommand{\wlast}{\mathsf{Last}}
+
+
+\newcommand{\threewriter}{\textsc{3-Writer}}
+\newcommand{\twowriter}{\textsc{2-Writer}}
+\newcommand{\onewriter}{\textsc{1-Writer}}
+
+
+\newcommand{\update}{\mathsf{Update}}
+\newcommand{\Initialize}{\mathsf{Initialize}}
+\newcommand{\CheckC}{\mathsf{CheckConsistency}}

@@ -1,0 +1,253 @@
+\section{$\rlxmm$ Memory Model}
+\label{app:relaxed}
+In this appendix we study the complexity of the $\vm$- problem for the `relaxed' fragment of C-11. Relaxed model satisfy the coherence axioms: \RlxRCoh{} and \RlxWCoh{} (Table~\ref{table:ax:models-2-app}). Essentially all $\hb$'s in \WRCoh{} and \WCoh{} are replaced by $\po$. For better unerstanding, Figure~\ref{fig:relaxed-illust-app} shows instances for violation of the relaxed axioms. For the stronger variation of the relaxed model, $\rlxmm$-Acyclic we have the extra requirement of  \PORF{}.  The overview of this section is as follows:
+\begin{itemize}
+ \item Appendix~\ref{sec-onewriter-relaxed} gives a  polynomial time algortihm for the $\vm$-problem restricted to  \onewriter~ under $\rlxmm$-Acyclic memory model.
+ 
+ \item Appendix~\ref{sec:finegrained-relaxed} gives a conditional lower bound for the $\vm$-problem  under ETH for \threewriter.
+ 
+ \item Appendix~\ref{sec:np-relaxed} shows that the $\vm$-problem restricted to \twowriter~ is NP-hard
+\end{itemize}
+
+
+
+\begin{table}
+    \caption{\small Coherence Axioms for $\rlxmm$-Acyclic variant of C11}
+    \label{table:ax:models-2-app}
+    \centering
+    %\small
+    \begin{tabular}{lr}
+   % \multicolumn{2}{c}{\underline{Release-Acquire}} \\
+    %$\irr(\mo_x;\hb)$ & (\WCoh{})\\
+    %$\acy(\hb \cup \mo)$ & (\SWCoh{})\\
+    %$\irr(\rf^{-1};\mo_x;\hb)$ & (\RCoh{})\\
+    %$\irr(\hb_x;[\W];\hb_x;\rf^{-1})$ & (\WRCoh{})\\
+    %\hline
+    \multicolumn{2}{c}{\underline{Relaxed-Acyclic}} \\
+    $\irr(\po\cup\rf)$ & (\PORF{})\\
+    $\irr(\mo_x;\po)$ & (\RlxWCoh{})\\
+    $\irr(\rf^{-1};\mo_x;\rf^?;\po)$ & (\RlxRCoh{})\\
+    \end{tabular}
+\end{table}
+
+\iffalse
+\begin{table}
+     \caption{\small The C11 models $\wramm, \ramm, \sramm, \rlxmm$.}
+    \label{table:ax:models-2-app}
+     
+        \setlength\tabcolsep{7.5pt}
+      \begin{tabular}{lr|lr}
+      \multicolumn{2}{l|}{} & \multicolumn{2}{l}{} \\
+      $\wramm$ & \makecell{\PORF{}\\ \WRCoh{}} &$\rlxmm$ & \makecell{\PORF{}\\ \RlxRCoh\\ \RlxWCoh} \\ 
+      \hline
+      $\ramm$ & \makecell{\PORF{} \\
+      \WCoh{}\\ \RCoh{}}   &$\sramm$ & \makecell{\PORF{}\\ \SWCoh{}\\ \RCoh{}}\\ 
+      \cline{1-4}
+      %$\sramm$ & \makecell{\SWCoh{}\\ \RCoh{}} & & \\ 
+      \end{tabular}
+          
+  \end{table}
+\fi
+ \begin{figure}[t]
+    \def\ystep{0.4}
+    \centering
+     \resizebox{0.5\textwidth}{!}{
+	\begin{tikzpicture}[yscale=1]
+	
+      \node (t11) at (12.3,0*\ystep)  {$\wt_1(x)$};
+      \node (t12) at (12.3,-4*\ystep) {$\wt_2(x)$};
+      \node (t0) at (12.3,-5*\ystep) {$(a)$};
+      \draw[mo] (t12) to[bend left=45] node[left]{$\mo$} (t11);
+    %  \draw[po] (t12) to (t13);
+    %  
+      \draw[po] (t11) to (t12);
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     \node (t11) at (16.3,0*\ystep)  {$\wt_1(x)$};
+      \node (t12) at (16.3,-4*\ystep) {$\wt_2(x)$};
+    %  \node (t13) at (0,-4.5*\ystep) {$\rd(x)$};
+    %
+      \node (t21) at (18.1,0*\ystep) {$\rd_2(x)$};
+      \node (t22) at (18.1,-4*\ystep) {$\rd_1(x)$};
+      \node (t1) at (17.2,-5*\ystep) {$(b)$};
+    %
+      \draw[mo] (t11) to node[left]{$\mo$} (t12);
+    %  \draw[po] (t12) to (t13);
+    %  
+      \draw[po] (t21) to (t22);
+    %  \draw[po] (t22) to (t23);
+    %
+    %  \draw[rf,bend left=0] (t11) to node[below,pos=0.9, sloped]{$\rf$} (t23);
+    %  \draw[rf,bend right=0] (t21) to node[below,pos=0.9, sloped]{$\rf$} (t13);
+    %    
+      \draw[rf,bend left=0] (t12) to node[above, pos=.8, sloped]{$\rf$}(t21);
+      \draw[rf,bend right=0] (t11) to node[below,pos=0.8, sloped]{$\rf$} (t22);
+    
+    \end{tikzpicture}
+	 }
+    \caption{Violation of (a)~\RlxWCoh:$\wt_2(x)~\mo~\wt_1(x), \wt_1(x)~\po~\wt_2(x)$ (b)~\RlxRCoh{}: $\wt_1(x)~\mo~\wt_2(x)$, $\rd_2(x)~\po~\rd_1(x)$ 
+      with $\wt_2(x)~\rf~\rd_2(x)$ and $\wt_1(x)~\rf~\rd_1(x)$.}
+      \label{fig:relaxed-illust-app}
+\end{figure}
+
+
+
+\subsection{Polynomial Time for \onewriter\ systems}\label{sec-onewriter-relaxed}
+Here we give a polynomial time algorithm for solving  the $\vm$-problem for \onewriter~ under $\rlxmm$-Acyclic memory model. Note that as $\rlxmm$-Acyclic is stronger than $\rlxmm$. So any polynomial time result for $\rlxmm$-Acyclic would also hold for $\rlxmm$.
+As for \onewriter~ systems we have $\mo=\po$, \RlxWCoh{} would always hold. Hence to show that an execution graph $\expartial$ is $\rlxmm$-Acyclic-consistent, we need to verify \PORF{} and \RlxRCoh{}. We can state the following lemma for $\rlxmm$ similar to  Lemma~\ref{lem:onewriter-axioms-two-properties}.
+
+\begin{restatable}{lemma}{lemmaonewriterrelaxedtwoproperties}
+    \label{lem:relaxed-onewriter-axioms-two-properties}
+Let $\rf_1$ and $\rf_2$ be two reads-from functions over a partial \onewriter\ execution graph $\ex=(\E, \po, \mo)$ s.t. $\mo$ agrees with $\po$. 
+\begin{itemize}
+\item Suppose $\rf_1 \sqsubseteq \rf_2$. Then, if $\rf_1$ induces a $\po \cup \rf_1$ cycle, then $\rf_2$ induces a $\po \cup \rf_2$ cycle.
+\item Suppose both $\rf_1$ and $\rf_2$ satisfy relaxed-read-coherence. Then, the $\rf$ function $\min(\rf_1, \rf_2)$ also satisfies relaxed-read-coherence.
+\end{itemize} 
+\end{restatable}
+\begin{proof}
+ The proof for the first part is same as that of $\wramm$ in lemma~\ref{lem:onewriter-axioms-two-properties} and hence we skip it.
+ 
+ For the second part, we denote $\rf_0=min(\rf_1,\rf_2)$. We shall show that that if $\rf_0$ violates relaxed-read-coherence, then either $\rf_1$ or $\rf_2$ violates it. Suppose $\rf_0$ induces a violation of relaxed-read-coherence. There is a cycle of the form:
+ \[ r \xra{\rf_0^{-1}} w \xra{\po^+} w' \xra{\rf_0} r' \xra{\po^+} r\], where all of $w,w',r$ and $r'$ are in the same variable.
+ By definition, either $\rf_1$ or $\rf_2$ associates $r$ to $w$. WLOG, say $\rf_1(r) = w$. Then either $w'~\rf_1~r'$ or $w'~\rf_2~r'$. For the former case, $\rf_1$ is not $\rlxmm$-consistent. For the later case,  there is a write event $w^{''}$ on $\xvar$ such that $w'~\po^*~w{''}~\rf_1~r'$ as $\rf_0$ maps $r'$ to the $\po$-earlier read between $\rf_1(r')$ and $\rf_2(r')$. Again relaxed-read-coherence of $\rf_1$ fails thereby proving the second item. 
+\end{proof}
+
+
+\textbf{Finding the smallest $\rlxmm$-consistent $\rf$}
+To show that an execution graph, $\expartial$ satisfies $\rlxmm$ consistency, we check for \PORF{}, \RlxRCoh{} and \RlxWCoh{}. 
+
+Algorithm~\ref{algo:one-writer-wra} can be modified to obtain a PTIME algorithm for $\rlxmm$. The modifications are as follows:
+\begin{itemize}
+ \item Any appearance of \WRCoh{} would be replaced  by \RlxRCoh{}.
+ 
+ \item Any appearance of $\wramm$-consistency would be replaced by $\rlxmm$-consistency.
+ 
+ \item Line~20 would be replaced by `Pick a cycle violating relaxed-read-coherence: $r_i \xra{\rf_i^{-1}} w_i \xra{po} w'_i \xra{\rf} r'_i \xra{po} r_i$'. 
+ 
+ \item We use check for \PORF{} in line~\ref{algo-check-porf} iof Algorithm~\ref{algo:one-writer-wra} only if the underlying memory model is $\rlxmm$-Acyclic.
+ 
+ \end{itemize}
+
+Note that, by construction of the algorithm, \RlxWCoh{} is never violated. The correctness of the algorithm uses Lemma~\ref{lem:relaxed-onewriter-axioms-two-properties} and is analogous to that of Algorithm~\ref{algo:one-writer-wra}. Theorem~\ref{th-wra-correctness} can be restated in terms of $\rlxmm$ as follows.
+
+\begin{restatable}{theorem}{thmrlxcorrectness}\label{th-wra-correctness}
+A partial execution graph $\expartial = (\E, \po)$ of a one-writer system is consistent for $\rlxmm$ iff the modified version of Algorithm~\ref{algo:one-writer-wra} for $\rlxmm$ memory model, executes Line~$6$. Moreover, the algorithm runs in time $\mathcal{O}(n^3)$ where $n = |E|$  and returns the smallest $\rf$ function that is $\rlxmm$-consistent, if one exists.
+\end{restatable}
+
+The calculation of complexity of the algorithm is similar to that of $\wramm$ (Section~\ref{sec:onewriter-algorithm}). We want to check for a cycle of the form  $r \xra{\rf_0^{-1}} w \xra{\po^+} w' \xra{\rf_0} r' \xra{\po^+} r$. 
+For each read event $r$ and its corresponding write event $w$, we need to check if there exist a $w'$ such that (1) there is a path of $\po$ edges from $w$ to $w'$,(2) $w'~\rf~r'$ and (3) $r'~\po^+~r$. For each read, this can be achieved in $\mathcal{O}(n)$ time by a graph search. Hence, overall, across all possible reads, this algorithm takes $\mathcal{O}(n^2)$ time. Therefore, each call to update costs $\mathcal{O}(n^2)$ and there can be at most $n$ calls. This gives a complexity of $\mathcal{O}(n^3)$.
+
+
+
+\input{relaxed-finegrained.tex}
+
+\subsection{NP-hardness for \twowriter\ systems}
+\label{sec:np-relaxed}
+
+Given a 3-CNF-SAT formula $\varphi$ with $k$ variables and $m$ clauses, we construct an abstract execution $\expartial=(\E, \po)$ with $2k+m+3$ threads, accessing $k+2m+1$ memory locations $v_1, v_2, \dots, v_k, c_1, \dots, c_m, d_1, \dots, d_m, s$ and 2 values $0, 1$ such that $\varphi$ is satisfiable iff $\ypartial_\varphi^{\rlxmm}  \models \rlxmm$.
+$\ypartial_\varphi^{\rlxmm}$ follows the general scheme depicted in Table \ref{tab:np-reduction-threads-relaxed}.
+
+\begin{table}[h]
+    
+\noindent
+\begin{minipage}{0.3\textwidth}
+\centering
+\begin{tabular}{c | c}
+    $Init_0$ & $Init_1$ \\
+    $\wt(v_1, 0)$~& ~$\wt(v_1, 1)$ \\
+    $\wt(v_2, 0)$~ & ~$\wt(v_2, 1)$ \\
+    $\cdots$ \\
+    $\wt(v_k, 0)$~ & ~$\wt(v_k, 1)$\\
+    & $\rd(s, 1)$ \\
+    & $\wt(v_1, 0)$ \\
+    & $\wt(v_2, 0)$ \\
+    & $\cdots$ \\
+    & $\wt(v_k, 0)$ \\
+    & $\wt(v_1, 1)$ \\
+    & $\wt(v_2, 1)$ \\
+    & $\cdots$ \\
+    & $\wt(v_k, 1)$ \\
+\end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}{0.3\textwidth}
+\centering
+\begin{tabular}{c | c}
+    $T_{x_i}$~ & ~$T_{\neg x_i}$ \\
+        $\rd(v_i, 0)$ ~&~  $\rd(v_i, 1)$ \\
+        $\rd(v_i, 1)$ ~&~ $\rd(v_i, 0)$ \\
+        & \\        
+        $\wt(c_j/d_j, 1)$ ~&~ $\wt(c_j/d_j, 1)$ \\
+        $\forall j \in S_{x_i}$ ~&~  $\forall j \in S_{\neg x_i}$\\
+        $d_j$ if $x_i$ is ~&~   the third literal\\
+        $c_j$  ~&~  otherwise
+\end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}{0.15\textwidth}
+\centering
+\begin{tabular}{c}
+    $T_j$ \\
+    $\rd(c_j, 1)$\\
+    $\wt(d_j, 1)$ \\
+    $\forall j \in \{1,\cdots,m\}$\\
+\end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}{0.15\textwidth}
+\centering
+\begin{tabular}{c}
+    $T_f$ \\
+    $\rd(d_1, 1)$ \\
+    $\rd(d_2, 1)$ \\
+    $\cdots$ \\
+    $\rd(d_m, 1)$ \\
+    $\wt(s, 1)$ \\
+\end{tabular}
+\end{minipage}
+\vspace{2em}
+\caption{Threads in the reduction for $\rlxmm$}
+    \label{tab:np-reduction-threads-relaxed}
+ \vspace{-.8cm}   
+\end{table}
+
+\begin{lemma}
+    $\varphi$ is satisfiable iff $\ypartial_\varphi^{\rlxmm}  \models \rlxmm$.
+\end{lemma}
+
+\begin{proof}
+    Suppose $A$ is a satisfying assignment for $\varphi$. Then, the execution proceeds as follows. 
+    The $\rf$ relation and $\mo$ relation are exactly as in Lemma~\ref{lem:relaxed-finegrained}, except the following.
+    If $A(x_i) = true$:
+    \begin{itemize}
+        \item $\tuple{T_f: \wt(s, 1)}~\rf~\tuple{Init_1: \rd(s, 1)}$,
+        \item $\tuple{Init_1: \wt(v_i, 1)}~\rf~\tuple{T_{\neg x_i}: \rd(v_i, 1)}$, and $\tuple{Init_1: \wt(v_i, 0)}~\rf~\tuple{T_{\neg x_i}: \rd(v_i, 0)}$. 
+    \end{itemize} 
+    For clause variables $c_j$ and $d_j$ , the $\rf$ (and consequently $\mo$) relation depends on the literals set to true by $A$. 
+    For each clause $C_j$ there are two threads writing $\wt(c_j, 1)$, and two threads writing $\wt(d_j, 1)$. 
+    
+    If $A$ makes $\ell_j^3$ true then $\tuple{T_{\ell_j^3}: \wt(d_j, 1)}~\rf~\tuple{T_f: \rd(d_j, 1)}$. Otherwise $A$ makes $\ell_j^1$ or $\ell_j^2$ true. Let $\ell_j^k$ be the literal that is made true by the satisfying assignment $A$. Then, we have $\tuple{T_{\ell_j^k}: \wt(c_j, 1)}~\rf~\tuple{T_j: \rd(c_j, 1)}$ and $\tuple{T_j: \wt(d_j, 1)}~\rf~\tuple{T_f: \rd(d_j, 1)}$.
+
+%    If $A$ makes $\ell_j^1$ or $\ell_j^2$ true, then $\tuple{T_{\ell_j^3}: \wt(d_j, 1)}~\rf~\tuple{T_f: \rd(d_j, 1)}$. Otherwise, $\tuple{T_j: \wt(d_j, 1)}~\rf~\tuple{T_f: \rd(d_j, 1)}$.
+    For every variable-value pair for $c_j$ and $d_j$, there are atmost two writes. With the $\rf$ picked as above, the $\mo$ relation gets fixed: the unused write in $T_{x}$/ $T_{\neg x}$ that is set to true by $A$ is $\mo$-before the used write, while if the unused write is in $T_{x}$/ $T_{\neg x}$ that is set to false by $A$, then it is $\mo$-after the used write.    
+    
+    \paragraph*{Relaxed Write-coherence.} From our construction, it is easy to see $\irr(\mo_x; \po)$.
+    %, which is easy to see from our construction. 
+
+    \paragraph*{Relaxed Read-coherence.} We need to prove  $\irr(\rf^{-1}; \mo_x; \rf^{?}; \po)$. 
+    The possible violating patterns and the arguments follow as in Lemma~\ref{lem:relaxed-finegrained}.
+
+    This yields an $\rf$ where all $\rd(d_j, 1)$ in $T_f$ read from a thread corresponding to a true literal in $A$, so $\ypartial_\varphi^{\rlxmm} \models \rlxmm$.
+
+    
+    
+    Conversely, suppose $\ypartial_\varphi^{\rlxmm} \models \rlxmm$. 
+    The proof proceeds as in Lemma~\ref{lem:relaxed-finegrained}, where we show that if there are two clauses $C_j$ and $C_{\ell}$ such that $\rd(d_j, 1)$ and $\rd(c_\ell, 1)$ reading from some $T_{x_i}$ and $T_{\neg x_i}$, then relaxed read coherence is violated. .
+\end{proof}
+
+
+
+
+
+
+
+
