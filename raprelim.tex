@@ -98,7 +98,7 @@ $\acy(\po \cup \rf)$ (Figure~\ref{fig:illust}(a)).
         \setlength\tabcolsep{7.5pt}
       \begin{tabular}{lr|lr}
       \multicolumn{2}{l|}{} & \multicolumn{2}{l}{} \\
-      $\wramm$ & \makecell{\PORF{}\\ \WRCoh{}} &$\rlxmm$ & \makecell{\PORF{}\\ \RlxRCoh\\ \RlxWCoh} \\ 
+      $\wramm$ & \makecell{\PORF{}\\ \WRCoh{}} &$\rlxmm$-Acyclic & \makecell{\PORF{}\\ \RlxRCoh\\ \RlxWCoh} \\ 
       \hline
       $\ramm$ & \makecell{\PORF{} \\
       \WCoh{}\\ \RCoh{}}   &$\sramm$ & \makecell{\PORF{}\\ \SWCoh{}\\ \RCoh{}}\\ 
@@ -281,6 +281,7 @@ accesses on the same shared variable. An execution graph is $\scmm$ iff it viola
 
 \paragraph*{Relaxed} The relaxed memory model has the least synchronization mechanism amongst all C11 variants. Here, $\hb = \po$ while applying the coherence axioms.
 
+There is also a stronger variant of $\rlxmm$ called $\rlxmm$-Acyclic which allows \PORF{} besides the coherence axioms of relaxed.  
 
 \begin{figure*}[h]
 %  \vspace{-\baselineskip}
@@ -443,11 +444,9 @@ Let $\ex = \tuple{\E, \po, \rf, \mo}$ be an execution graph. Then: $\ex \models 
 Let $\ex = \tuple{\E, \po, \rf, \mo}$ be an execution graph. Then: $\ex \models \ramm$ implies $\ex \models \rlxmm$, and $\ex \models \ramm$ implies $\ex \models \rlxmm$. 
 \end{lemma}
 
-\begin{proof}
-
 If $\ex$ satisfies \WCoh{}, then it satisfies \RlxWCoh. Similarly, if $\ex$ satisfies \RCoh{}, then $\ex$ also satisfies \RlxRCoh{}. This is because in both cases $\hb$ is replaced by $\po$ in the coherence axioms. Hence $\ex \models \ramm$ implies $\ex \models \rlxmm$.
 
-\end{proof}
+
 
  
 \begin{figure*}[h]
@@ -508,7 +507,7 @@ If $\ex$ satisfies \WCoh{}, then it satisfies \RlxWCoh. Similarly, if $\ex$ sati
  }\label{example-rlxwra}
 \vspace{-\baselineskip}
 \end{figure*}
-\paragraph*{Comparing memory models.} The two lemmas gives the following partial order of the memory models reflecting the number of allowed behaviours: $\scmm\preccurlyeq\sramm\preccurlyeq\ramm\preccurlyeq\{\wramm,\rlxmm\}$ with models towards the right allowing more behaviors.  All models are weaker than $\scmm$. $\rlxmm$ is weaker than $\ramm$ but incomparable with $\wramm$. In particular, the lack of synchronization across $\rf$
+\paragraph*{Comparing memory models.} The two lemmas gives the following partial order of the memory models reflecting the number of allowed behaviours: $\scmm\preccurlyeq\sramm\preccurlyeq\ramm\preccurlyeq\{\wramm,\{\rlxmm\text{-Acyclic}\preccurlyeq\rlxmm\}\}$ with models towards the right allowing more behaviors.  All models are weaker than $\scmm$. $\rlxmm$ is weaker than $\ramm$ but incomparable with $\wramm$. In particular, the lack of synchronization across $\rf$
 in $\rlxmm$ makes $\hb$ weaker in $\rlxmm$ compared to $\wramm$. On the other hand, $\wramm$ allows extra behaviors over $\rlxmm$ because it does not enforce \WRCoh{}. Figure~\ref{example-rlxwra} shows examples to demonstrate the incomparability between $\wramm$ and $\rlxmm$.
 
 An execution graph $\ex = \tuple{\E, \po, \rf, \mo}$ is consistent with memory model $\MemModel$ if it satisfies all the axioms corresponding to $\MemModel$ as shown in Table  ~\ref{table:ax:models-2}. We write $\ex \models \MemModel$ if $\ex$ is consistent with $\MemModel$. For a partial execution graph $\expartial = \tuple{\E, \po}$, we write $\expartial \models \MemModel$ if there exists an $\rf$ and $\mo$ such that $\ex \models \MemModel$ for the complete execution graph $\ex = \tuple{\E, \po, \rf, \mo}$. Hence, the general consistency testing problem $\vm$ can be stated as: given a partial execution graph $\expartial$ and a memory model $\MemModel$, does $\expartial \models \MemModel$? 

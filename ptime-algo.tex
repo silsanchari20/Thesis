@@ -1,3 +1,52 @@
+The general VSC problem as given in chapter~\ref{prelim} was first studied in \cite{gibbons} to test if shared memory multiprocessors provide a sequentially consistent memory. The problem is in general hard even with restrictions such as bounded threads, bounded variables or just one writer. Later Qadeer and Musuvathi \cite{musuvathi} showed that most  concurrency bugs can manifest within a few number of  preemptions. Also, bounding preemption decreases the state space exploration significantly. So a naural question is what happens to the complexity of the VSC-problem when number of  preemptions is fixed?
+We study how the complexity varies across \onewriter{}, \twowriter{} and \threewriter{} programs and discuss the proofs of all the relevant theorems introduced in Chapter~\ref{prelim}.
+
+\section{VSC under fixed preemptions}\label{VSCp}
+
+Recall the VSC$^\pp$-problem from last chapter: given a concurrent program $\program$ and a fixed constant $\pp$, is there an interleaving of $\program$ containing at most $\pp$ preemptions which is sequentially consistent? 
+
+The complexity for VSC$^\pp$ is polynomial for $\onewriter$ programs as given in the next section. The following sections show the hardness results for \twowriter{} and \threewriter{} programs.
+
+\subsection{Results for Single Writer}
+
+We intend to prove the following theorem. 
+\begin{theorem}\label{th:onewriter} \vscp  admits a polynomial-time solution for \onewriter\ programs.  
+\end{theorem}
+
+For the rest of this section, fix a \onewriter\ program $\program$ with $k$ threads having a total of $n$ events across all threads, 
+and a constant $\pp \geq 0$. Here is an overview of our algorithm. 
+\begin{description}
+\item[Step 1.] Guess a set $\points$ of at most $\pi$ events.
+\item[Step 2.] Decide whether there exists an SC interleaving of $\program$ where the preemptions occur exactly after the events in $\points$.
+\end{description}
+Step 1 can be done in $\mathcal{O}(n^{\pp})$.  For Step 2, we present an algorithm that has complexity $\mathcal{O}(n^3 \cdot k^2 \cdot \pp \cdot \pp!)$.  Hence, the overall complexity  comes to $\mathcal{O}(n^{\pp + 3} \cdot k^2 \cdot \pp \cdot \pp!)$. Since $\pi$ is fixed, we get a polynomial-time algorithm for the \vscp\ problem for \onewriter\ programs. We now present our algorithm with examples.  
+
+ \begin{figure}[t]
+ \centering
+\begin{tikzpicture}[box/.style={rectangle, rounded corners, fill=gray!10, draw}]
+  \node [box]  (a) at (0,0) {\scriptsize Program};
+  \node [box] (b) at (3,0) {\scriptsize Block-program};
+  \node [box] (c) at (6.2,0) {\scriptsize \begin{tabular}{c} Build \textbf{conflict graph} \\ on outer blocks \end{tabular}};
+  \node [box] (d) at (10,1) {\scriptsize \begin{tabular}{c} Pick permutation \\ of inner blocks \end{tabular}};
+  \node [box] (e) at (10,-1) {\scriptsize \begin{tabular}{c} Place outer blocks \\ suitably based on \\ conflict order \end{tabular}};
+ 
+  
+
+  \begin{scope}[->]
+   \draw [>=stealth] (a) to node [above] {\scriptsize \begin{tabular}{c} \textbf{Step 1} \\ choose $\pi$ \\  preemption  \\ points \end{tabular}} (b);
+   \draw [thick, dashed, gray] (b) to (c);
+   \draw [thick, dashed, gray] (c) to (d);
+   \draw [thick, dashed, gray] (d) to (e);
+  \end{scope}
+
+  \node at (3, -0.6) {\scriptsize \textbf{Step 2.1}};
+  \node at (6.2, -0.8) {\scriptsize \textbf{Step 2.2}};
+  \node at (10, 1.7) {\scriptsize \textbf{Step 2.3}};
+  \node at (10, -1.9) {\scriptsize \textbf{Step 2.4}};
+\end{tikzpicture}
+\caption{Schema for the algorithm for \onewriter\ programs}
+\label{fig:schema-one-writer}
+ \end{figure}
 
 \subsubsection*{Step 2.1. Partition the program $\program$ into Blocks : Block Programs}
 

@@ -1,4 +1,54 @@
 
+In the last chapter we have encountered how the VSC$^\pp$-problem becomes tractable for \onewriter{} programs with a complexity $\mathcal{O}(n^{\pp + 1} \cdot k \cdot \pp \cdot \pp!)$. Here are two observations about this complexity: the exponent on $k$ is a constant, whereas the exponent on $n$ is the parameter $\pp$. We remark that to achieve the polynomial-time complexity, we had restricted to \onewriter{}  programs and also assumed that the parameter $\pp$ is fixed. 
+
+Our goal in this chapter is to investigate what happens when we perturb these restrictions. Figure~\ref{fig:results-overview} presents an overview of the complexity results.
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[box/.style={rectangle, fill=gray!10, draw, inner sep=2pt}]
+  \node[box] (a) at (0,0) {\footnotesize \begin{tabular}{c} \onewriter \\ fixed $\pp$ \end{tabular}};
+  \node[box] (b) at (-4,-1.5) {\footnotesize \begin{tabular}{c} multiple writers \\ fixed $\pp$ \end{tabular}};
+  \node[box] (c) at (0, -1.5) {\footnotesize \begin{tabular}{c} \onewriter \\ $\pp$ not fixed \end{tabular}};
+  \node[box] (d) at (4, -1.5) {\footnotesize \begin{tabular}{c} multiple writers \\ $\pp$ not fixed \end{tabular}};
+  
+  \begin{scope}[->]
+    \draw (a) to (b);
+    \draw (a) to (c);
+    \draw (a) to (d);
+  \end{scope}
+ 
+  \node at (2.8, 0) {\footnotesize \textsc{Ptime} };
+  \node at (-4, -2.5) {\footnotesize \begin{tabular}{c} \textsc{NP-complete}  \\  \end{tabular}};
+  \node at (0, -2.5) {\footnotesize \textsc{NP-complete}~\cite{gibbons}};
+  \node at (4, -2.5) {\footnotesize \begin{tabular}{c} \textsc{W[1]-hard} \\ \end{tabular}}; 
+\end{tikzpicture}
+\caption{Illustration of the various complexity results}
+\label{fig:results-overview}
+\end{figure}
+
+We shall discuss the complexity results when multiple writer programs are involved and what happens when $\pp$ is an input parameter. 
+
+\paragraph*{Multiple writers, fixed $\pp$.} When multiple writers are allowed, \vscp\ becomes $\np$-complete, even with \twowriter\ programs (Theorem~\ref{th:NPhardness}). Furthermore, under the Exponential-Time-Hypothesis~\cite{ImpagliazzoPZ01}, we prove that VSC$^\pp$ cannot have a $2^{o(k)} \cdot n^{\mathcal{O}(1)}$ algorithm, even for $0$ preemptions and \threewriter\ programs (Theorem~\ref{th:Finegrained}). Contrast this with \onewriter\ where the exponent on $k$ was a constant $1$, thanks to the conflict analysis. Our hardness results therefore give strong evidence that the presence of multiple writers may introduce an unavoidable exponential on the number of threads $k$. 
+
+\paragraph*{One writer, $\pp$ not fixed.} Now, if we continue with \onewriter\ but assume that $\pp$ is also part of the instance input, then Theorem~4.3 of \cite{gibbons} shows $\NP$-completeness. In their proof, an instance of 3-CNF-SAT with $k$ variables and $m$ clauses is reduced to a \onewriter\ program, where $\pp$ can be taken to be $\mathcal{O}(m + k)$. This is sufficient to prove $\NP$-hardness, when $\pp$ is not fixed. This hardness result provides evidence that having either $n^\pp$ or $k^\pp$ or some exponential function with $\pp$ could be unavoidable -- in our algorithm for Section~\ref{sec:one-writer}, we have $n^\pp$ and $\pp!$ in the running time. 
+
+\paragraph*{Multiple writers, $\pp$ not fixed.} Finally, when we consider multiple writers, and do not fix $\pp$, we show W[1]-hardness (Section~\ref{sec:w1-hard}). W[1] is a complexity class studied in parameterized complexity, which intuitively provides evidence that we cannot have an algorithm with running time $f(\pp) \cdot (k + n)^{\mathcal{O}(1)}$ for our problem when multiple writers are allowed. In other words, we cannot separate out the influence of $\pp$ from $n$ and $k$. In contrast, consider the standard \emph{vertex cover} problem for graphs: given a graph of size $n$ is there a vertex cover of size $\le k$? This is an $\NP$-complete problem, but it has an algorithm of the form $f(k) \cdot n^{\mathcal{O}(1)}$ and hence is called fixed-parameter-tractable (FPT). On the other hand, deciding whether a graph of size $n$ has an \emph{independent set} of size $\ge k$ is known to be W[1]-hard (hence unlikely to be FPT). In Section~\ref{sec:w1-hard}, we reduce the independent set problem to our VSC problem, where the $k$ of the independent set translates to the $\pp$ of our VSC problem. We refer the reader to~\cite{DowneyFellows1999} for an exposition of parameterized complexity classes.
+
+We divide the chapter into three sections. In the firts  begin by showing hardness result for \twowriter{}. The following section gives a lower bound result for \threewriter{} programs assuming ETH. In the last section of this chapter we shall show how the complexity of VSC$^\pp$ becomes \textsc{W[1]}-hard when $\pp$ is a parameter of the problem and not fixed. The results from this chapter are the following
+
+\begin{restatable}{theorem}{scFinegrained}\label{th:Finegrained}
+Under ETH, there is no $2^{o(k)} \cdot n^{\mathcal{O}(1)}$ algorithm for \vscp where $k$ is the number of threads, $n$ is the total number of operations.
+
+The result holds even when the input instance is a \threewriter\ program.
+\end{restatable}
+
+\begin{restatable}{theorem}{scFinegrained}\label{th:NPhardness}
+\vscp is $\NP$-complete, for all $\pi \ge 0$. Hardness holds even for \twowriter\ programs. 
+\end{restatable}
+
+\begin{restatable}{theorem}{wonehardness}\label{thm:w1-hard}
+When $\pp$ is not fixed, and is treated as a parameter in the input, the \vscp\ problem is W[1]-hard.
+\end{restatable} 
 We now move on to present the hardness results. Firstly, we note that \vscp\ is in $\NP$, since we can guess an interleaving and check sequential consistency and the preemption bound $\pp$ in linear time. 
 We present two hardness results for the case of fixed $\pp$. To show hardness, we provide reductions from 3-CNF-SAT. Given a Boolean formula $\varphi$ over variables $x_1, \dots, x_k$ and clauses $C_1, \dots, C_m$, where each clause is a disjunction of three literals, we ask whether $\varphi$ admits a satisfying assignment. We will start with the reduction to \threewriter\ systems and then adapt the reduction to \twowriter\ systems. The constructions for both the reductions are adapted from Theorem 2.1 of~\cite{Gibbons}. Let us first recall the Exponential Time Hypothesis that we make use of, to deduce a conditional lower bound.
 

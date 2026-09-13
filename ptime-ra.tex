@@ -43,7 +43,7 @@ and, since $\wt(x)$ and $\wt'(x)$ come from the same thread, the $\hb$ step betw
     Now, let $\MemModel = \sramm$. For strong-write-coherence to be true, we require $\mo$ to agree with $\po$. If $X \models \sramm$, then the axioms porf-acyclicity, strong-write-coherence and read-coherence are true. Since strong-write-coherence holds, $\mo$ needs to agree with $\po$. We have shown above that read-coherence coincides with weak-read-coherence, when $\mo$ agrees with $\po$. Hence $X \models \wramm$. Now, for the other direction. Suppose $\mo$ agrees with $\po$ and weak-read-coherence are true. From above, we deduce read-coherence holds. If strong-write-coherence is violated, then there will be a porf-cycle, a contradiction. Hence, the lemma follows for $\MemModel = \sramm$.
 \end{proof}
 As a consequence, the consistency checking of \onewriter\ under $\sramm$, $\ramm$ and $\wramm$ boils down to checking porf-acyclicity and weak-read-coherence violations.
-Secondly, the problem of synthesizing both $\rf$ and $\mo$ boils down to just synthesizing $\rf$, since $\mo$ is fixed to the order that respects $\po$. Nevertheless, there are still exponentially many $\rf$ relations possible. The next lemma entails that there is a ``smallest'' $\rf$ among all $\wramm$-consistent $\rf$s in the $\sqsubseteq$ order on $\rf$s defined in the overview of this section. Given $\rf_1, \rf_2$, we write $\min(\rf_1, \rf_2)$ for the reads-from relation which associates every read $r$ to the $\po$-smaller write between $\rf^{-1}_1(r)$ and $\rf^{-1}_2(r)$.
+Secondly, the problem of synthesizing both $\rf$ and $\mo$ boils down to just synthesizing $\rf$, since $\mo$ is fixed to the order that respects $\po$. Nevertheless, there are still exponentially many $\rf$ relations possible. The next lemma entails that there is a ``smallest'' $\rf$ among all $\wramm$-consistent $\rf$s in the $\sqsubseteq$ order on $\rf$s defined in the overview of this section. Given $\rf_1, \rf_2$, we write $\min(\rf_1, \rf_2)$ for the reads-from relation which associates every read $r$ to the $\po$-smaller write between $\rf^{-1}_1(r)$ and $\rf^{-1}_2(r)$ (An event $e$ is $\po$-smaller than $e'$ if $e~\po^+~e'$). 
 
 
 \begin{restatable}{lemma}{lemmaonewritertwoproperties}
@@ -323,7 +323,7 @@ $t_x \gets$ writer thread for $x$ \\
     $t \gets$ thread of $r_i$ \\
     $t_x \gets$ writer thread of variable $x$ \\
     \If{$t \neq t_x$}{
-    $\rf^{-1}_{i+1}(r_i) \gets$ $\po$-smallest write $w''_i$ of the form $\wt(x,v)$ in $t_x$ s.t. $w'_i ~\po* w''_i$ \label{algo-update1} \\
+    $\rf^{-1}_{i+1}(r_i) \gets$ $\po$-smallest write $w''_i$ of the form $\wt(x,v)$ in $t_x$ s.t. $w'_i ~\po^* w''_i$ \label{algo-update1} \\
     \If{there is no such write}{
         \Return $\expartial$ is not $\wramm$-consistent  \label{algo-update-notconsistent1}
     }
