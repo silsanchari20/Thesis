@@ -1,25 +1,32 @@
-\section{Causal Consistency Models}
-\label{app:cc-models}
+\label{chap:cc-models}
+
+The development of causal memory models is closely connected to the study of ordering in distributed systems. Study of causal consistency can be traced back to Lamport's `happened-before' relation (this is differnet than happens-before relation that we have studied so far), which provides a way to capture causal dependencies between events in a distributed execution \cite{SC-Lamport78}. The distinction between causally related and concurrent events was further developed through logical timestamping mechanisms. In particular, Fidge introduced vector timestamps as a way of representing the causal ordering of events in distributed executions and distinguishing causal precedence from concurrency \cite{Fidge1988}. %These ideas provided an important foundation for causal memory models in which causally related operations must be observed in a consistent order, while concurrent operations need not have a common ordering.
+
+In the context of shared memory, Ahamad et al. \cite{Ahamad1995} formalized this idea through the notion of 'causal memory', in which processes are required to observe causally related memory operations consistently, while concurrent operations may be observed in different orders.
+Several variants of causal consistency have subsequently been studied\cite{BouajjaniEGH17}, including Causal Consistency ($\ccmm$) \cite{DBLP:conf/icdcs/HuttoA90}, Causal Convergence ($\cvmm$) \cite{Burckhardt:2014}\cite{DBLP:journals/corr/PerrinMJ16}, and Causal Memory ($\cmmm$)\cite{Ahamad1995}\cite{DBLP:journals/corr/PerrinMJ16} which differ in the restrictions they impose on the observations of concurrent operations. Lahav and Boker showed that $\ccmm$ coincides with $\wramm$ while $\cvmm$ coincides with $\sramm$  \cite{Lahav2021}. As a result the aspect of verification of $\ccmm$ and $\cvmm$ will show results similar to that of $\wramm$ and $\sramm$. Naturally,  consistency checking for $\ccmm$ and $\cvmm$, even when restricted to bounding syntactic parameters remain NP-Complete as it was for their $\ramm$ counter parts.  Chakraborty et al.    \cite{ChakrabortyKMP24} showed that the same consistency checking problem also retains NP-Completeness in case of $\cmmm$. 
+
+In this chapter, we study the consistency checking problem under the \emph{causal consistency models}, $\ccmm, \cmmm$ and $\cvmm$ when the number of writers per memory location are fixed. 
+We begin with a brief overview of the operational and axiomatic semantics of these models, and then show that the complexity landscape observed for the Release - Acquire (RA) variants extends to these models as well. 
+Recall that for the RA-variants  and Relaxed, we established a tight characterization of complexity with respect to the number of writer threads per memory location:
+\onewriter\ admits polynomial-time solutions, \twowriter\ is $\NP$-hard, and \threewriter\ yields a stronger conditional lower bound. Our goal in this chapter is to establish analogous results for causal consistency models, thereby showing that the same complexity results extend to $\ccmm, \cmmm$ and $\cvmm$. Of course by the result of Lahav and Boker \cite{Lahav2021} it is evident that these set of results would also directly extend to $\ccmm$ and $\cvmm$. Interestingly, the set of results shall also extend to $\cmmm$.
+
+The list of results are presented below. The details will be discussed in the subsequent secions.
+
+\begin{itemize}
+\item For \onewriter\ programs, we prove that there is no $\mathcal{O}(n^{\frac{3}{2} - \epsilon})$-time algorithm, under the Boolean Matrix Multiplication (BMM) hypothesis, for any $\epsilon > 0$. 
+\item When we consider \twowriter\ programs (those where each variable is written into by atmost two threads), the problem continues to be $\np$-complete. 
+\item Furthermore, when we consider \threewriter\ programs, the problem admits a conditional lower bound under the Exponential Time Hypothesis (ETH): there is no $2^{o(k)} \cdot n^{\mathcal{O}(1)}$ algorithm, where $k$ is the number of threads, and $n$ is the total number of operations.
+\end{itemize}
 
 
-In this appendix, we study the consistency checking problem under the \emph{causal consistency models} namely, $\ccmm, \cmmm$ and $\cvmm$ which come from distributed databases.
-We begin with a brief overview of the
-operational and axiomatic semantics of these models, and then show that the complexity landscape observed for the Release - Acquire (RA) variants extends to these models as well. 
-Recall that for RA, we established a tight characterization of complexity with respect to the number of writer threads per memory location:
-\onewriter\ admits polynomial-time
-solutions, \twowriter\ is $\NP$-hard, and \threewriter\ yields a stronger
-conditional lower bound. Our goal in this section is to establish analogous
-results for causal consistency models, thereby showing that the same complexity results extend to $\ccmm, \cmmm$ and $\cvmm$. Next, we provide an overview of these causal consistency models. 
-
-
-\subsection{Overview of Causal Consistency Models}
+\section{Overview of Causal Consistency Models}
 \label{app:cc-models-overview}
 
 In the domain of distributed systems, causality is the key concept for consistency. There are three popular causal models, namely, Causal Consistency ($\ccmm$), Causal Convergence ($\cvmm$), and Causal Memory ($\cmmm$)~\cite{BouajjaniEGH17}. 
 It is known that $\ccmm$ coincides with $\wramm$ while $\cvmm$ coincides with $\sramm$~\cite{Lahav:2022}. $\cmmm$ is stronger than $\ccmm$ and incomparable to $\cvmm$ and $\ramm$.  
 
 In Causal Memory, each thread has a locally-consistent view of the order that different writes have been executed~\cite{Ahamad1995,BouajjaniEGH17}. 
-This is formalised by introducing an additional relation for each thread, called the ``happened-before'' relation in the literature.  To avoid confusion with the ``happens before'' $\hb$, we call this the \emph{observed relation} $\ob{}$. 
+This is formalised by introducing an additional relation for each thread, called the ``happened-before'' relation in the literature.  To avoid confusion with the ``happens before'' $\hb$, we stick to call this the \emph{observed relation} $\ob{}$ as was done in \cite{ChakrabortyKMP24}. We shall folow their notations from here on. 
 
 To enhance understanding we define the notion of \emph{conflicting triplets} first.
 
@@ -28,14 +35,14 @@ Given an execution graph $\expartial=(\E,\po)$, two events in $\E$ are called \e
 \end{definition} 
  
 \noindent{The observed relation $\ob{}$.}
-Given an event $\event$, the \emph{observed relation} for $\event$ is the smallest transitive relation $\ob{\event}\subseteq \E\times \E$ with the following properties. 
+Given an event $\event$, the \emph{observed relation} for $\event$ is the smallest transitive relation $\ob{\event}\subseteq \E\times \E$ that conforms to the following rules. 
 
 \begin{enumerate}
-\item For every $(\event_1, \event_2)\in \hb$ such that $(\event_i, \event)\in \hb$ for each $i\in[2]$, we have $(\event_1, \event_2)\in \ob{\event}$.
+\item For every $(\event_1, \event_2)\in \hb$ such that $(\event_i, \event)\in \hb$ for each $i\in[2]$, we must have $(\event_1, \event_2)\in \ob{\event}$.
 \item For every conflicting triplets $(\wt, \rd, \wt')$ such that:
 (ii)~$(\wt',\rd)\in \ob{\event}$ and
 (iii)~$(\rd, \event)\in \po^?$,
-we have $(\wt', \wt)\in \ob{\event}$.
+we must have $(\wt', \wt)\in \ob{\event}$.
 \end{enumerate}
 
 
@@ -43,108 +50,430 @@ The idea is that any thread which executes the read $\rd$ must observe $\wt$
 after it has observed $\wt'$ so that it does not read an obsolete value. 
 For any event $\event$, $\ob{\event}$ contains $\hb$, and $\ob{}$ grows monotonically as we move down a thread 
 in $\po$-order. That is, for any $(\event_1, \event_2)\in \po$, we have $\ob{\event_1}\subseteq \ob{\event_2}$. For a thread $t$, the observed relation  is defined as $\ob{t}=\ob{\event^{\max}}$, where $\event^{\max}$ is the $\po$-maximal event of $t$.  $\cmmm$ requires all the axioms of $\wramm$, and in addition, 
-requires that $\ob{t}$ is irreflexive~\cite{BouajjaniEGH17}. Figure \ref{cm:examples} depicts 
-some examples. 
+requires that $\ob{t}$ is irreflexive~\cite{BouajjaniEGH17}.  
 
 \begin{itemize}
-\item $(\text{PORF})\land(\text{weak-Rcoh})\land (\text{\OB{}})$ \hfill [$\cmmm$]
+\item $(\text{PORF})\land(\text{\WRCoh})\land (\text{\OB{}})$ \hfill [$\cmmm$]
 \end{itemize}
 
-Thus, $\wramm\mmorder \cmmm$. However, $\cmmm$ is incomparable with $\ramm$/$\sramm$, i.e., $\cmmm$ allows executions that are inconsistent in $\ramm$/$\sramm$ and vice versa. 
+Thus, $\wramm\mmorder \cmmm$. However, $\cmmm$ is incomparable with $\ramm$/$\sramm$, i.e., $\cmmm$ allows executions that are inconsistent in $\ramm$/$\sramm$ and vice versa. Figure \ref{cm:examples} depicts some examples to show. Figure~ \ref{cm:examples} (a) is $\cmmm$ consistent as $\ob{t_1}, \ob{t_2}$ are acyclic but not $\ramm$ consistent. Figure~\ref{cm:examples} (b) is not $\cmmm$ consistent: Since $\wt_1(x)~\hb~\rd(x)$ and $\rd(x)$ is the $\po$-maximal event of $t_2$, we have $\wt_1(x)~\ob{t_2}~\rd(x)$ by the first property of $\ob{}$. Now for the conflicting triplet $(\wt_2(x), \rd(x), \wt_1(x))$ we have $\wt_1(x)~\ob{t_2}~\rd(x)$ and thus by the second property of $\ob{}$ we get $\wt_1(x)~\ob{e}~\wt_2(x)$. Again by the first property of $\ob{}$, we have $\wt_2(z)~\ob{t_2}~\rd(z)$  since $\wt_2(z)~\rf~\rd(z)$, $\wt_2(z)~\hb~\rd(x)$ and $\rd(z)~\hb~\rd(x)$. Then for the conflicting triplet $(\wt_1(z), \rd(z), \wt_2(z))$ we get $\wt_2(z)~\ob{t_2}~\wt_1(z)$ by applying the second property of $\ob{}$. But this gives us the cycle $\wt_1(z)~\po~\wt_2(z)~\ob{t_2}~\wt_1(z)$ violating \OB{}. Notice that for  Figure~\ref{cm:examples} (b) The follwing $mo$'s will be induced: $\wt_1(z)~\mo~\wt_2(z)$ and $\wt_1(x)~\mo~\wt_2(x)$ because of the relations $\wt_2(x)~\rf~\rd(x)$ and $\wt_1~\hb~\rd(x)$. They ensure both \RCoh{} and \SWCoh{} and in turn $\sramm$-consistency.
+
+\begin{figure*}[t]
+\centering
+
+\begin{tikzpicture}[scale=1,
+    >=stealth,
+    every node/.style={font=\large},
+    po/.style={->, thick},
+    seen/.style={->, very thick, orange},
+    rf/.style={->, very thick, blue, dashed}
+]
+
+% =========================================================
+% (a)
+% =========================================================
+
+\begin{scope}[xshift=0cm]
+
+    % Thread labels
+    \node at (0,0.8) {$t_1$};
+    \node at (3.2,0.8) {$t_2$};
+
+    % Events
+    \node (a1) at (0,0) {$w_1(x)$};
+    \node (a2) at (0,-2.0) {$r(x)$};
+
+    \node (a3) at (3.2,0) {$w_2(x)$};
+    \node (a4) at (3.2,-2.0) {$r(x)$};
+
+    % Program order
+    \draw[po] (a1) -- (a2);
+    \draw[po] (a3) -- (a4);
+
+    % seen edges
+    \draw[seen]
+        (a1) to[bend left=20]
+        node[above, pos=.5, font=\small] {$\ob{t_1}$}
+        (a3);
+
+    \draw[seen]
+        (a3) to[bend left=12]
+        node[above, font=\small] {$\ob{t_2}$}
+        (a1);
+
+    % rf edges
+    \draw[rf]
+        (a1.south east) to[bend right=8]
+        node[pos=0.48, right=2pt, yshift=-1pt, font=\small] {$rf$}
+        (a4.north west);
+
+    \draw[rf]
+        (a3.south west) to[bend left=8]
+        node[pos=0.48, right=2pt, yshift=-1pt,  font=\small] {$rf$}
+        (a2.north east);
+
+    % label
+    \node at (1.6,-3.5) {$(a)~ \cmmm$ consistent};
+
+\end{scope}
 
 
-	\begin{figure}
-	\centering
-	\includegraphics[width=\textwidth]{Figures/CM.pdf}
-	\caption{(a) is $\cmmm$ consistent as $\ob{t_1}, \ob{t_2}$ are acyclic. 
-	(b) is also $\cmmm$ consistent : the $\wt_1(x) \ob{t_2} \wt_2(x)$ is induced 
-	by $\wt_1(x)~\hb~\rd(x)$ and $\wt_2(x)~\rf~\rd(x)$. 
-	(c) is obtained 
-	from (b) by adding $\wt_1(z)~\rf~\rd(z)$, and is $\cmmm$ inconsistent, 
-since we have $\wt_1(z)~\po~\wt_2(z)~\ob{t_2}~\wt_1(z)$. 
-	$\wt_2(z)~\ob{t_2}~\wt_1(z)$ is induced 
-	from the conflicting triplet $(\wt_1(z), \rd(z), \wt_2(z))$ with 
-	 $\wt_2(z)~\ob{t_2}~\rd(z)$. 
-	}
+% =========================================================
+% (b)
+% =========================================================
+
+\begin{scope}[xshift=6.8cm]
+
+    % Thread labels
+    \node at (0,0.8) {$t_1$};
+    \node at (3.2,0.8) {$t_2$};
+
+    % Thread 1
+    \node (b1) at (0,0)    {$w_1(z)$};
+    \node (b2) at (0,-0.9) {$w_2(z)$};
+    \node (b3) at (0,-1.8) {$w_1(x)$};
+    \node (b4) at (0,-2.7) {$w(y)$};
+
+    % Thread 2
+    \node (b5) at (3.2,0)    {$w_2(x)$};
+    \node (b6) at (3.2,-0.9) {$r(z)$};
+    \node (b7) at (3.2,-1.8) {$r(y)$};
+    \node (b8) at (3.2,-2.7) {$r(x)$};
+
+    % Program order
+    \draw[po] (b1) -- (b2);
+    \draw[po] (b2) -- (b3);
+    \draw[po] (b3) -- (b4);
+
+    \draw[po] (b5) -- (b6);
+    \draw[po] (b6) -- (b7);
+    \draw[po] (b7) -- (b8);
+
+    % seen_t2
+    \draw[seen]
+        (b3.east) to[bend left=10]
+        node[right, pos=.3, font=\small] {$\ob{t_2}$}
+        (b5.west);
+        
+     \draw[seen]
+        (b3.west) to[bend left=42]
+        node[pos=0.50, left, font=\small] {$\ob{t_2}$}
+        (b1.west);
+
+    % rf : w2(x) -> r(x)
+    \draw[rf]
+        (b5.east) to[bend left=25]
+        node[right, pos=.5, font=\small] {$rf$}
+        (b8.east);
+    
+    %rf : w1(z) -> r(z)
+    \draw[rf]
+        (b1.east) to[bend left=25]
+        node[above, pos=.3, font=\small] {$rf$}
+        (b6.west);
+
+    % rf : w(y) -> r(y)
+    \draw[rf]
+        (b4.east) to[bend left=8]
+        node[below, font=\small] {$rf$}
+        (b7.west);
+
+    % label
+    \node at (1.6,-3.5) {$(b)~\text{Not}~ \cmmm$ consistent};
+
+\end{scope}
+
+\end{tikzpicture}
+\caption{(a) satisfies \OB{} but  (b) doesn't. On the other hand, (b) is $\sramm$ consistent while (a) is not.}
 	\label{cm:examples}
-	\end{figure}
+	
+\end{figure*}
+	
 
 Since $\wramm=\ccmm$ and $\sramm=\cvmm$, both the fine-grained-hardness and $\NP$-hardness result for $\wramm, \sramm$ implies the same for  $\ccmm$ and $\cvmm$. So we only need to prove the hardness results for $\cmmm$.
 In Section \ref{app:cc-1w}, we discuss the polynomial-time algorithm for \onewriter\ programs and in Section~\ref{app:cc-3w}, we discuss the complexity results for \threewriter\ programs under $\cmmm$. Note that the $\NP$-hardness for \twowriter\ programs under $\cmmm$ follows from arguments analogous to those made in Section~\ref{sec:hardness-twowriter} for RA models, and therefore we do not discuss it separately.
 
- 	
+\section{ \onewriter~ programs under Causal Memory}~\label{app:cc-1w}
 
-For a $\cmmm$-consistent execution graph the following should be satisfied: $(\text{PORF})\land(\text{weak-Rcoh})\land (\text{\OB{}})$
+Recall that $\cmmm$ is essentially $\wramm$ with the extra axiom of $\ob{}$ acyclicity. Hence, any execution graph $\ex$  which is $\cmmm$-consistent is also $\wramm$-consistent. The following lemma  shows that for the special case of $\onewriter$, $\wramm$ and $\cmmm$ collides. 
 
+\begin{lemma}
+For $\onewriter$-systems, \OB{} coincides with \WRCoh{}.
+\end{lemma}\label{ob-wrcoh}
 
-
- 
-
-
-\subsection{ \onewriter~ programs under Causal Consistency }~\label{app:cc-1w}
-
-Recall that $\cmmm$ is essentially $\wramm$ with the extra axiom of $\ob{}$ acyclicity. We argue that the algorithm in  Section~\ref{sec:onewriter-algorithm} 
-can be used for $\cmmm$ also. It is easy to see that any execution graph $\ex$  which is $\cmmm$-consistent is also $\wramm$-consistent. 
-
-
-The other direction follows for the \onewriter{} case. 
-Suppose $\ex$ is $\wramm$-consistent but  violates $\ob{t}$ acyclicity for some thread 
- $t$. Then we have  both $\wt'~\ob{t}~ \wt$ and  $\wt~\ob{t}~ \wt'$ for writes $\wt, \wt'$ on some location $x$. 
+\begin{proof}
+Let $\ex=(\E,\po,\rf)$ be an execution graph that satisfies \WRCoh{} violates \OB{} for some thread $t$. Then we have both $\wt'~\ob{t}~ \wt$ and  $\wt~\ob{t}~ \wt'$ for writes $\wt, \wt'$ on some location $x$. 
  
  By definition of $\ob{t}$, $\wt'~\ob{t}~ \wt$ implies the existence of a conflicting triplet $(\wt, \rd, \wt')$ such that 
    $\wt~\rf ~\rd$, $\wt'~\ob{t}~\rd$, $\rd~\po^?~ e_{max}$ where $e_{max}$ is the $\po$-maximal element of $t$.
   Likewise,  $\wt~\ob{t}~ \wt'$ implies the existence of a conflicting triplet $(\wt', \rd', \wt)$ such that 
    $\wt'~\rf ~\rd'$, $\wt~\ob{t}~\rd'$, $\rd'~\po^?~ e_{max}$ where $e_{max}$ is the $\po$-maximal element of $t$. 
       Since $\wt, \wt'$  are in the same thread, either $\wt~\po~\wt'$ or 
-   $\wt'~\po~\wt$. Either way, we observe one violation for \WRCoh{} wrt $\rd$ or $\rd'$. 
-   Thus, inconsistency wrt $\cmmm$ results in $\wramm$ inconsistency as well. 
-    Therefore, the algorithm    for $\wramm$ can be employed for $\cmmm$ as well. 
-   Thus in case of \onewriter~ the time complexity of consistency testing will be same as that of $\wramm$, $O(n^3)$. 
+   $\wt'~\po~\wt$. Either way, we observe one violation for \WRCoh{} ($irr(\hb;[W_x];\hb;\rf_x^{-1})$) wrt $\rd$ or $\rd'$.
+\end{proof}
+
+The above lemma implies that  the $\mathcal{O}(n^3)$ algorithm for consistency checking of $\onewriter$ in  Section~\ref{sec:onewriter-algorithm} 
+can be directly employed to check consistency for $\cmmm$:  
+ Consistency wrt $\wramm$ implies consistency wrt $\cmmm$. Inconsistency wrt $\cmmm$ results in $\wramm$ inconsistency. 
    
-   Since $\cvmm = \sramm$ and $\ccmm=\wramm$, the lower bound result under BMM hypothesis in Section~\ref{sec:onewriter} holds for both $\cvmm$ and $\ccmm$. Finally, as mentioned previously,
-for the single writer case, obtaining a cyclic $\ob{t}$ for a thread $t$ results in violation of \WRCoh{}.  In the reduction given in Section~\ref{sec:onewriter}, \WRCoh{} is violated in the presence of a triangle, hence, the result also holds for $\cmmm$.
+\paragraph*{Hardness for $\onewriter$} Since $\cvmm = \sramm$ and $\ccmm=\wramm$, the lower bound result under BMM hypothesis in Section~\ref{sec:onewriter} holds for both $\cvmm$ and $\ccmm$. Besides from Lemma~\ref{ob-wrcoh}, we deduce  that all hardness results of $\onewriter$ under $\wramm$ also holds when the underlying memory model is $\cmmm$ and give the following lemma. 
    
-   
+  \begin{lemma}
+    \label{lem:cm-onewriter-lowerbound}
+Under BMM, for any $\epsilon > 0$, there is no $\mathcal{O}(n^{\frac{3}{2} - \epsilon})$ algorithm for deciding if a given \onewriter\ execution graph $\ex = \tuple{\E, \po, \rf, \mo}$ satisfies the axioms of $\MemModel \in (\ccmm, \cvmm\cmmm)$. 
+\end{lemma} 
 
 
+The next section discusses how the hardness increases with the increases in number of writers writing to a memory location.
 
+\section{Fine-grained Hardness under ETH for \threewriter~ systems}~\label{app:cc-3w}
 
+We have seen in the earlier section, since $\cvmm = \sramm$ and $\ccmm=\wramm$, all results  for both $\cvmm$ and $\ccmm$ coincides with that of $\sramm$ and $\wramm$. In case of $\onewriter$, even $\cmmm$ collides with $\wramm$. In this section we show how the fine-grained lower bound for $\threewriter$ and the NP-hardness of $\twowriter$, given in Section~\ref{sec:hardness-threewriter} and Section~\ref{sec:hardness-twowriter}, both hold for the three causal memory models: $\cvmm,\ccmm,\cmmm$. Alternatively we want to prove the following two theorems.
 
-\subsection{Fine-grained Hardness under ETH for \threewriter~ systems}~\label{app:cc-3w}
+\begin{theorem}\label{thm:cm-eth-hardness}
+    Under ETH, there is no $2^{o(k)} \cdot n^{\mathcal{O}(1)}$ algorithm for the $\vm$-problem with $\MemModel \in \{ \cvmm, \ccmm, \cmmm\}$, $k$ being the number of threads, and $n$ the number of events. The result holds even while restricting the input instance to \threewriter\ execution graphs.
+\end{theorem}
 
+\begin{theorem}
+\label{thm:cm-two-writer-hardness}
+    The $\vm$ problem is $\NP$-complete for $\MemModel \in \{\cvmm, \ccmm, \cmmm\}$, even when restricted to \twowriter\ execution graphs.
+\end{theorem}
 
-We will now discuss the fine-grained hardness of \threewriter -system under $\cmmm$. 
-Since  $\cmmm$ is stronger than $\wramm$, the soundness part of the reduction in 
- Lemma \ref{lem:wra-eth}  follows : Assume $\expartial_\varphi^{\ramm} \models \cmmm$. Then 
- we know $\expartial_\varphi^{\ramm} \models \wramm$. Our soundness argument shows that 
- $\varphi$ is satisfiable. 
+As it is evident from our discussion, we only need to prove the theorems for $\cmmm$.
+
+\paragraph*{Proof strategy.} Given a 3-CNF formula $\varphi$ with $k$ threads and $m$ clauses, we construct a partial execution graph $\expartial_\varphi = \tuple{\E, \po}$ that satisfies the following properties:
+\begin{itemize}
+\item $\expartial_\varphi$ is \threewriter,
+\item the number of threads in $\expartial_\varphi$ is $\mathcal{O}(k)$,
+\item the number of events in $\expartial_\varphi$ is $\mathcal{O}(k + m)$, 
+\item $\expartial_\varphi \models \MemModel$ iff $\varphi$ is satisfiable, for $\cmmm$. 
+\end{itemize} 
+
+The reduction will be same as that of $\ramm$-variants in Section~\ref{sec:hardness-threewriter} and the thread construction will be same as that of Figure~\ref{tab:reduction-threads-ra} and is revisited in Figure~\ref{tab:reduction-threads-cm} for our convenience.
+The proof for Theorem~\ref{thm:cm-eth-hardness} and the correctness of the construction will be evident from the following two lemmas. 
+\begin{figure}
+\footnotesize%\noindent
+
+\begin{tabular}{c| c}
+    $T_i^1$ & $T_i^0$  \\
+    $\wt(s_i, 1)$~~&~~$\wt(s_i, 1)$~~ \\
+    $\wt(s_i, 2)$~~&~~$\wt(s_i, 2)$~~ \\
+    $\wt(v_i, 1)$~~&~~$\wt(v_i, 0)$~~
+\end{tabular}
+\hfill
+\begin{tabular}{c | c }
+    $T_{x_i}$~ & ~$T_{\neg x_i}$ \\
+        & \\
+        $\rd(v_i, 1)$~&~$\rd(v_i, 0)$ \\
+        & \\
+        $\wt(c_j, 1)$ ~&~ $\wt(c_j, 1)$ \\
+        $\forall j \in S_{x_i}$ ~&~  $\forall j \in S_{\neg x_i}$ 
+\end{tabular}
+\hfill
+\begin{tabular}{c}
+    $T_f$ \\
+    $\rd(c_1, 1)$ \\
+    $\cdots$ \\
+    $\rd(c_m, 1)$ \\
+    $\rd(s_1, 2)$ \\
+    $\rd(s_1, 1)$ \\
+    $\cdots$ \\
+    $\rd(s_k, 2)$ \\
+    $\rd(s_k, 1)$ 
+\end{tabular}
+ \caption{Threads in the reduction, for $i \in \{1, 2, \dots, k\}$ }
+   \label{tab:reduction-threads-cm}
+\end{figure}
+
+\begin{lemma}\label{lem:cm-eth}
+If  $\expartial_\varphi \models \cmmm$, then $\varphi$ has a satisfying assignment. 
+\end{lemma}
+
+Since $\cmmm$ is stronger than $\wramm$, the above lemma follows : Assume $\expartial_\varphi^{\ramm} \models \cmmm$. Then 
+ we know $\expartial_\varphi^{\ramm} \models \wramm$. Our soundness argument for $\wramm$ shows that $\varphi$ is satisfiable. 
  
- For the completeness part, assume that $\varphi$ is satisfiable. We have already synthesized an $\rf, \mo$ which respect $\sramm$(and hence $\wramm$). We have to now show that, \OB{} is preserved by the synthesized $\rf$. 
+ For the other direction of Theorem~\ref{thm:cm-eth-hardness}, assume that $\varphi$ is satisfiable. We had  already synthesized an $\rf, \mo$ which respected $\sramm$(and hence $\wramm$). Following are the synthesized $\rf$-edges.
+ 
+ \begin{itemize}
+  \item For some literal  $\ell_j$ that makes $C_j$ true,   $T_{\ell_j}^{A(x_i)}: \wt(c_j, 1) \xra{\rf} T_f: \rd(c_j, 1)$.
+  \item $T_{i}^{A(x_i)}: \wt(s_i, 2) \xra{\rf} T_f: \rd(c_i, 2)$; $T_{i}^{\neg A(x_i)}: \wt(s_i, 1) \xra{\rf} T_f: \rd(c_i, 1)$. 
+  \item The other $\rf$-edges are trivial.
+ \end{itemize}
+ $\expartial$ satisfies \PORF{} as the synthesized set of $\rf$ and $\mo$-edges satisfied $\sramm$. 
+ We have to now show that, \OB{} is preserved by the synthesized $\rf$ to prove the next lemma.
 
 \begin{lemma}\label{lem:eth-cm}
-If $\varphi$ has a satisfying assignment, then $\expartial_\varphi^{\ramm} \models \cmmm$. 
+If $\varphi$ has a satisfying assignment, then $\expartial_\varphi \models \cmmm$. 
 \end{lemma}
 \begin{proof}
 Let $A$ be the satisfying assignment for $\varphi$. 
 Say $A(x_i) = true$:
 
-(i) For all pair of events in $\E$, $e~\hb~e'$ we have $e~\ob{T_F}~e'$
+(i) For all pair of events $e$, $e'$ in $\E$ with $e~\hb~e'$ we have $e~\ob{T_F}~e'$
 
-(ii) For the conflicting tiplet $(\tuple{T_i^0: \wt(s_i, 1)}, \tuple{T_f: \rd(s_i, 1)}, \tuple{T_i^1: \rd(s_i, 2)})$, we have $\tuple{T_i^1: \wt(s_i, 2)}~ \ob{T_f}~ \tuple{T_f: \rd(s_i, 1)}$ and $\tuple{T_f: \rd(s_i, 1)}~\po^?~e^{T_f}_{max}$ where $e^{T_f}_{max}$ is the $\po$-maximal event in $T_f$. This implies $\tuple{T_i^1: \wt(s_i, 2)}~\ob{T_f}~\tuple{T_i^0: \wt(s_i, 1)}$. 
+(ii) For the conflicting tiplet $(\tuple{T_i^0: \wt(s_i, 1)}, \tuple{T_f: \rd(s_i, 1)}, \tuple{T_i^1: \wt(s_i, 2)})$, we have $\allowbreak\tuple{T_i^1:\allowbreak \wt(s_i, 2)}~\allowbreak \ob{T_f}~\tuple{T_f: \rd(s_i, 1)}$ and $\tuple{T_f: \rd(s_i, 1)}\allowbreak~\po^?~e^{T_f}_{max}$ where $e^{T_f}_{max}$ is the $\po$-maximal event in $T_f$. This implies $\tuple{T_i^1: \wt(s_i, 2)}~\ob{T_f}~\tuple{T_i^0: \wt(s_i, 1)}$. 
 
 As there are no $\hb$-cycle and no members of $\ob{T_f}$ directed from $T_i^0$ to $T_i^1$, $\ob{T_f}$ is irreflexive.
 
-If we consider the relation $\ob{T_{\neg x_i}}$, for the conflicting triplet $(\tuple{T_i^0: \wt(v_i, 0)},\\ \tuple{T_{x_i}: \rd(v_i,0)}, \tuple{T_i^1: \wt(v_i, 1)})$ we have $\tuple{T_i^1: \wt(v_i, 1)}~\ob{T_{\neg x_i}}~\tuple{T_i^0: \wt(v_i, 0)}$. 
+If we consider the relation $\ob{T_{x_i}}$, for the conflicting triplet $(\tuple{T_i^1: \wt(v_i, 1)},\\ \tuple{T_{x_i}: \rd(v_i,1)}, \tuple{T_i^0: \wt(v_i, 0)})$ we  have $\tuple{T_i^1: \wt(v_i, 1)}~\ob{T_{x_i}}~\tuple{T_{x_i}: \rd(v_i, 0)}$ and no other members of $\ob{T_{x_i}}$ directed from $T_i^0$ to $T_i^1$. As there is no $\hb$-cycle, $\ob{T_{x_i}}$ is also irreflexive. Similarly we can argue that $\ob{T_{x_i}}$ is irreflexive.
 
-Again no members of $\ob{T_{\neg x_i}}$ are directed from $T_i^0$ to $T_i^1$. As there is no $\hb$-cycle, $\ob{T_{\neg x_i}}$ is also irreflexive. 
-
-It is easy to see that $\ob{}$ is irreflexive for all remaining threads.
-Hence \OB{} is preserved by the synthesized $\rf$
-
+It is easy to see that $\ob{}$ is irreflexive for all remaining threads as they do not have an incoming $\rf$-edge. 
+Hence \OB{} is preserved by the synthesized $\rf$.
 \end{proof}
 
-\subsection{NP-hardness for \twowriter~ systems}
+\section{NP-hardness for \twowriter~ systems}
 
-For \twowriter~ systems the reduction from 3-SAT instance has similar construction as that of $\wramm$ and the proof of the reduction will be on similar argument as the proof of the reduction for \threewriter.
+For \twowriter~ systems the reduction from 3-SAT instance $\varphi$ has similar construction as that of $\ypartial$ in case of $\wramm$ and the proof of Theorem~\ref{thm:cm-two-writer-hardness} will be on similar argument as the proof of Theorem~\ref{thm:cm-eth-hardness} for \threewriter. Figure~\ref{fig:cm-two-writer} revisites the thread construction of $\twowriter$ under $\ramm$. The soundness argument for Theorem~\ref{thm:cm-two-writer-hardness} holds due two the same logic as in case of lemma~\ref{lem:cm-eth}. We only have to show the completeness proof for the theorem to prove correctness of the construction.
+Again, the synthesis of $\rf$-edges for the completeness of the proof, is same as that of  $\ramm$. Say $A$ is a satisfying assignment for $\varphi$.  Consider a clause $C_j$.
+\begin{itemize}
+\item If $A$ makes $\ell_j^3$ true then:
+\begin{itemize}
+\item $\tuple{T_{\ell_j^3}: \wt(d_j, 1)}~\rf~\tuple{T_f: \rd(d_j, 1)}$,
+\item Choose an arbitrary $\wt(c_j, 1)$ for $\tuple{T_j: \rd(c_j, 1)}$
+\end{itemize}
+\item Else, $A$ makes one of the first two literals of $C_j$ true. Arbitrarily pick one $\ell_j^i$, for $i \in \{1,2\}$:  
+\begin{itemize}
+\item $\tuple{T_{\ell_j^i}: \wt(c_j, 1)}~\rf~ \tuple{T_j: \rd(c_j, 1)}$,
+\item $\tuple{T_{j}:\wt(d_j, 1)}~\rf~\tuple{T_f: \rd(d_j, 1)}$
+\end{itemize}
+\end{itemize}
+The $\rf$-edges related to $s_i$'s remains unchanged.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+    every node/.style={font=\small}
+]
+
+% =========================================================
+% T_i^{1}
+% =========================================================
+
+\node at (0,0) {$T_i^1$};
+
+\node at (0,-0.60) {$w(s_i,1)$};
+\node at (0,-1.15) {$w(s_i,2)$};
+\node at (0,-1.70) {$w(v_i,1)$};
 
 
+% =========================================================
+% T_i^{0}
+% =========================================================
+
+\node at (2.4,0) {$T_i^0$};
+
+\node at (2.4,-0.60) {$w(s_i,1)$};
+\node at (2.4,-1.15) {$w(s_i,2)$};
+\node at (2.4,-1.70) {$w(v_i,0)$};
+
+
+% vertical separator
+\draw (1.2,0.30) -- (1.2,-2.10);
+
+
+% =========================================================
+% T_{x_i}
+% =========================================================
+
+\node at (0,-3.05) {$T_{x_i}$};
+
+\node at (0,-3.65) {$r(v_i,1)$};
+
+\node[align=center] at (0,-5.45)
+{
+\footnotesize $w(c_j,1)$,\\ $j\in S_{x_i}\setminus S_{x_i}^{3}$\\[3pt]
+$w(d_j,1)$,\\
+$j\in S_{x_i}^{3}$
+};
+
+
+
+\node[align=center] at (0,-7)
+{\scriptsize $S_{x_i}^{3}=\{j:\ell_j^3=x_i\}$};
+
+
+% =========================================================
+% T_{\neg x_i}
+% =========================================================
+
+\node at (3.0,-3.05) {$T_{\neg x_i}$};
+
+\node at (3.0,-3.70) {$r(v_i,0)$};
+
+\node[align=center] at (3.0,-5.45)
+{
+\footnotesize $w(c_j,1)$,\\ \quad $j\in S_{\neg x_i}\setminus S_{\neg x_i}^{3}$\\[3pt]
+$w(d_j,1)$,\\ \quad $j\in S_{\neg x_i}^{3}$
+};
+
+\node[align=center] at (3.0,-7)
+{\scriptsize $S_{\neg x_i}^{3}=\{j:\ell_j^3=\neg x_i\}$};
+
+
+
+% vertical separator
+\draw (1.50,-2.70) -- (1.50,-7.5);
+
+
+% =========================================================
+% T_j
+% =========================================================
+
+\node at (5.75,-3.05) {$T_j$};
+
+\node at (5.75,-3.70) {$r(c_j,1)$};
+\node at (5.75,-4.45) {$w(d_j,1)$};
+
+
+% vertical separator
+\draw (4.50,-2.70) -- (4.50,-7.5);
+
+
+% =========================================================
+% T_f
+% =========================================================
+
+\node at (8.5,-0.20) {$T_f$};
+
+\node at (8.5,-0.90) {$r(d_1,1)$};
+\node at (8.5,-1.45) {$\vdots$};
+\node at (8.5,-2.00) {$r(d_m,1)$};
+
+\node at (8.5,-2.70) {$r(s_1,2)$};
+\node at (8.5,-3.25) {$r(s_1,1)$};
+
+\node at (8.5,-3.85) {$\vdots$};
+
+\node at (8.5,-4.40) {$r(s_k,2)$};
+\node at (8.5,-4.95) {$r(s_k,1)$};
+
+
+% vertical separator
+\draw (7.15,0.05) -- (7.15,-7.5);
+
+
+% =========================================================
+% Index
+% =========================================================
+
+\node at (3,-7.3)
+{\scriptsize $i\in\{1,2,\ldots,k\}$};
+
+
+\end{tikzpicture}
+\caption{Threads in the 2-Writer reduction, for
+$i\in\{1,2,\ldots,k\}$.}
+\label{fig:cm-two-writer}
+\end{figure}
+
+By arguments similar to the proof of Lemma~\ref{lem:cm-eth}, we prove the following.
+
+\begin{lemma}\label{lem:eth-cm}
+If $\varphi$ has a satisfying assignment, then $\ypartial_\varphi \models \cmmm$. 
+\end{lemma}
+\begin{proof}
+The argument for \OB{} follows similar lines of argument as the proof for Lemma~\ref{lem:cm-eth}. Irreflexivity of $\ob{}$ is evident for all threads  except $T_j,~j=1,2,\dots,m$ in Figure~\ref{fig:cm-two-writer}.  Even for $T_j$ there are no conflicting triplets that matches the conditions of the second rule of $\ob{e}$ as given in Section~\ref{app:cc-models-overview}. Naturally, \OB{} follows.
+\end{proof}
+
+We have shown how the hardness results vary when the number of writers are fixed. We get the same trichotomy of results as we got for the previous memory models in Part B of the thesis. Infact for single-writer systems, we even get a superlinear lower bound assuming BMM hypothesis for all models except Relaxed. The objective of Part B was to show how the number of writers affect the complexity of the $\vm$-problem. For multi-writers, the hardness  is the result of finding a correct total order among the writes on the same memory location. Even in the case of $\wramm$, where there is no total order synthesised on the write operations, the $\hb$ resulting from the synthesis of $\rf$, induces a latent partial order.  
+ Hence, when the ordering among the writes on same variable became fixed in $\onewriter$, the $\vm$-problem was solvable easily. Infact, if the total order among the write operations are already fixed, we can show that consistency checking for any memory model can be done in polynomial time given there exists a polynomial time algorithm for $\onewriter$ for that memory model. This will be shown in Chapter~\ref{conclusion}.  

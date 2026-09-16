@@ -1,0 +1,592 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
+\HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
+\global\let\oldcontentsline\contentsline
+\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
+\global\let\oldnewlabel\newlabel
+\gdef\newlabel#1#2{\newlabelxx{#1}#2}
+\gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
+\AtEndDocument{\ifx\hyper@anchor\@undefined
+\let\contentsline\oldcontentsline
+\let\newlabel\oldnewlabel
+\fi}
+\fi}
+\global\let\hyper@last\relax 
+\gdef\HyperFirstAtBeginDocument#1{#1}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\providecommand \oddpage@label [2]{}
+\@writefile{toc}{\contentsline {chapter}{Declaration}{i}{chapter*.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{Acknowledgements}{ii}{chapter*.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{Abstract}{iii}{chapter*.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{List of Publications}{iv}{chapter*.4}\protected@file@percent }
+\citation{SC-Lamport78}
+\citation{sun1991sparc}
+\citation{gharachorloo1990memory}
+\citation{gharachorloo1990memory}
+\citation{dubois1986memory}
+\citation{sun1991sparc}
+\citation{sparc1994architecture}
+\citation{GHARACHORLOO1992399}
+\citation{CantinLS05}
+\@writefile{toc}{\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{loa}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {1.1}Background and Related Work}{3}{section.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1.1}Verifying Memory Models}{3}{subsection.1.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {1.2}Contributions}{3}{section.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {1.3}Organization of the Thesis}{3}{section.1.3}\protected@file@percent }
+\citation{gibbons}
+\@writefile{toc}{\contentsline {chapter}{\numberline {2}Preliminaries}{4}{chapter.2}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{loa}{\addvspace {10\p@ }}
+\newlabel{prelim}{{2}{4}{Preliminaries}{chapter.2}{}}
+\newlabel{prelim@cref}{{[chapter][2][]2}{[1][4][]4}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.1}Concurrent Programming}{4}{section.2.1}\protected@file@percent }
+\citation{SC-Lamport78}
+\citation{gibbons}
+\citation{gibbons}
+\citation{gibbons}
+\citation{gibbons}
+\citation{QadeerMusuvati}
+\citation{DBLP:conf/tacas/QadeerR05}
+\citation{vafaedis}
+\@writefile{toc}{\contentsline {section}{\numberline {2.2}Sequential Consistency}{5}{section.2.2}\protected@file@percent }
+\citation{gibbons}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.1}{\ignorespaces The partial interleaving $(1:w(x,1))(3:r(x,1))(1:w(x,2))$ has only one preemption at $(1:w(x,1))$ while the interleaving $(1:w(x,1))(3:r(x,1))(1:w(x,2)) (2:r(x,2)) (2:w(y,1)) (1:r(y,1))$ has two preemptions at $(1:w(x,1))$ and $(1:w(x,2))$.\relax }}{6}{figure.caption.7}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig-onewriter-example}{{2.1}{6}{The partial interleaving $(1:w(x,1))(3:r(x,1))(1:w(x,2))$ has only one preemption at $(1:w(x,1))$ while the interleaving $(1:w(x,1))(3:r(x,1))(1:w(x,2)) (2:r(x,2)) (2:w(y,1)) (1:r(y,1))$ has two preemptions at $(1:w(x,1))$ and $(1:w(x,2))$.\relax }{figure.caption.7}{}}
+\newlabel{fig-onewriter-example@cref}{{[figure][1][2]2.1}{[1][5][]6}}
+\@writefile{loe}{\addvspace {10\p@ }}
+\@writefile{loe}{\contentsline {theorem}{\numberline {1}Theorem}{6}{theorem.1}\protected@file@percent }
+\newlabel{th:onewriter}{{1}{6}{}{theorem.1}{}}
+\newlabel{th:onewriter@cref}{{[theorem][1][]1}{[1][6][]6}}
+\@writefile{loe}{\contentsline {theorem}{\numberline {2}Theorem}{6}{theorem.2}\protected@file@percent }
+\newlabel{th:NPhardness}{{2}{6}{}{theorem.2}{}}
+\newlabel{th:NPhardness@cref}{{[theorem][2][]2}{[1][6][]6}}
+\@writefile{loe}{\contentsline {theorem}{\numberline {3}Theorem}{6}{theorem.3}\protected@file@percent }
+\newlabel{scFinegrained}{{3}{6}{}{theorem.3}{}}
+\newlabel{scFinegrained@cref}{{[theorem][3][]3}{[1][6][]6}}
+\newlabel{th:Finegrained}{{3}{6}{}{theorem.3}{}}
+\newlabel{th:Finegrained@cref}{{[theorem][3][]3}{[1][6][]6}}
+\@writefile{toc}{\contentsline {chapter}{Part A}{8}{chapter*.8}\protected@file@percent }
+\citation{gibbons}
+\citation{musuvathi}
+\@writefile{toc}{\contentsline {chapter}{\numberline {3}VSC$^\pi $ Verifying Sequential Consistency under fixed preemptions}{9}{chapter.3}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{loa}{\addvspace {10\p@ }}
+\newlabel{sc-1}{{3}{9}{VSC$^\pp $ Verifying Sequential Consistency under fixed preemptions}{chapter.3}{}}
+\newlabel{sc-1@cref}{{[chapter][3][]3}{[1][9][]9}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.1}VSC under fixed preemptions}{9}{section.3.1}\protected@file@percent }
+\newlabel{VSCp}{{3.1}{9}{VSC under fixed preemptions}{section.3.1}{}}
+\newlabel{VSCp@cref}{{[section][1][3]3.1}{[1][9][]9}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.1}Results for Single Writer}{9}{subsection.3.1.1}\protected@file@percent }
+\@writefile{loe}{\addvspace {10\p@ }}
+\@writefile{loe}{\contentsline {theorem}{\numberline {4}Theorem}{9}{theorem.4}\protected@file@percent }
+\newlabel{th:onewriter}{{4}{9}{}{theorem.4}{}}
+\newlabel{th:onewriter@cref}{{[theorem][4][]4}{[1][9][]9}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces Schema for the algorithm for \textsc  {1-Writer}\ programs\relax }}{10}{figure.caption.9}\protected@file@percent }
+\newlabel{fig:schema-one-writer}{{3.1}{10}{Schema for the algorithm for \onewriter \ programs\relax }{figure.caption.9}{}}
+\newlabel{fig:schema-one-writer@cref}{{[figure][1][3]3.1}{[1][10][]10}}
+\@writefile{loe}{\contentsline {example}{\numberline {1}Example}{10}{example.1}\protected@file@percent }
+\newlabel{eg:block-program}{{1}{10}{}{example.1}{}}
+\newlabel{eg:block-program@cref}{{[example][1][]1}{[1][10][]10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces Programs $\mathsf  {Prog}_1$ and $\mathsf  {Prog}_2$ on the left, their corresponding block-programs on the right w.r.t. chosen preemption points. Inner blocks are coloured in violet, and outer blocks in green. The blue edges denote edges in the conflict graph of the outer nodes.\relax }}{11}{figure.caption.12}\protected@file@percent }
+\newlabel{fig:example-algo}{{3.2}{11}{Programs $\program _1$ and $\program _2$ on the left, their corresponding block-programs on the right w.r.t. chosen preemption points. Inner blocks are coloured in violet, and outer blocks in green. The blue edges denote edges in the conflict graph of the outer nodes.\relax }{figure.caption.12}{}}
+\newlabel{fig:example-algo@cref}{{[figure][2][3]3.2}{[1][11][]11}}
+\@writefile{loe}{\contentsline {example}{\numberline {2}Example}{11}{example.2}\protected@file@percent }
+\newlabel{eg:sc-for-block-programs}{{2}{11}{}{example.2}{}}
+\newlabel{eg:sc-for-block-programs@cref}{{[example][2][]2}{[1][11][]11}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces A permutation of inner blocks (above), and an interleaving obtained by inserting outer blocks at appropriate positions (below).\relax }}{12}{figure.caption.13}\protected@file@percent }
+\newlabel{fig:example-algo-final-step}{{3.3}{12}{A permutation of inner blocks (above), and an interleaving obtained by inserting outer blocks at appropriate positions (below).\relax }{figure.caption.13}{}}
+\newlabel{fig:example-algo-final-step@cref}{{[figure][3][3]3.3}{[1][11][]12}}
+\@writefile{loe}{\contentsline {lemma}{\numberline {1}Lemma}{12}{lemma.1}\protected@file@percent }
+\newlabel{eq:naive}{{3.1}{12}{Sequential Consistency for Block Programs}{equation.3.1.1}{}}
+\newlabel{eq:naive@cref}{{[equation][1][3]3.1}{[1][12][]12}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces Module to obtain an $\mathsf  {SC}$-consistent block interleaving from a given block program $\mathsf  {Prog}$\relax }}{14}{algocf.1}\protected@file@percent }
+\newlabel{pseudocode:vscp-interleaving}{{1}{14}{Step 2.4. Placing the outer blocks respecting conflict}{algocf.1}{}}
+\newlabel{pseudocode:vscp-interleaving@cref}{{[algorithm][1][]1}{[1][13][]14}}
+\newlabel{for-loop-outer}{{6}{14}{Step 2.4. Placing the outer blocks respecting conflict}{AlgoLine.1.6}{}}
+\newlabel{for-loop-outer@cref}{{[line][6][]6}{[1][13][]14}}
+\newlabel{While-loop}{{7}{14}{Step 2.4. Placing the outer blocks respecting conflict}{AlgoLine.1.7}{}}
+\newlabel{While-loop@cref}{{[line][7][]7}{[1][13][]14}}
+\newlabel{For-loop-iner}{{9}{14}{Step 2.4. Placing the outer blocks respecting conflict}{AlgoLine.1.9}{}}
+\newlabel{For-loop-iner@cref}{{[line][9][]9}{[1][13][]14}}
+\newlabel{if-conflict}{{10}{14}{Step 2.4. Placing the outer blocks respecting conflict}{AlgoLine.1.10}{}}
+\newlabel{if-conflict@cref}{{[line][10][]10}{[1][13][]14}}
+\@writefile{loe}{\contentsline {theorem}{\numberline {5}Theorem}{15}{theorem.5}\protected@file@percent }
+\citation{gibbons}
+\citation{ImpagliazzoPZ01}
+\citation{gibbons}
+\@writefile{toc}{\contentsline {chapter}{\numberline {4}Hardness Results for VSC$^\pi $}{17}{chapter.4}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{loa}{\addvspace {10\p@ }}
+\newlabel{SC-hardness}{{4}{17}{Hardness Results for VSC$^\pp $}{chapter.4}{}}
+\newlabel{SC-hardness@cref}{{[chapter][4][]4}{[1][17][]17}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Illustration of the various complexity results\relax }}{17}{figure.caption.21}\protected@file@percent }
+\newlabel{fig:results-overview}{{4.1}{17}{Illustration of the various complexity results\relax }{figure.caption.21}{}}
+\newlabel{fig:results-overview@cref}{{[figure][1][4]4.1}{[1][17][]17}}
+\citation{DowneyFellows1999}
+\citation{Gibbons}
+\citation{ImpagliazzoPZ01}
+\newlabel{thmt@@scFinegrained@data}{{\def \theequation {4.\@arabic {\c@equation }}\def \theHequation {(restate \theHthmt@dummyctr )4.0.\@arabic {\c@equation }}\setcounter {equation}{0}}{18}{Multiple writers, $\pp $ not fixed}{section*.24}{}}
+\newlabel{thmt@@scFinegrained@data@cref}{{[chapter][4][]4}{[1][18][]18}}
+\@writefile{loe}{\addvspace {10\p@ }}
+\@writefile{loe}{\contentsline {theorem}{\numberline {6}Theorem}{18}{theorem.6}\protected@file@percent }
+\newlabel{thmt@@scFinegrained}{{6}{18}{}{theorem.6}{}}
+\newlabel{thmt@@scFinegrained@cref}{{[theorem][6][]6}{[1][18][]18}}
+\newlabel{th:Finegrained}{{6}{18}{}{theorem.6}{}}
+\newlabel{th:Finegrained@cref}{{[theorem][6][]6}{[1][18][]18}}
+\newlabel{thmt@@scFinegrained@data}{{\def \theequation {4.\@arabic {\c@equation }}\def \theHequation {(restate \theHthmt@dummyctr )4.0.\@arabic {\c@equation }}\setcounter {equation}{0}}{18}{Multiple writers, $\pp $ not fixed}{theorem.6}{}}
+\newlabel{thmt@@scFinegrained@data@cref}{{[chapter][4][]4}{[1][18][]18}}
+\@writefile{loe}{\contentsline {theorem}{\numberline {7}Theorem}{18}{theorem.7}\protected@file@percent }
+\newlabel{thmt@@scFinegrained}{{7}{18}{}{theorem.7}{}}
+\newlabel{thmt@@scFinegrained@cref}{{[theorem][7][]7}{[1][18][]18}}
+\newlabel{th:NPhardness}{{7}{18}{}{theorem.7}{}}
+\newlabel{th:NPhardness@cref}{{[theorem][7][]7}{[1][18][]18}}
+\newlabel{thmt@@wonehardness@data}{{\def \theequation {4.\@arabic {\c@equation }}\def \theHequation {(restate \theHthmt@dummyctr )4.0.\@arabic {\c@equation }}\setcounter {equation}{0}}{18}{Multiple writers, $\pp $ not fixed}{theorem.7}{}}
+\newlabel{thmt@@wonehardness@data@cref}{{[chapter][4][]4}{[1][18][]18}}
+\@writefile{loe}{\contentsline {theorem}{\numberline {8}Theorem}{18}{theorem.8}\protected@file@percent }
+\newlabel{thmt@@wonehardness}{{8}{18}{}{theorem.8}{}}
+\newlabel{thmt@@wonehardness@cref}{{[theorem][8][]8}{[1][18][]18}}
+\newlabel{thm:w1-hard}{{8}{18}{}{theorem.8}{}}
+\newlabel{thm:w1-hard@cref}{{[theorem][8][]8}{[1][18][]18}}
+\@writefile{toc}{\contentsline {paragraph}{Notation.}{19}{section*.25}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}Fine-grained Hardness under ETH for \textsc  {3-Writer}}{19}{section.4.1}\protected@file@percent }
+\newlabel{sec:finegrained}{{4.1}{19}{Fine-grained Hardness under ETH for \threewriter }{section.4.1}{}}
+\newlabel{sec:finegrained@cref}{{[section][1][4]4.1}{[1][19][]19}}
+\@writefile{loe}{\contentsline {theorem}{\numberline {7}Theorem}{19}{theorem.dummy.16}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces Threads in the reduction to \textsc  {3-Writer}\ programs\relax }}{19}{table.caption.26}\protected@file@percent }
+\newlabel{tab:reduction-threads-scmm}{{4.1}{19}{Threads in the reduction to \threewriter \ programs\relax }{table.caption.26}{}}
+\newlabel{tab:reduction-threads-scmm@cref}{{[table][1][4]4.1}{[1][19][]19}}
+\newlabel{thmt@@threeWriterLemma@data}{{\def \theequation {4.\@arabic {\c@equation }}\def \theHequation {(restate \theHthmt@dummyctr )4.1.\@arabic {\c@equation }}\setcounter {equation}{0}}{19}{Fine-grained Hardness under ETH for \threewriter }{table.caption.26}{}}
+\newlabel{thmt@@threeWriterLemma@data@cref}{{[section][1][4]4.1}{[1][19][]19}}
+\@writefile{loe}{\contentsline {lemma}{\numberline {2}Lemma}{20}{lemma.2}\protected@file@percent }
+\newlabel{thmt@@threeWriterLemma}{{2}{20}{}{lemma.2}{}}
+\newlabel{thmt@@threeWriterLemma@cref}{{[lemma][2][]2}{[1][19][]20}}
+\newlabel{lem:eth-sc}{{2}{20}{}{lemma.2}{}}
+\newlabel{lem:eth-sc@cref}{{[lemma][2][]2}{[1][19][]20}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}NP-Hardness for \textsc  {2-Writer}}{20}{section.4.2}\protected@file@percent }
+\newlabel{sec:np}{{4.2}{20}{NP-Hardness for \twowriter }{section.4.2}{}}
+\newlabel{sec:np@cref}{{[section][2][4]4.2}{[1][20][]20}}
+\newlabel{thmt@@twoWriterLemma@data}{{\def \theequation {4.\@arabic {\c@equation }}\def \theHequation {(restate \theHthmt@dummyctr )4.2.\@arabic {\c@equation }}\setcounter {equation}{0}}{21}{NP-Hardness for \twowriter }{section.4.2}{}}
+\newlabel{thmt@@twoWriterLemma@data@cref}{{[section][2][4]4.2}{[1][21][]21}}
+\@writefile{loe}{\contentsline {lemma}{\numberline {3}Lemma}{21}{lemma.3}\protected@file@percent }
+\newlabel{thmt@@twoWriterLemma}{{3}{21}{}{lemma.3}{}}
+\newlabel{thmt@@twoWriterLemma@cref}{{[lemma][3][]3}{[1][21][]21}}
+\newlabel{lem:np-two-writer}{{3}{21}{}{lemma.3}{}}
+\newlabel{lem:np-two-writer@cref}{{[lemma][3][]3}{[1][21][]21}}
+\citation{DowneyFellows1999}
+\@writefile{toc}{\contentsline {section}{\numberline {4.3}W[1]-hardness for VSC$^\pi $ when $\pi $ is an input parameter}{22}{section.4.3}\protected@file@percent }
+\newlabel{sec:w1-hard}{{4.3}{22}{W[1]-hardness for VSC$^\pp $ when $\pp $ is an input parameter}{section.4.3}{}}
+\newlabel{sec:w1-hard@cref}{{[section][3][4]4.3}{[1][22][]22}}
+\@writefile{loe}{\contentsline {theorem}{\numberline {8}Theorem}{22}{theorem.dummy.22}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces The $W[1]$-hardness reduction.\relax }}{23}{figure.caption.28}\protected@file@percent }
+\newlabel{fig:Example-w1}{{4.2}{23}{The $W[1]$-hardness reduction.\relax }{figure.caption.28}{}}
+\newlabel{fig:Example-w1@cref}{{[figure][2][4]4.2}{[1][22][]23}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.2}{\ignorespaces Reduction from $k$-independent set problem. Index $j$ ranges from $1$ to $k$.\relax }}{24}{table.caption.29}\protected@file@percent }
+\newlabel{tab:independent-set}{{4.2}{24}{Reduction from $k$-independent set problem. Index $j$ ranges from $1$ to $k$.\relax }{table.caption.29}{}}
+\newlabel{tab:independent-set@cref}{{[table][2][4]4.2}{[1][22][]24}}
+\@writefile{loe}{\contentsline {lemma}{\numberline {4}Lemma}{24}{lemma.4}\protected@file@percent }
+\newlabel{lem:independent-set-to-SC-interleaving}{{4}{24}{}{lemma.4}{}}
+\newlabel{lem:independent-set-to-SC-interleaving@cref}{{[lemma][4][]4}{[1][24][]24}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Illustrating the preemption points within a selector thread\relax }}{25}{figure.caption.30}\protected@file@percent }
+\newlabel{fig:w1-illustration}{{4.3}{25}{Illustrating the preemption points within a selector thread\relax }{figure.caption.30}{}}
+\newlabel{fig:w1-illustration@cref}{{[figure][3][4]4.3}{[1][24][]25}}
+\@writefile{loe}{\contentsline {lemma}{\numberline {5}Lemma}{25}{lemma.5}\protected@file@percent }
+\newlabel{lem:sc-interleaving-to-independent-set}{{5}{25}{}{lemma.5}{}}
+\newlabel{lem:sc-interleaving-to-independent-set@cref}{{[lemma][5][]5}{[1][25][]25}}
+\citation{TSO-context-bounding}
+\@writefile{toc}{\contentsline {section}{\numberline {4.4}Discussion}{26}{section.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\centering  Part B}{27}{chapter*.31}\protected@file@percent }
+\citation{KLSV:popl18}
+\citation{Lahav:2022}
+\citation{Margalit:2021:POPL}
+\citation{Norris:2013:OOPSLA}
+\citation{Margalit:2021:POPL}
+\citation{Lahav2021}
+\citation{Tunc2023}
+\citation{lahavveri}
+\citation{gibbons}
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}Weak Memory Models}{28}{chapter.5}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{loa}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {5.1}Preliminaries}{28}{section.5.1}\protected@file@percent }
+\newlabel{sec:prelims}{{5.1}{28}{Preliminaries}{section.5.1}{}}
+\newlabel{sec:prelims@cref}{{[section][1][5]5.1}{[1][28][]28}}
+\citation{Lahav:2017}
+\citation{Batty:2011}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.1}Consistency Axioms}{29}{subsection.5.1.1}\protected@file@percent }
+\newlabel{subsec:consistency_axioms}{{5.1.1}{29}{Consistency Axioms}{subsection.5.1.1}{}}
+\newlabel{subsec:consistency_axioms@cref}{{[subsection][1][5,1]5.1.1}{[1][29][]29}}
+\citation{Lahav:2022}
+\citation{Lahav:2022}
+\citation{Luo:2021}
+\citation{Lahav2021}
+\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces \small  Coherence Axioms for C11 variants\relax }}{30}{table.caption.32}\protected@file@percent }
+\newlabel{table:ax:models-1}{{5.1}{30}{\small Coherence Axioms for C11 variants\relax }{table.caption.32}{}}
+\newlabel{table:ax:models-1@cref}{{[table][1][5]5.1}{[1][30][]30}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.2}{\ignorespaces \small  The C11 models $\mathsf  {WRA}, \mathsf  {RA}, \mathsf  {SRA}, \mathsf  {Relaxed}$.\relax }}{30}{table.caption.32}\protected@file@percent }
+\newlabel{table:ax:models-2}{{5.2}{30}{\small The C11 models $\wramm , \ramm , \sramm , \rlxmm $.\relax }{table.caption.32}{}}
+\newlabel{table:ax:models-2@cref}{{[table][2][5]5.2}{[1][30][]30}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces \footnotesize  (a)porf-acyclicity{} is violated (b)write-coherence{} is violated: $\mathtt  {w}_1(x)\nobreakspace  {}\mathsf  {\color  {colorHB}hb}\nobreakspace  {}\mathtt  {w}_2(x)$ while $\mathtt  {w}_2(x)\nobreakspace  {}\mathsf  {\color  {colorMO}mo}\nobreakspace  {}\mathtt  {w}_1(x)$, (c)read-coherence{} is violated: $\mathtt  {w}_1(x)\nobreakspace  {}\mathsf  {\color  {colorRF}rf}\nobreakspace  {}\mathtt  {r}(x)$ with $\mathtt  {w}_1(x)\nobreakspace  {}\mathsf  {\color  {colorMO}mo}\nobreakspace  {}\mathtt  {w}_2(x)$ and $\mathtt  {w}_2(x)\nobreakspace  {}\mathsf  {\color  {colorHB}hb}\nobreakspace  {}\mathtt  {r}(x)$, (d)weak-read-coherence{} is violated: $\mathtt  {w}_1(x)\nobreakspace  {}\mathsf  {\color  {colorRF}rf}\nobreakspace  {}\mathtt  {r}(x)$ with $\mathtt  {w}_1(x)\nobreakspace  {}\mathsf  {\color  {colorHB}hb}\nobreakspace  {}\mathtt  {w}_2(x)$ and $\mathtt  {w}_2(x)\nobreakspace  {}\mathsf  {\color  {colorHB}hb}\nobreakspace  {}\mathtt  {r}(x)$, (e)strong-write-coherence{} is violated : $\mathsf  {\color  {colorHB}hb}\cup \mathsf  {\color  {colorMO}mo}$ cycle, (f)relaxed-read-coherence{} is violated: $\mathtt  {w}_1(x)\nobreakspace  {}\mathsf  {\color  {colorMO}mo}\nobreakspace  {}\mathtt  {w}_2(x)$, $\mathtt  {r}_2(x)\nobreakspace  {}\mathsf  {\color  {colorPO}po}\nobreakspace  {}\mathtt  {r}_1(x)$ with $\mathtt  {w}_2(x)\nobreakspace  {}\mathsf  {\color  {colorRF}rf}\nobreakspace  {}\mathtt  {r}_2(x)$ and $\mathtt  {w}_1(x)\nobreakspace  {}\mathsf  {\color  {colorRF}rf}\nobreakspace  {}\mathtt  {r}_1(x)$, (g)relaxed-write-coherence{} is violated\relax }}{30}{figure.caption.33}\protected@file@percent }
+\newlabel{fig:illust}{{5.1}{30}{\footnotesize (a)\PORF {} is violated (b)\WCoh {} is violated: $\wt _1(x)~\hb ~\wt _2(x)$ while $\wt _2(x)~\mo ~\wt _1(x)$, (c)\RCoh {} is violated: $\wt _1(x)~\rf ~\rd (x)$ with $\wt _1(x)~\mo ~\wt _2(x)$ and $\wt _2(x)~\hb ~\rd (x)$, (d)\WRCoh {} is violated: $\wt _1(x)~\rf ~\rd (x)$ with $\wt _1(x)~\hb ~\wt _2(x)$ and $\wt _2(x)~\hb ~\rd (x)$, (e)\SWCoh {} is violated : $\hb \cup \mo $ cycle, (f)\RlxRCoh {} is violated: $\wt _1(x)~\mo ~\wt _2(x)$, $\rd _2(x)~\po ~\rd _1(x)$ with $\wt _2(x)~\rf ~\rd _2(x)$ and $\wt _1(x)~\rf ~\rd _1(x)$, (g)\RlxWCoh {} is violated\relax }{figure.caption.33}{}}
+\newlabel{fig:illust@cref}{{[figure][1][5]5.1}{[1][30][]30}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.2}{\ignorespaces \footnotesize  (a) execution graph of MP-trans violating $\mathsf  {WRA}$ : we have $\mathtt  {w}(x,0)\nobreakspace  {}\mathsf  {\color  {colorHB}hb}\nobreakspace  {}\mathtt  {w}(x,1)\nobreakspace  {}\mathsf  {\color  {colorHB}hb}\nobreakspace  {}\mathtt  {r}(x,0)\nobreakspace  {}\mathsf  {\color  {colorRF}rf}^{-1}\nobreakspace  {}\mathtt  {w}(x,0)$ which violates weak-read-coherence. (b) execution graph of WWrace consistent with $\mathsf  {WRA}$ but violating $\mathsf  {RA}$ : we have $\mathtt  {r}(x,1)\nobreakspace  {}\mathsf  {\color  {colorRF}rf}^{-1}\mathtt  {w}(x,1)\nobreakspace  {}\mathsf  {\color  {colorMO}mo}\nobreakspace  {}\mathtt  {w}(x,2)\nobreakspace  {}\mathsf  {\color  {colorHB}hb}\nobreakspace  {}\mathtt  {r}(x,1)$ violating read coherence. (c) execution graph of 2+2W which is $\mathsf  {RA}$ consistent but violating $\mathsf  {SRA}$ : we have $\mathtt  {w}(x,1)\nobreakspace  {}\mathsf  {\color  {colorHB}hb}\nobreakspace  {}\mathtt  {w}(y,2)\nobreakspace  {}\mathsf  {\color  {colorMO}mo}\nobreakspace  {}\mathtt  {w}(y,1)\nobreakspace  {}\mathsf  {\color  {colorHB}hb}\nobreakspace  {}\mathtt  {w}(x,2)\nobreakspace  {}\mathsf  {\color  {colorMO}mo}\nobreakspace  {}\mathtt  {w}(x,1)$ violating strong-write-coherence. (d) execution graph of Jumping which is $\mathsf  {SRA}$ consistent, but violates $\mathsf  {SC}$: we have $\mathtt  {w}(x,1)\nobreakspace  {}\mathsf  {\color  {colorPO}po}\nobreakspace  {}\mathtt  {w}(y,1)\nobreakspace  {}\mathsf  {\color  {colorRF}rf}\nobreakspace  {}\mathtt  {r}(y,1)\nobreakspace  {}\mathsf  {\color  {colorPO}po}\nobreakspace  {}\mathtt  {r}(x,2)\nobreakspace  {}\mathsf  {\color  {colorFR}fr}\nobreakspace  {}\mathtt  {w}(x,1)$ violating $\mathsf  {acy}(\mathsf  {\color  {colorPO}po}\cup \mathsf  {\color  {colorRF}rf}\cup \mathsf  {\color  {colorMO}mo}\cup \mathsf  {\color  {colorFR}fr})$. \relax }}{31}{figure.caption.37}\protected@file@percent }
+\newlabel{examplesra}{{5.2}{31}{\footnotesize (a) execution graph of MP-trans violating $\wramm $ : we have $\wt (x,0)~\hb ~\wt (x,1)~\hb ~\rd (x,0)~\rf ^{-1}~\wt (x,0)$ which violates weak-read-coherence. (b) execution graph of WWrace consistent with $\wramm $ but violating $\ramm $ : we have $\rd (x,1)~\rf ^{-1}\wt (x,1)~\mo ~\wt (x,2)~\hb ~\rd (x,1)$ violating read coherence. (c) execution graph of 2+2W which is $\ramm $ consistent but violating $\sramm $ : we have $\wt (x,1)~\hb ~\wt (y,2)~\mo ~\wt (y,1)~\hb ~\wt (x,2)~\mo ~\wt (x,1)$ violating strong-write-coherence. (d) execution graph of Jumping which is $\sramm $ consistent, but violates $\scmm $: we have $\wt (x,1)~\po ~\wt (y,1)~\rf ~\rd (y,1)~\po ~\rd (x,2)~\fr ~\wt (x,1)$ violating $\acy (\po \cup \rf \cup \mo \cup \fr )$. \relax }{figure.caption.37}{}}
+\newlabel{examplesra@cref}{{[figure][2][5]5.2}{[1][31][]31}}
+\@writefile{loe}{\addvspace {10\p@ }}
+\@writefile{loe}{\contentsline {lemma}{\numberline {6}Lemma}{31}{lemma.6}\protected@file@percent }
+\newlabel{lem:sra-ra-wra-relationship}{{6}{31}{}{lemma.6}{}}
+\newlabel{lem:sra-ra-wra-relationship@cref}{{[lemma][6][]6}{[1][31][]31}}
+\@writefile{loe}{\contentsline {lemma}{\numberline {7}Lemma}{31}{lemma.7}\protected@file@percent }
+\newlabel{lem:sra-ra-rlx-relationship}{{7}{31}{}{lemma.7}{}}
+\newlabel{lem:sra-ra-rlx-relationship@cref}{{[lemma][7][]7}{[1][31][]31}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.3}{\ignorespaces \footnotesize  (a) $\mathsf  {WRA}$-consitent but violates relaxed-read-coherence{} and hence not $\mathsf  {Relaxed}$-consistent. (b) $\mathsf  {Relaxed}$-consitent but violates weak-read-coherence{} and hence not $\mathsf  {WRA}$-consistent. \relax }}{32}{figure.caption.38}\protected@file@percent }
+\newlabel{example-rlxwra}{{5.3}{32}{\footnotesize (a) $\wramm $-consitent but violates \RlxRCoh {} and hence not $\rlxmm $-consistent. (b) $\rlxmm $-consitent but violates \WRCoh {} and hence not $\wramm $-consistent. \relax }{figure.caption.38}{}}
+\newlabel{example-rlxwra@cref}{{[figure][3][5]5.3}{[1][32][]32}}
+\citation{gibbons}
+\citation{CantinLS05}
+\citation{ChakrabortyKMP24}
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}Verifying Release-Acquire Consistency}{33}{chapter.6}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{loa}{\addvspace {10\p@ }}
+\newlabel{RA-ptime}{{6}{33}{Verifying Release-Acquire Consistency}{chapter.6}{}}
+\newlabel{RA-ptime@cref}{{[chapter][6][]6}{[1][33][]33}}
+\citation{gibbons}
+\@writefile{toc}{\contentsline {section}{\numberline {6.1}Polynomial-time algorithm for \textsc  {1-Writer}\ systems}{34}{section.6.1}\protected@file@percent }
+\newlabel{sec:onewriter}{{6.1}{34}{Polynomial-time algorithm for \onewriter \ systems}{section.6.1}{}}
+\newlabel{sec:onewriter@cref}{{[section][1][6]6.1}{[1][33][]34}}
+\newlabel{order}{{6.1}{34}{Polynomial-time algorithm for \onewriter \ systems}{section.6.1}{}}
+\newlabel{order@cref}{{[section][1][6]6.1}{[1][34][]34}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.1}Structural properties of \textsc  {1-Writer}\ execution graphs}{34}{subsection.6.1.1}\protected@file@percent }
+\newlabel{sec:onewriter-structural-properties}{{6.1.1}{34}{Structural properties of \onewriter \ execution graphs}{subsection.6.1.1}{}}
+\newlabel{sec:onewriter-structural-properties@cref}{{[subsection][1][6,1]6.1.1}{[1][34][]34}}
+\newlabel{thmt@@lemonewriterreducestowra@data}{{\def \theequation {6.\@arabic {\c@equation }}\def \theHequation {(restate \theHthmt@dummyctr )6.1.\@arabic {\c@equation }}\setcounter {equation}{0}}{35}{Structural properties of \onewriter \ execution graphs}{subsection.6.1.1}{}}
+\newlabel{thmt@@lemonewriterreducestowra@data@cref}{{[subsection][1][6,1]6.1.1}{[1][35][]35}}
+\@writefile{loe}{\addvspace {10\p@ }}
+\@writefile{loe}{\contentsline {lemma}{\numberline {8}Lemma}{35}{lemma.8}\protected@file@percent }
+\newlabel{thmt@@lemonewriterreducestowra}{{8}{35}{}{lemma.8}{}}
+\newlabel{thmt@@lemonewriterreducestowra@cref}{{[lemma][8][]8}{[1][35][]35}}
+\newlabel{lem:one-writer-reduces-to-wra}{{8}{35}{}{lemma.8}{}}
+\newlabel{lem:one-writer-reduces-to-wra@cref}{{[lemma][8][]8}{[1][35][]35}}
+\newlabel{thmt@@lemmaonewritertwoproperties@data}{{\def \theequation {6.\@arabic {\c@equation }}\def \theHequation {(restate \theHthmt@dummyctr )6.1.\@arabic {\c@equation }}\setcounter {equation}{0}}{35}{Structural properties of \onewriter \ execution graphs}{lemma.8}{}}
+\newlabel{thmt@@lemmaonewritertwoproperties@data@cref}{{[subsection][1][6,1]6.1.1}{[1][35][]35}}
+\@writefile{loe}{\contentsline {lemma}{\numberline {9}Lemma}{36}{lemma.9}\protected@file@percent }
+\newlabel{thmt@@lemmaonewritertwoproperties}{{9}{36}{}{lemma.9}{}}
+\newlabel{thmt@@lemmaonewritertwoproperties@cref}{{[lemma][9][]9}{[1][35][]36}}
+\newlabel{lem:onewriter-axioms-two-properties}{{9}{36}{}{lemma.9}{}}
+\newlabel{lem:onewriter-axioms-two-properties@cref}{{[lemma][9][]9}{[1][35][]36}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.2}Algorithm}{36}{subsection.6.1.2}\protected@file@percent }
+\newlabel{sec:onewriter-algorithm}{{6.1.2}{36}{Algorithm}{subsection.6.1.2}{}}
+\newlabel{sec:onewriter-algorithm@cref}{{[subsection][2][6,1]6.1.2}{[1][36][]36}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces \footnotesize  From left: $\mathsf  {\color  {colorRF}rf}_0 \sqsubseteq \mathsf  {\color  {colorRF}rf}_1 \sqsubseteq \mathsf  {\color  {colorRF}rf}_2$. $\mathsf  {\color  {colorRF}rf}_0$ has a violation of weak-read-coherence{}:\nobreakspace  {}$\mathtt  {r}_3 \xrightarrow {\mathsf  {\color  {colorRF}rf}_{0}^{-1}} \mathtt  {w}_1 \xrightarrow {\mathsf  {\color  {colorPO}po}} \mathtt  {w}_2 \xrightarrow {\mathsf  {\color  {colorHB}hb}_0} \mathtt  {r}_3 $. $\mathsf  {\color  {colorRF}rf}_1$ has a violation of weak-read-coherence{}:\nobreakspace  {}$\mathtt  {r}_4 \xrightarrow {\mathsf  {\color  {colorRF}rf}_{1}^{-1}} \mathtt  {w}_2 \xrightarrow {\mathsf  {\color  {colorPO}po}} \mathtt  {w}_3 \xrightarrow {\mathsf  {\color  {colorHB}hb}_1} \mathtt  {r}_4 $. $\mathsf  {\color  {colorRF}rf}_2$ does not have any more violations of weak-read-coherence{}. porf-acyclicity{} is also satisfied by $\mathsf  {\color  {colorRF}rf}_2$. The underlying partial execution graph is $\mathsf  {WRA}$-consistent. \relax }}{37}{figure.caption.40}\protected@file@percent }
+\newlabel{Example-one-writer-without-porfcycle}{{6.1}{37}{\footnotesize From left: $\rf _0 \sqsubseteq \rf _1 \sqsubseteq \rf _2$. $\rf _0$ has a violation of \WRCoh {}:~$\rd _3 \xra {\rf _{0}^{-1}} \wt _1 \xra {\po } \wt _2 \xra {\hb _0} \rd _3 $. $\rf _1$ has a violation of \WRCoh {}:~$\rd _4 \xra {\rf _{1}^{-1}} \wt _2 \xra {\po } \wt _3 \xra {\hb _1} \rd _4 $. $\rf _2$ does not have any more violations of \WRCoh {}. \PORF {} is also satisfied by $\rf _2$. The underlying partial execution graph is $\wramm $-consistent. \relax }{figure.caption.40}{}}
+\newlabel{Example-one-writer-without-porfcycle@cref}{{[figure][1][6]6.1}{[1][36][]37}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces \footnotesize  From left: $\mathsf  {\color  {colorRF}rf}_0 \sqsubseteq \mathsf  {\color  {colorRF}rf}_1$. $\mathsf  {\color  {colorRF}rf}_0$ has a violation of weak-read-coherence{}:\nobreakspace  {}$\mathtt  {r}_3 \xrightarrow {\mathsf  {\color  {colorRF}rf}_{0}^{-1}} \mathtt  {w}_1 \xrightarrow {\mathsf  {\color  {colorPO}po}} \mathtt  {w}_2 \xrightarrow {\mathsf  {\color  {colorHB}hb}} \mathtt  {r}_3 $. $\mathsf  {\color  {colorRF}rf}_1$ has no weak-read-coherence{} violation but does not satisfy porf-acyclicity{}:\nobreakspace  {}$\mathtt  {w}_5 \xrightarrow {\mathsf  {\color  {colorRF}rf}_{1}} \mathtt  {r}_3 \xrightarrow {\mathsf  {\color  {colorPO}po}} \mathtt  {w}_4 \xrightarrow {\mathsf  {\color  {colorRF}rf}} \mathtt  {r}_2 \xrightarrow {\mathsf  {\color  {colorPO}po}} \mathtt  {w}_5$. The partial execution graph is not $\mathsf  {WRA}$-consistent. \relax }}{37}{figure.caption.41}\protected@file@percent }
+\newlabel{Example-one-writer-with-porfcycle}{{6.2}{37}{\footnotesize From left: $\rf _0 \sqsubseteq \rf _1$. $\rf _0$ has a violation of \WRCoh {}:~$\rd _3 \xra {\rf _{0}^{-1}} \wt _1 \xra {\po } \wt _2 \xra {\hb } \rd _3 $. $\rf _1$ has no \WRCoh {} violation but does not satisfy \PORF {}:~$\wt _5 \xra {\rf _{1}} \rd _3 \xra {\po } \wt _4 \xra {\rf } \rd _2 \xra {\po } \wt _5$. The partial execution graph is not $\wramm $-consistent. \relax }{figure.caption.41}{}}
+\newlabel{Example-one-writer-with-porfcycle@cref}{{[figure][2][6]6.2}{[1][36][]37}}
+\newlabel{thmt@@thmwracorrectness@data}{{\def \theequation {6.\@arabic {\c@equation }}\def \theHequation {(restate \theHthmt@dummyctr )6.1.\@arabic {\c@equation }}\setcounter {equation}{0}}{37}{Algorithm}{AlgoLine.2.36}{}}
+\newlabel{thmt@@thmwracorrectness@data@cref}{{[line][36][]36}{[1][37][]37}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces $\mathsf  {WRA}$-consistency checking in \textsc  {1-Writer}\ systems\relax }}{38}{algocf.2}\protected@file@percent }
+\newlabel{algo:one-writer-wra}{{2}{38}{Algorithm}{algocf.2}{}}
+\newlabel{algo:one-writer-wra@cref}{{[algorithm][2][]2}{[1][37][]38}}
+\newlabel{algo-while-main-onewriter}{{3}{38}{Algorithm}{AlgoLine.2.3}{}}
+\newlabel{algo-while-main-onewriter@cref}{{[line][3][]3}{[1][37][]38}}
+\newlabel{algo-update-call}{{4}{38}{Algorithm}{AlgoLine.2.4}{}}
+\newlabel{algo-update-call@cref}{{[line][4][]4}{[1][37][]38}}
+\newlabel{algo-check-porf}{{5}{38}{Algorithm}{AlgoLine.2.5}{}}
+\newlabel{algo-check-porf@cref}{{[line][5][]5}{[1][37][]38}}
+\newlabel{algo-declare-consistent}{{6}{38}{Algorithm}{AlgoLine.2.6}{}}
+\newlabel{algo-declare-consistent@cref}{{[line][6][]6}{[1][37][]38}}
+\newlabel{algo-porf-cycle}{{8}{38}{Algorithm}{AlgoLine.2.8}{}}
+\newlabel{algo-porf-cycle@cref}{{[line][8][]8}{[1][37][]38}}
+\newlabel{init-not-consistent1}{{16}{38}{Algorithm}{AlgoLine.2.16}{}}
+\newlabel{init-not-consistent1@cref}{{[line][16][]16}{[1][37][]38}}
+\newlabel{init-not-consistent2}{{20}{38}{Algorithm}{AlgoLine.2.20}{}}
+\newlabel{init-not-consistent2@cref}{{[line][20][]20}{[1][37][]38}}
+\newlabel{algo-violatecycle}{{23}{38}{Algorithm}{AlgoLine.2.23}{}}
+\newlabel{algo-violatecycle@cref}{{[line][23][]23}{[1][37][]38}}
+\newlabel{algo-update1}{{28}{38}{Algorithm}{AlgoLine.2.28}{}}
+\newlabel{algo-update1@cref}{{[line][28][]28}{[1][37][]38}}
+\newlabel{algo-update-notconsistent1}{{30}{38}{Algorithm}{AlgoLine.2.30}{}}
+\newlabel{algo-update-notconsistent1@cref}{{[line][30][]30}{[1][37][]38}}
+\newlabel{algo-update2}{{32}{38}{Algorithm}{AlgoLine.2.32}{}}
+\newlabel{algo-update2@cref}{{[line][32][]32}{[1][37][]38}}
+\newlabel{algo-update-notconsistent2}{{34}{38}{Algorithm}{AlgoLine.2.34}{}}
+\newlabel{algo-update-notconsistent2@cref}{{[line][34][]34}{[1][37][]38}}
+\@writefile{loe}{\contentsline {theorem}{\numberline {9}Theorem}{38}{theorem.9}\protected@file@percent }
+\newlabel{thmt@@thmwracorrectness}{{9}{38}{}{theorem.9}{}}
+\newlabel{thmt@@thmwracorrectness@cref}{{[theorem][9][]9}{[1][37][]38}}
+\citation{WilliamsW18}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.3}{\ignorespaces From triangles to violations of weak-read-coherence\relax }}{40}{figure.caption.44}\protected@file@percent }
+\newlabel{fig:super-linear-illustration}{{6.3}{40}{From triangles to violations of weak-read-coherence\relax }{figure.caption.44}{}}
+\newlabel{fig:super-linear-illustration@cref}{{[figure][3][6]6.3}{[1][40][]40}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.2}Hardness for \textsc  {1-Writer}\ systems}{40}{section.6.2}\protected@file@percent }
+\newlabel{sec:1-writer-hardness}{{6.2}{40}{Hardness for \onewriter \ systems}{section.6.2}{}}
+\newlabel{sec:1-writer-hardness@cref}{{[section][2][6]6.2}{[1][40][]40}}
+\@writefile{loe}{\contentsline {theorem}{\numberline {10}Theorem\thmtformatoptarg {Theorem\nobreakspace  {}1.3 of \cite  {WilliamsW18}}}{40}{theorem.10}\protected@file@percent }
+\@writefile{loe}{\contentsline {proposition}{\numberline {1}Proposition}{40}{proposition.1}\protected@file@percent }
+\newlabel{prop:wra-onewriter-lowerbound}{{1}{40}{}{proposition.1}{}}
+\newlabel{prop:wra-onewriter-lowerbound@cref}{{[proposition][1][]1}{[1][40][]40}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.4}{\ignorespaces  A partial execution $\overline  {\mathsf  {\color  {black}X}}$ for a graph $G=(\{1,2,3\}, \{(1,2), (2,1),(1,3), (3,1), (2,3), (3,2)\})$. We have $(\mathtt  {w}(a_1,0), \mathtt  {r}(a_1,0))\in \mathsf  {\color  {colorHB}hb}$ violating weak read coherence in $\overline  {\mathsf  {\color  {black}X}}$.  \relax }}{41}{figure.caption.45}\protected@file@percent }
+\newlabel{fig:super-linear-lower-bound}{{6.4}{41}{A partial execution $\expartial $ for a graph $G=(\{1,2,3\}, \{(1,2), (2,1),(1,3), (3,1), (2,3), (3,2)\})$. We have $(\wt (a_1,0), \rd (a_1,0))\in \hb $ violating weak read coherence in $\expartial $.  \relax }{figure.caption.45}{}}
+\newlabel{fig:super-linear-lower-bound@cref}{{[figure][4][6]6.4}{[1][41][]41}}
+\citation{Tunc2023}
+\@writefile{toc}{\contentsline {chapter}{\numberline {7}Hardness Results for VRA}{43}{chapter.7}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{loa}{\addvspace {10\p@ }}
+\newlabel{RA-hard}{{7}{43}{Hardness Results for VRA}{chapter.7}{}}
+\newlabel{RA-hard@cref}{{[chapter][7][]7}{[1][43][]43}}
+\citation{ImpagliazzoPZ01}
+\citation{Lokshtanov:ETH:2011}
+\citation{ChakrabortyKMP24}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.1}{\ignorespaces Threads in the reduction, for $i \in \{1, 2, \dots  , k\}$ \relax }}{44}{figure.caption.48}\protected@file@percent }
+\newlabel{tab:reduction-threads-ra}{{7.1}{44}{Threads in the reduction, for $i \in \{1, 2, \dots , k\}$ \relax }{figure.caption.48}{}}
+\newlabel{tab:reduction-threads-ra@cref}{{[figure][1][7]7.1}{[1][44][]44}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.1}Fine-grained hardness for \textsc  {3-Writer}\ systems}{44}{section.7.1}\protected@file@percent }
+\newlabel{sec:hardness}{{7.1}{44}{Fine-grained hardness for \threewriter \ systems}{section.7.1}{}}
+\newlabel{sec:hardness@cref}{{[section][1][7]7.1}{[1][43][]44}}
+\newlabel{sec:hardness-threewriter}{{7.1}{44}{Fine-grained hardness for \threewriter \ systems}{section.7.1}{}}
+\newlabel{sec:hardness-threewriter@cref}{{[section][1][7]7.1}{[1][43][]44}}
+\@writefile{loe}{\addvspace {10\p@ }}
+\@writefile{loe}{\contentsline {theorem}{\numberline {11}Theorem}{44}{theorem.11}\protected@file@percent }
+\newlabel{thm:eth-hardness}{{11}{44}{}{theorem.11}{}}
+\newlabel{thm:eth-hardness@cref}{{[theorem][11][]11}{[1][44][]44}}
+\@writefile{loe}{\contentsline {lemma}{\numberline {10}Lemma}{45}{lemma.10}\protected@file@percent }
+\newlabel{lem:wra-eth}{{10}{45}{}{lemma.10}{}}
+\newlabel{lem:wra-eth@cref}{{[lemma][10][]10}{[1][45][]45}}
+\newlabel{thmt@@lemsatimpliessra@data}{{\def \theequation {7.\@arabic {\c@equation }}\def \theHequation {(restate \theHthmt@dummyctr )7.1.\@arabic {\c@equation }}\setcounter {equation}{0}}{45}{The reduction}{lemma.10}{}}
+\newlabel{thmt@@lemsatimpliessra@data@cref}{{[section][1][7]7.1}{[1][45][]45}}
+\@writefile{loe}{\contentsline {lemma}{\numberline {11}Lemma}{45}{lemma.11}\protected@file@percent }
+\newlabel{thmt@@lemsatimpliessra}{{11}{45}{}{lemma.11}{}}
+\newlabel{thmt@@lemsatimpliessra@cref}{{[lemma][11][]11}{[1][45][]45}}
+\newlabel{lem:sat-implies-sra}{{11}{45}{}{lemma.11}{}}
+\newlabel{lem:sat-implies-sra@cref}{{[lemma][11][]11}{[1][45][]45}}
+\@writefile{lot}{\contentsline {table}{\numberline {7.1}{\ignorespaces $\varphi =(x_1\lor x_2\lor x_3)\land (x_1 \lor \neg x_2\lor \neg x_3)$\relax }}{46}{table.caption.51}\protected@file@percent }
+\newlabel{tab:example-finegrainedwra}{{7.1}{46}{$\varphi =(x_1\lor x_2\lor x_3)\land (x_1 \lor \neg x_2\lor \neg x_3)$\relax }{table.caption.51}{}}
+\newlabel{tab:example-finegrainedwra@cref}{{[table][1][7]7.1}{[1][45][]46}}
+\newlabel{app:hardness-example}{{7.1}{46}{Illustration}{section*.50}{}}
+\newlabel{app:hardness-example@cref}{{[section][1][7]7.1}{[1][45][]46}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.2}{\ignorespaces Execution graph for Table\nobreakspace  {}\ref  {tab:example-finegrainedwra}:The trivial $\mathsf  {\color  {colorRF}rf}$-edges are omitted\relax }}{47}{figure.caption.52}\protected@file@percent }
+\newlabel{example-Execution-ra}{{7.2}{47}{Execution graph for Table~\ref {tab:example-finegrainedwra}:The trivial $\rf $-edges are omitted\relax }{figure.caption.52}{}}
+\newlabel{example-Execution-ra@cref}{{[figure][2][7]7.2}{[1][46][]47}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1.1}Hardness for \textsc  {2-Writer}\ systems}{48}{subsection.7.1.1}\protected@file@percent }
+\newlabel{sec:hardness-twowriter}{{7.1.1}{48}{Hardness for \twowriter \ systems}{subsection.7.1.1}{}}
+\newlabel{sec:hardness-twowriter@cref}{{[subsection][1][7,1]7.1.1}{[1][48][]48}}
+\@writefile{loe}{\contentsline {theorem}{\numberline {12}Theorem}{48}{theorem.12}\protected@file@percent }
+\newlabel{thm:two-writer-hardness}{{12}{48}{}{theorem.12}{}}
+\newlabel{thm:two-writer-hardness@cref}{{[theorem][12][]12}{[1][48][]48}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.3}{\ignorespaces Threads in the 2-Writer reduction, for $i\in \{1,2,\ldots  ,k\}$.\relax }}{49}{figure.caption.55}\protected@file@percent }
+\newlabel{fig:two-writer}{{7.3}{49}{Threads in the 2-Writer reduction, for $i\in \{1,2,\ldots ,k\}$.\relax }{figure.caption.55}{}}
+\newlabel{fig:two-writer@cref}{{[figure][3][7]7.3}{[1][49][]49}}
+\@writefile{loe}{\contentsline {lemma}{\numberline {12}Lemma}{49}{lemma.12}\protected@file@percent }
+\@writefile{loe}{\contentsline {lemma}{\numberline {13}Lemma}{49}{lemma.13}\protected@file@percent }
+\citation{Tunc2023}
+\citation{gibbons}
+\@writefile{toc}{\contentsline {section}{\numberline {7.2}Discussion}{50}{section.7.2}\protected@file@percent }
+\newlabel{ra-discuss}{{7.2}{50}{Discussion}{section.7.2}{}}
+\newlabel{ra-discuss@cref}{{[section][2][7]7.2}{[1][50][]50}}
+\citation{Margalit:2021}
+\citation{ChakrabortyKMP24}
+\@writefile{toc}{\contentsline {chapter}{\numberline {8}Verifying Relaxed Memory Model}{52}{chapter.8}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{loa}{\addvspace {10\p@ }}
+\newlabel{Relaxed}{{8}{52}{Verifying Relaxed Memory Model}{chapter.8}{}}
+\newlabel{Relaxed@cref}{{[chapter][8][]8}{[1][52][]52}}
+\newlabel{app:relaxed}{{8}{52}{Verifying Relaxed Memory Model}{chapter.8}{}}
+\newlabel{app:relaxed@cref}{{[chapter][8][]8}{[1][52][]52}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.1}Polynomial Time for \textsc  {1-Writer}\ systems}{52}{section.8.1}\protected@file@percent }
+\newlabel{sec-onewriter-relaxed}{{8.1}{52}{Polynomial Time for \onewriter \ systems}{section.8.1}{}}
+\newlabel{sec-onewriter-relaxed@cref}{{[section][1][8]8.1}{[1][52][]52}}
+\@writefile{lot}{\contentsline {table}{\numberline {8.1}{\ignorespaces \small  Coherence Axioms for $\mathsf  {Relaxed}$-Acyclic variant of C11\relax }}{52}{table.caption.58}\protected@file@percent }
+\newlabel{table:ax:models-2-app}{{8.1}{52}{\small Coherence Axioms for $\rlxmm $-Acyclic variant of C11\relax }{table.caption.58}{}}
+\newlabel{table:ax:models-2-app@cref}{{[table][1][8]8.1}{[1][52][]52}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.1}{\ignorespaces Violation of (a)\nobreakspace  {}relaxed-write-coherence:$\mathtt  {w}_2(x)\nobreakspace  {}\mathsf  {\color  {colorMO}mo}\nobreakspace  {}\mathtt  {w}_1(x), \mathtt  {w}_1(x)\nobreakspace  {}\mathsf  {\color  {colorPO}po}\nobreakspace  {}\mathtt  {w}_2(x)$ (b)\nobreakspace  {}relaxed-read-coherence{}: $\mathtt  {w}_1(x)\nobreakspace  {}\mathsf  {\color  {colorMO}mo}\nobreakspace  {}\mathtt  {w}_2(x)$, $\mathtt  {r}_2(x)\nobreakspace  {}\mathsf  {\color  {colorPO}po}\nobreakspace  {}\mathtt  {r}_1(x)$ with $\mathtt  {w}_2(x)\nobreakspace  {}\mathsf  {\color  {colorRF}rf}\nobreakspace  {}\mathtt  {r}_2(x)$ and $\mathtt  {w}_1(x)\nobreakspace  {}\mathsf  {\color  {colorRF}rf}\nobreakspace  {}\mathtt  {r}_1(x)$.\relax }}{53}{figure.caption.59}\protected@file@percent }
+\newlabel{fig:relaxed-illust-app}{{8.1}{53}{Violation of (a)~\RlxWCoh :$\wt _2(x)~\mo ~\wt _1(x), \wt _1(x)~\po ~\wt _2(x)$ (b)~\RlxRCoh {}: $\wt _1(x)~\mo ~\wt _2(x)$, $\rd _2(x)~\po ~\rd _1(x)$ with $\wt _2(x)~\rf ~\rd _2(x)$ and $\wt _1(x)~\rf ~\rd _1(x)$.\relax }{figure.caption.59}{}}
+\newlabel{fig:relaxed-illust-app@cref}{{[figure][1][8]8.1}{[1][52][]53}}
+\newlabel{thmt@@lemmaonewriterrelaxedtwoproperties-relaxed@data}{{\def \theequation {8.\@arabic {\c@equation }}\def \theHequation {(restate \theHthmt@dummyctr )8.1.\@arabic {\c@equation }}\setcounter {equation}{0}}{53}{Polynomial Time for \onewriter \ systems}{section.8.1}{}}
+\newlabel{thmt@@lemmaonewriterrelaxedtwoproperties-relaxed@data@cref}{{[section][1][8]8.1}{[1][53][]53}}
+\@writefile{loe}{\addvspace {10\p@ }}
+\@writefile{loe}{\contentsline {lemma}{\numberline {14}Lemma}{53}{lemma.14}\protected@file@percent }
+\newlabel{thmt@@lemmaonewriterrelaxedtwoproperties-relaxed}{{14}{53}{}{lemma.14}{}}
+\newlabel{thmt@@lemmaonewriterrelaxedtwoproperties-relaxed@cref}{{[lemma][14][]14}{[1][53][]53}}
+\newlabel{lem:relaxed-onewriter-axioms-two-properties}{{14}{53}{}{lemma.14}{}}
+\newlabel{lem:relaxed-onewriter-axioms-two-properties@cref}{{[lemma][14][]14}{[1][53][]53}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {3}{\ignorespaces $\mathsf  {Relaxed}$-Acyclic-consistency checking in \textsc  {1-Writer}\ systems\relax }}{54}{algocf.3}\protected@file@percent }
+\newlabel{algo:one-writer-relaxed}{{3}{54}{Polynomial Time for \onewriter \ systems}{algocf.3}{}}
+\newlabel{algo:one-writer-relaxed@cref}{{[algorithm][3][]3}{[1][53][]54}}
+\newlabel{algo-while-main-onewriter-relaxed}{{3}{54}{Polynomial Time for \onewriter \ systems}{AlgoLine.3.3}{}}
+\newlabel{algo-while-main-onewriter-relaxed@cref}{{[line][3][]3}{[1][53][]54}}
+\newlabel{algo-update-call-relaxed}{{4}{54}{Polynomial Time for \onewriter \ systems}{AlgoLine.3.4}{}}
+\newlabel{algo-update-call-relaxed@cref}{{[line][4][]4}{[1][53][]54}}
+\newlabel{algo-check-porf-relaxed}{{5}{54}{Polynomial Time for \onewriter \ systems}{AlgoLine.3.5}{}}
+\newlabel{algo-check-porf-relaxed@cref}{{[line][5][]5}{[1][53][]54}}
+\newlabel{algo-declare-consistent-relaxed}{{6}{54}{Polynomial Time for \onewriter \ systems}{AlgoLine.3.6}{}}
+\newlabel{algo-declare-consistent-relaxed@cref}{{[line][6][]6}{[1][53][]54}}
+\newlabel{algo-porf-cycle-relaxed}{{8}{54}{Polynomial Time for \onewriter \ systems}{AlgoLine.3.8}{}}
+\newlabel{algo-porf-cycle-relaxed@cref}{{[line][8][]8}{[1][53][]54}}
+\newlabel{init-not-consistent1-relaxed}{{16}{54}{Polynomial Time for \onewriter \ systems}{AlgoLine.3.16}{}}
+\newlabel{init-not-consistent1-relaxed@cref}{{[line][16][]16}{[1][53][]54}}
+\newlabel{init-not-consistent2-relaxed}{{20}{54}{Polynomial Time for \onewriter \ systems}{AlgoLine.3.20}{}}
+\newlabel{init-not-consistent2-relaxed@cref}{{[line][20][]20}{[1][53][]54}}
+\newlabel{algo-violatecycle-relaxed}{{23}{54}{Polynomial Time for \onewriter \ systems}{AlgoLine.3.23}{}}
+\newlabel{algo-violatecycle-relaxed@cref}{{[line][23][]23}{[1][53][]54}}
+\newlabel{algo-update1-relaxed}{{28}{54}{Polynomial Time for \onewriter \ systems}{AlgoLine.3.28}{}}
+\newlabel{algo-update1-relaxed@cref}{{[line][28][]28}{[1][53][]54}}
+\newlabel{algo-update-notconsistent1-relaxed}{{30}{54}{Polynomial Time for \onewriter \ systems}{AlgoLine.3.30}{}}
+\newlabel{algo-update-notconsistent1-relaxed@cref}{{[line][30][]30}{[1][53][]54}}
+\newlabel{algo-update2-relaxed}{{32}{54}{Polynomial Time for \onewriter \ systems}{AlgoLine.3.32}{}}
+\newlabel{algo-update2-relaxed@cref}{{[line][32][]32}{[1][53][]54}}
+\newlabel{algo-update-notconsistent2-relaxed}{{34}{54}{Polynomial Time for \onewriter \ systems}{AlgoLine.3.34}{}}
+\newlabel{algo-update-notconsistent2-relaxed@cref}{{[line][34][]34}{[1][53][]54}}
+\newlabel{thmt@@thmrlxcorrectness@data}{{\def \theequation {8.\@arabic {\c@equation }}\def \theHequation {(restate \theHthmt@dummyctr )8.1.\@arabic {\c@equation }}\setcounter {equation}{0}}{55}{Polynomial Time for \onewriter \ systems}{AlgoLine.3.36}{}}
+\newlabel{thmt@@thmrlxcorrectness@data@cref}{{[line][36][]36}{[1][55][]55}}
+\@writefile{loe}{\contentsline {theorem}{\numberline {13}Theorem}{55}{theorem.13}\protected@file@percent }
+\newlabel{thmt@@thmrlxcorrectness}{{13}{55}{}{theorem.13}{}}
+\newlabel{thmt@@thmrlxcorrectness@cref}{{[theorem][13][]13}{[1][55][]55}}
+\newlabel{th-wra-correctness}{{13}{55}{}{theorem.13}{}}
+\newlabel{th-wra-correctness@cref}{{[theorem][13][]13}{[1][55][]55}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.2}Fine-grained hardness under $ETH$ for \textsc  {3-Writer}\ systems}{56}{section.8.2}\protected@file@percent }
+\newlabel{sec:finegrained-relaxed}{{8.2}{56}{Fine-grained hardness under $ETH$ for \threewriter \ systems}{section.8.2}{}}
+\newlabel{sec:finegrained-relaxed@cref}{{[section][2][8]8.2}{[1][56][]56}}
+\@writefile{loe}{\contentsline {theorem}{\numberline {14}Theorem}{56}{theorem.14}\protected@file@percent }
+\newlabel{lem:relaxed-finegrained}{{14}{56}{}{theorem.14}{}}
+\newlabel{lem:relaxed-finegrained@cref}{{[theorem][14][]14}{[1][56][]56}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.2}{\ignorespaces Threads in the reduction for $\mathsf  {Relaxed}$\relax }}{57}{figure.caption.62}\protected@file@percent }
+\newlabel{tab:reduction-threads-relaxed}{{8.2}{57}{Threads in the reduction for $\rlxmm $\relax }{figure.caption.62}{}}
+\newlabel{tab:reduction-threads-relaxed@cref}{{[figure][2][8]8.2}{[1][56][]57}}
+\@writefile{loe}{\contentsline {lemma}{\numberline {15}Lemma}{57}{lemma.15}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {8.2}{\ignorespaces $\varphi =(x_1\lor x_2\lor x_3)\land (x_1 \lor \neg x_2\lor \neg x_3)$\relax }}{58}{table.caption.63}\protected@file@percent }
+\newlabel{tab:relaxed-example-finegrainedwra}{{8.2}{58}{$\varphi =(x_1\lor x_2\lor x_3)\land (x_1 \lor \neg x_2\lor \neg x_3)$\relax }{table.caption.63}{}}
+\newlabel{tab:relaxed-example-finegrainedwra@cref}{{[table][2][8]8.2}{[1][57][]58}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.3}{\ignorespaces Execution graph for Table\nobreakspace  {}\ref  {tab:relaxed-example-finegrainedwra}: The graph is restricted to the $\mathsf  {\color  {colorMO}mo}$-edges between writes of $Init_1$ and $Init_0$ and all synthesized edges involving $v_1$\relax }}{59}{figure.caption.64}\protected@file@percent }
+\newlabel{example-Execution-relaxed}{{8.3}{59}{Execution graph for Table~\ref {tab:relaxed-example-finegrainedwra}: The graph is restricted to the $\mo $-edges between writes of $Init_1$ and $Init_0$ and all synthesized edges involving $v_1$\relax }{figure.caption.64}{}}
+\newlabel{example-Execution-relaxed@cref}{{[figure][3][8]8.3}{[1][58][]59}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.3}NP-hardness for \textsc  {2-Writer}\ systems}{60}{section.8.3}\protected@file@percent }
+\newlabel{sec:np-relaxed}{{8.3}{60}{NP-hardness for \twowriter \ systems}{section.8.3}{}}
+\newlabel{sec:np-relaxed@cref}{{[section][3][8]8.3}{[1][60][]60}}
+\@writefile{loe}{\contentsline {theorem}{\numberline {15}Theorem}{60}{theorem.15}\protected@file@percent }
+\newlabel{thm:relaxed-two-writer-hardness}{{15}{60}{}{theorem.15}{}}
+\newlabel{thm:relaxed-two-writer-hardness@cref}{{[theorem][15][]15}{[1][60][]60}}
+\@writefile{lot}{\contentsline {table}{\numberline {8.3}{\ignorespaces Threads in the reduction for $\mathsf  {Relaxed}$\relax }}{61}{table.caption.67}\protected@file@percent }
+\newlabel{tab:np-reduction-threads-relaxed}{{8.3}{61}{Threads in the reduction for $\rlxmm $\relax }{table.caption.67}{}}
+\newlabel{tab:np-reduction-threads-relaxed@cref}{{[table][3][8]8.3}{[1][60][]61}}
+\@writefile{loe}{\contentsline {lemma}{\numberline {16}Lemma}{61}{lemma.16}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8.4}Discussion}{62}{section.8.4}\protected@file@percent }
+\citation{SC-Lamport78}
+\citation{Fidge1988}
+\citation{Ahamad1995}
+\citation{BouajjaniEGH17}
+\citation{DBLP:conf/icdcs/HuttoA90}
+\citation{Burckhardt:2014}
+\citation{DBLP:journals/corr/PerrinMJ16}
+\citation{Ahamad1995}
+\citation{DBLP:journals/corr/PerrinMJ16}
+\citation{Lahav2021}
+\citation{ChakrabortyKMP24}
+\citation{Lahav2021}
+\@writefile{toc}{\contentsline {chapter}{\numberline {9}Verifying Causal Memory Models}{63}{chapter.9}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{loa}{\addvspace {10\p@ }}
+\newlabel{chap:cc-models}{{9}{63}{Verifying Causal Memory Models}{chapter.9}{}}
+\newlabel{chap:cc-models@cref}{{[chapter][9][]9}{[1][63][]63}}
+\citation{BouajjaniEGH17}
+\citation{Lahav:2022}
+\citation{Ahamad1995}
+\citation{BouajjaniEGH17}
+\citation{ChakrabortyKMP24}
+\citation{BouajjaniEGH17}
+\@writefile{toc}{\contentsline {section}{\numberline {9.1}Overview of Causal Consistency Models}{64}{section.9.1}\protected@file@percent }
+\newlabel{app:cc-models-overview}{{9.1}{64}{Overview of Causal Consistency Models}{section.9.1}{}}
+\newlabel{app:cc-models-overview@cref}{{[section][1][9]9.1}{[1][64][]64}}
+\@writefile{loe}{\addvspace {10\p@ }}
+\@writefile{loe}{\contentsline {definition}{\numberline {1}Definition}{64}{definition.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {9.1}{\ignorespaces (a) satisfies ob-acyclicity{} but (b) doesn't. On the other hand, (b) is $\mathsf  {SRA}$ consistent while (a) is not.\relax }}{65}{figure.caption.70}\protected@file@percent }
+\newlabel{cm:examples}{{9.1}{65}{(a) satisfies \OB {} but (b) doesn't. On the other hand, (b) is $\sramm $ consistent while (a) is not.\relax }{figure.caption.70}{}}
+\newlabel{cm:examples@cref}{{[figure][1][9]9.1}{[1][65][]65}}
+\@writefile{toc}{\contentsline {section}{\numberline {9.2} \textsc  {1-Writer}\nobreakspace  {} programs under Causal Memory}{65}{section.9.2}\protected@file@percent }
+\newlabel{app:cc-1w}{{9.2}{65}{\onewriter ~ programs under Causal Memory}{section.9.2}{}}
+\newlabel{app:cc-1w@cref}{{[section][2][9]9.2}{[1][65][]65}}
+\@writefile{loe}{\contentsline {lemma}{\numberline {17}Lemma}{65}{lemma.17}\protected@file@percent }
+\newlabel{ob-wrcoh}{{9.2}{65}{\onewriter ~ programs under Causal Memory}{lemma.17}{}}
+\newlabel{ob-wrcoh@cref}{{[section][2][9]9.2}{[1][65][]65}}
+\@writefile{loe}{\contentsline {lemma}{\numberline {18}Lemma}{66}{lemma.18}\protected@file@percent }
+\newlabel{lem:cm-onewriter-lowerbound}{{18}{66}{}{lemma.18}{}}
+\newlabel{lem:cm-onewriter-lowerbound@cref}{{[lemma][18][]18}{[1][66][]66}}
+\@writefile{toc}{\contentsline {section}{\numberline {9.3}Fine-grained Hardness under ETH for \textsc  {3-Writer}\nobreakspace  {} systems}{66}{section.9.3}\protected@file@percent }
+\newlabel{app:cc-3w}{{9.3}{66}{Fine-grained Hardness under ETH for \threewriter ~ systems}{section.9.3}{}}
+\newlabel{app:cc-3w@cref}{{[section][3][9]9.3}{[1][66][]66}}
+\@writefile{loe}{\contentsline {theorem}{\numberline {16}Theorem}{66}{theorem.16}\protected@file@percent }
+\newlabel{thm:cm-eth-hardness}{{16}{66}{}{theorem.16}{}}
+\newlabel{thm:cm-eth-hardness@cref}{{[theorem][16][]16}{[1][66][]66}}
+\@writefile{loe}{\contentsline {theorem}{\numberline {17}Theorem}{66}{theorem.17}\protected@file@percent }
+\newlabel{thm:cm-two-writer-hardness}{{17}{66}{}{theorem.17}{}}
+\newlabel{thm:cm-two-writer-hardness@cref}{{[theorem][17][]17}{[1][66][]66}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9.2}{\ignorespaces Threads in the reduction, for $i \in \{1, 2, \dots  , k\}$ \relax }}{67}{figure.caption.73}\protected@file@percent }
+\newlabel{tab:reduction-threads-cm}{{9.2}{67}{Threads in the reduction, for $i \in \{1, 2, \dots , k\}$ \relax }{figure.caption.73}{}}
+\newlabel{tab:reduction-threads-cm@cref}{{[figure][2][9]9.2}{[1][67][]67}}
+\@writefile{loe}{\contentsline {lemma}{\numberline {19}Lemma}{67}{lemma.19}\protected@file@percent }
+\newlabel{lem:cm-eth}{{19}{67}{}{lemma.19}{}}
+\newlabel{lem:cm-eth@cref}{{[lemma][19][]19}{[1][67][]67}}
+\@writefile{loe}{\contentsline {lemma}{\numberline {20}Lemma}{67}{lemma.20}\protected@file@percent }
+\newlabel{lem:eth-cm}{{20}{67}{}{lemma.20}{}}
+\newlabel{lem:eth-cm@cref}{{[lemma][20][]20}{[1][67][]67}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9.3}{\ignorespaces Threads in the 2-Writer reduction, for $i\in \{1,2,\ldots  ,k\}$.\relax }}{68}{figure.caption.74}\protected@file@percent }
+\newlabel{fig:cm-two-writer}{{9.3}{68}{Threads in the 2-Writer reduction, for $i\in \{1,2,\ldots ,k\}$.\relax }{figure.caption.74}{}}
+\newlabel{fig:cm-two-writer@cref}{{[figure][3][9]9.3}{[1][68][]68}}
+\@writefile{toc}{\contentsline {section}{\numberline {9.4}NP-hardness for \textsc  {2-Writer}\nobreakspace  {} systems}{68}{section.9.4}\protected@file@percent }
+\@writefile{loe}{\contentsline {lemma}{\numberline {21}Lemma}{69}{lemma.21}\protected@file@percent }
+\newlabel{lem:eth-cm}{{21}{69}{}{lemma.21}{}}
+\newlabel{lem:eth-cm@cref}{{[lemma][21][]21}{[1][69][]69}}
+\bibstyle{IEEEtran}
+\bibdata{m}
+\@writefile{toc}{\contentsline {chapter}{\numberline {10}Discussions and Future Work}{70}{chapter.10}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{loa}{\addvspace {10\p@ }}
+\newlabel{Conclusion}{{10}{70}{Discussions and Future Work}{chapter.10}{}}
+\newlabel{Conclusion@cref}{{[chapter][10][]10}{[1][70][]70}}
+\bibcite{SC-Lamport78}{1}
+\bibcite{sun1991sparc}{2}
+\bibcite{gharachorloo1990memory}{3}
+\bibcite{dubois1986memory}{4}
+\bibcite{sparc1994architecture}{5}
+\bibcite{GHARACHORLOO1992399}{6}
+\bibcite{CantinLS05}{7}
+\bibcite{gibbons}{8}
+\bibcite{QadeerMusuvati}{9}
+\bibcite{DBLP:conf/tacas/QadeerR05}{10}
+\bibcite{ImpagliazzoPZ01}{11}
+\bibcite{DowneyFellows1999}{12}
+\bibcite{TSO-context-bounding}{13}
+\bibcite{KLSV:popl18}{14}
+\bibcite{Lahav:2022}{15}
+\bibcite{Margalit:2021:POPL}{16}
+\bibcite{Norris:2013:OOPSLA}{17}
+\bibcite{Lahav2021}{18}
+\bibcite{Tunc2023}{19}
+\bibcite{lahavveri}{20}
+\bibcite{Lahav:2017}{21}
+\bibcite{Batty:2011}{22}
+\bibcite{Luo:2021}{23}
+\bibcite{ChakrabortyKMP24}{24}
+\bibcite{WilliamsW18}{25}
+\bibcite{Lokshtanov:ETH:2011}{26}
+\bibcite{Margalit:2021}{27}
+\bibcite{Fidge1988}{28}
+\bibcite{Ahamad1995}{29}
+\bibcite{BouajjaniEGH17}{30}
+\bibcite{DBLP:conf/icdcs/HuttoA90}{31}
+\bibcite{Burckhardt:2014}{32}
+\bibcite{DBLP:journals/corr/PerrinMJ16}{33}
