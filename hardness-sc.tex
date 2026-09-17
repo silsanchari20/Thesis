@@ -358,23 +358,16 @@ The two lemmas above prove the correctness of our reduction. If $G$ has an indep
 
 \section{Discussion}
 
-In the last two chapters, we have studied  the fundamental VSC-problem in the context of bounded preemptions. This is a deviation from the usual parameters
-considered in the study of this problem. The results are two-fold: an algorithm
-for the single-writer case, and hardness reductions in the presence of multiple
+In the last two chapters, we have studied  the fundamental VSC-problem in the context of bounded preemptions. This is a deviation from the usual parameters considered in the study of this problem. The results are two-fold: an algorithm for the $\onewriter$ case, and hardness reductions in the presence of multiple
 writers, and unbounded preemptions. On the algorithmic front, the key insight is
-that for 1-Writer systems the idea of a conflict graph helps to determine order-
-ing without having to fall back on a systematic enumeration of all permutations. 
-Such a trick is not possible in the case of multiple writers.
-In fact the problem seems harder with increase in number of writers. 
+that for $\onewriter$ systems the idea of a conflict graph helps to determine ordering without having to fall back on a systematic enumeration of all permutations. Such a trick is not possible in the case of multiple writers. In fact the problem seems harder with increase in number of writers. 
 
 
 Investigating a preemption-bounded version of stateless model-checking under
-the reads-value-from equivalence and the impact of incorporating the VSC $\pp$ problem into the procedure, remain directions for future work. Another interesting
+the reads-value-from equivalence and the impact of incorporating the VSC$^\pp$ problem into the procedure, remain directions for future work. Another interesting
 direction is to investigate the consistency problem for the Total Store Ordering
 (TSO) memory model under the influence of various context-switches \cite{TSO-context-bounding} defined
-in the literature.
-
-
+in the literature. In the next chapter we check for consistency under bounded preemption for $\tsomm$ when the preemption switches is analogous to the definition of `Processor-centric' context switches as defined in \cite{TSO-context-bounding}.
 
 \endinput
 

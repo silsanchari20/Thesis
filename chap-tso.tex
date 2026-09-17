@@ -1,0 +1,4 @@
+We have already studied Sequential Consistency which is the most natural semantics for shared concurrent systems. However as we have discussed earlier in the introduction of this thesis, modern multi-core processors perform certain hardware and compiler optimizations which might lead to weak or relaxed behaviours. Infact, it might lead to re-ordering of events even in the same threads violating the program order. Total Store Order  (TSO), which is a formalization
+of the Intel x86 processor  architecture \cite{Sewell:2010}, is one such model that relaxes the write-read ordering within the same thread. 
+
+\cite{TSO-context-bounding}
