@@ -1,4 +1,68 @@
 We have already studied Sequential Consistency which is the most natural semantics for shared concurrent systems. However as we have discussed earlier in the introduction of this thesis, modern multi-core processors perform certain hardware and compiler optimizations which might lead to weak or relaxed behaviours. Infact, it might lead to re-ordering of events even in the same threads violating the program order. Total Store Order  (TSO), which is a formalization
-of the Intel x86 processor  architecture \cite{Sewell:2010}, is one such model that relaxes the write-read ordering within the same thread. 
+of the Intel x86 processor  architecture \cite{Sewell:2010}, is one such model that relaxes the write-read ordering within the same thread. Under TSO semantics, each process maintains an unbounded FIFO buffer called the store buffer. Whenever a write is executed by a thread, the write is not immediately visible to the other threads. It is instead stored in the local buffer of that thread. The local buffer can propagate it’s writes non-deterministically
+to the shared memory. Only then does such writes get visible to the other threads. Another well known memory model called Partial Store Order (PSO),  also allows write-write re-ordering. It is associated with the SPARC v9 architecture \cite{sparc1994architecture}. We will discuss these arcitecture in details in this chapter. 
 
-\cite{TSO-context-bounding}
+There have been several works dedicated to verification of these models \cite{DBLP:journals/acta/AbdullaAAJLS17}\cite{10.1145/1707801.1706303}\cite{tso_rf_bui2021reads}\cite{zhao2023satisfiability}. But what about the Consistency Checking Problem that we are dealing with in this thesis? The general problem is NP-Complete even for single location  \cite{CantinLS05}. On the other hand with bounded parameters like number of threads, memory locations and values accessed by the memory locations, the problem becomes polynomial \cite{ChakrabortyKMP24}.  
+
+We want to understand  the hardness of consistency checking for hardware memory model under fixed number of preemptions.
+ Unlike SC, TSO/PSO can have more than one correct ways to define a preemption. TSO/PSO involves a non-deterministic update from the buffer of a process to the shared memory. A context switch after such an operation may or may not be counted as a preemption. Considering this, there have been three definitions of context switches for TSO excutions \cite{TSO-context-bounding}. We will give a definition for preemptions similar to `Processor-centric context' switches as given in \cite{TSO-context-bounding}. 
+ 
+The results in this chapter are analogous to those of the VSC-problem in  Chaper~\ref{sc-1}.  
+
+
+\section{Semantics for Hardware memory models}
+
+It is easier to understand these models using their 
+
+
+\begin{figure}
+\centering
+\begin{equation*}
+\begin{array}{lc}
+
+\inference{read-own-write}
+	{\state \to[\rd\of\xd] \state' \qquad \statemap\of\pid = \state \qquad \buffermap\of\pid|_{\set\xvar \times \valset} = \tuple\xd \cdot \word}
+	{\tuple{ \statemap, \buffermap, \memorymap} \to[\rd\of\xd_\pid] \tuple{ \statemap[\pid \leftarrow \state'], \buffermap, \memorymap}}
+\bigskip\\
+\inference{read-from-memory}
+	{\state \to[\rd\of\xd] \state' \qquad \statemap\of\pid = \state \qquad \buffermap\of\pid|_{\set\xvar \times \valset} = \varepsilon \qquad \memorymap\of\xvar = \dval}
+	{\tuple{ \statemap, \buffermap, \memorymap} \to[\rd\of\xd_\pid] \tuple{ \statemap[\pid \leftarrow \state'], \buffermap, \memorymap}}
+\bigskip\\
+\inference{write}
+	{\state \to[\wr\of\xd] \state' \qquad \statemap\of\pid = \state}
+	{\tuple{ \statemap, \buffermap, \memorymap} \to[\wr\of\xd_\pid] \tuple{ \statemap[\pid \leftarrow \state'], \buffermap[\pid \leftarrow \tuple\xd \cdot \buffermap\of\pid], \memorymap}}
+\bigskip\\
+\inference{arw}
+	{\state \to[\arw\of\xdd] \state' \qquad \statemap\of\pid = \state \qquad \buffermap\of\pid = \varepsilon \qquad \memorymap\of\xvar = \dval}
+	{\tuple{ \statemap, \buffermap, \memorymap} \to[\arw\of\xdd_\pid] \tuple{ \statemap[\pid \leftarrow \state'], \buffermap, \memorymap[\xvar \leftarrow \dval']}}
+\bigskip\\
+\inference{skip}
+	{\state \to[\nop] \state' \qquad \statemap\of\pid = \state}
+	{\tuple{ \statemap, \buffermap, \memorymap} \to[\nop_\pid] \tuple{ \statemap[\pid \leftarrow \state'], \buffermap, \memorymap}}
+\bigskip\\
+\inference{memory-fence}
+	{\state \to[\mf] \state' \qquad \statemap\of\pid = \state \qquad \buffermap\of\pid = \varepsilon}
+	{\tuple{ \statemap, \buffermap, \memorymap} \to[\mf_\pid] \tuple{ \statemap[\pid \leftarrow \state'], \buffermap, \memorymap}}
+\bigskip\\
+\inference{update}
+	{\buffermap\of\pid = \word \cdot \tuple\xd}
+	{\tuple{ \statemap, \buffermap, \memorymap} \to[\up_\pid] \tuple{ \statemap, \buffermap[\pid \leftarrow \word], \memorymap[\xvar \leftarrow \dval]}}
+
+\end{array}
+\end{equation*}
+\caption{TSO semantics}
+\label{fig:tso-semantics}
+\end{figure}
+
+
+\section{Polynomial time algorithm for $\onewriter$}
+
+\section{Hardness for $\threewriter$}
+
+\section{Hardness for $\twowriter$}
+
+\section{Conclusion}
+
+
+ 
+

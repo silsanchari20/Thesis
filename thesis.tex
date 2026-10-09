@@ -159,8 +159,8 @@ S Krishna, Indian Institute of Technology, Bombay
 \section{Organization of the Thesis}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Preliminaries}\label{prelim}
-\input{Prelims-sc.tex}
+\chapter{Preliminaries}\label{prelim} 
+\input{Prelims-sc.tex} 
  We also have to talk about parameterized reduction somewhere.
 \begin{center}
     \chapter*{\centering Part A}
@@ -174,23 +174,26 @@ S Krishna, Indian Institute of Technology, Bombay
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \chapter{VSC$^\pp$ Verifying Sequential Consistency under fixed preemptions} \label{sc-1}
-
-\input{ptime-algo} 
+ 
+\input{ptime-algo}
 \chapter{Hardness Results for VSC$^\pp$}\label{SC-hardness}
 
- 
- 
 \input{hardness-sc.tex}
- 
-\chapter{Total Store Order under fixed preemptions}
-\input{chap-tso.tex}
- 
+
+%\chapter{Verifying Hardware  Memory Models  under fixed preemptions}
+%\input{chap-tso.tex} 
+
+\chapter{VSC$^\pp$ for Acyclic Architectures} 
+\label{sc-acyclic} 
+\input{acyclic.tex}
+
+
 \begin{center}
     \chapter*{\centering Part B}
     \addcontentsline{toc}{chapter}{\centering Part B} 
 \end{center}
   
- 
+
 
 \chapter{Weak Memory Models}
 
@@ -217,6 +220,9 @@ We shall formally charaterize the behaviours of these memory models using axioma
 \chapter{Verifying Causal Memory Models}
   
 \input{causal.tex}
+\chapter{What happens to VRA when the modification order on writes is fixed?}
+
+\input{mo-fixed.tex}
 
  \chapter{Discussions and Future Work}\label{Conclusion} 
 

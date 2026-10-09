@@ -812,7 +812,6 @@ number = {4},
 issn = {1539-9087},
 url = {https://doi.org/10.1145/2753761},
 doi = {10.1145/2753761},
-abstract = {To improve the performance of the memory system, multiprocessors implement weak memory consistency models. Weak memory models admit different views of the processes on their load and store instructions, thus allowing for computations that are not sequentially consistent. Program analyses have to take into account the memory model of the targeted hardware. This is challenging because numerous memory models have been developed, and every memory model requires its own analysis.In this article, we study a prominent approach to program analysis: testing. The testing problem takes as input sequences of operations, one for each process in the concurrent program. The task is to check whether these sequences can be interleaved to an execution of the entire program that respects the constraints of a memory model under consideration. We determine the complexity of the testing problem for most of the known memory models. Moreover, we study the impact on the complexity of parameters, such as the number of concurrent processes, the length of their executions, and the number of shared variables.What differentiates our contribution from related results is a uniform approach that avoids considering each memory model on its own. We build upon work of Steinke and Nutt. They showed that the existing memory models form a hierarchy where one model is called weaker than another one if it includes the latter’s behavior. Using the Steinke-Nutt hierarchy, we develop three general concepts that allow us to quickly determine the complexity of a testing problem. First, we generalize the technique of problem reductions from complexity theory. So-called range reductions propagate hardness results between memory models, and we apply them to establish NP lower bounds for the stronger memory models. Second, for the weaker models, we present polynomial-time testing algorithms that are inspired by determinization algorithms for automata. Finally, we describe a single SAT encoding of the testing problem that works for all memory models in the Steinke-Nutt hierarchy to prove their membership in NP. Our results are general enough to carry over to future weak memory models. Moreover, they show that SAT solvers are adequate tools for testing.},
 journal = {ACM Trans. Embed. Comput. Syst.},
 month = sep,
 articleno = {63},
@@ -846,6 +845,17 @@ keywords = {NP-completeness, SAT, Weak memory models, complexity analysis, testi
   pages={93--107},
   year={2005},
   organization={Springer}
+}
+
+@article{zhao2023satisfiability,
+  title     = {Satisfiability Modulo Ordering Consistency Theory
+               for SC, TSO, and PSO Memory Models},
+  journal   = {ACM Transactions on Programming Languages and Systems},
+  volume    = {45},
+  number    = {1},
+  pages     = {1--37},
+  year      = {2023},
+  doi       = {10.1145/3579835}
 }
 
 @article{tso_rf_bui2021reads,
@@ -1434,3 +1444,42 @@ doi = {https://doi.org/10.1016/0743-7315(92)90052-O}
   biburl       = {https://dblp.org/rec/journals/corr/PerrinMJ16.bib},
   bibsource    = {dblp computer science bibliography, https://dblp.org}
 }
+
+@inproceedings{10.1145/1706299.1706303,
+author = {Atig, Mohamed Faouzi and Bouajjani, Ahmed and Burckhardt, Sebastian and Musuvathi, Madanlal},
+title = {On the verification problem for weak memory models},
+year = {2010},
+isbn = {9781605584799},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/1706299.1706303},
+doi = {10.1145/1706299.1706303},
+abstract = {We address the verification problem of finite-state concurrent programs running under weak memory models. These models capture the reordering of program (read and write) operations done by modern multi-processor architectures for performance. The verification problem we study is crucial for the correctness of concurrency libraries and other performance-critical system services employing lock-free synchronization, as well as for the correctness of compiler backends that generate code targeted to run on such architectures.We consider in this paper combinations of three well-known program order relaxations. We consider first the "write to read" relaxation, which corresponds to the TSO (Total Store Ordering) model. This relaxation is used in most hardware architectures available today. Then, we consider models obtained by adding either (1) the "write to write" relaxation, leading to a model which is essentially PSO (Partial Store Ordering), or (2) the "read to read/write" relaxation, or (3) both of them, as it is done in the RMO (Relaxed Memory Ordering) model for instance.We define abstract operational models for these weak memory models based on state machines with (potentially unbounded) FIFO buffers, and we investigate the decidability of their reachability and their repeated reachability problems.We prove that the reachability problem is decidable for the TSO model, as well as for its extension with "write to write" relaxation (PSO). Furthermore, we prove that the reachability problem becomes undecidable when the "read to read/write" relaxation is added to either of these two memory models, and we give a condition under which this addition preserves the decidability of the reachability problem. We show also that the repeated reachability problem is undecidable for all the considered memory models.},
+booktitle = {Proceedings of the 37th Annual ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages},
+pages = {7–18},
+numpages = {12},
+keywords = {relaxed memory models, program verification, lossy channel systems, infinite state systems},
+location = {Madrid, Spain},
+series = {POPL '10}
+}
+
+@article{10.1145/1707801.1706303,
+author = {Atig, Mohamed Faouzi and Bouajjani, Ahmed and Burckhardt, Sebastian and Musuvathi, Madanlal},
+title = {On the verification problem for weak memory models},
+year = {2010},
+issue_date = {January 2010},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {45},
+number = {1},
+issn = {0362-1340},
+url = {https://doi.org/10.1145/1707801.1706303},
+doi = {10.1145/1707801.1706303},
+journal = {SIGPLAN Not.},
+month = {jan},
+pages = {7–18},
+numpages = {12},
+keywords = {relaxed memory models, program verification, lossy channel systems, infinite state systems}
+}
+
+

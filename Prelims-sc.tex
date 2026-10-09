@@ -1,7 +1,3 @@
-
-
-
-
 This chapter contains all auxiliary definitions to intoduce  the problem of Verifying  Sequential Consistency as appeared in \cite{gibbons}. Particularly it introduces the problem of interest and the relevant theorems for Part A of the thesis. We later shall explore a variant of the VSC problem under weak memory models in Part B. 
 
 
@@ -17,14 +13,228 @@ where $x, y \in \varset$ and $4, 3, 1 \in \valset$. For convenience of expositio
 
 \smallskip 
 
-\noindent{\bf{Concurrent Programs}} A \emph{concurrent program} $\program$ is given by a set of threads $S_1, \dots, S_k$, with $S_i$ having identifier $i$. Let $\eventset$ be the set of all events appearing in $\prog$.  There is a natural \emph{program order} $\po$ induced on $\eventset$: for $e_1, e_2 \in \eventset$, we say $e_1~\po~e_2$ if $e_1, e_2$ belong to the same thread, and $e_1$ immediately precedes $e_2$ in the thread sequence. An \emph{interleaving} $\inter$ of $\program$ is an enumeration of $\eventset$ such that the program order is maintained. A \emph{partial interleaving} is an interleaving of some subset of $\eventset$. Any interleaving is also a partial interleaving.
+\noindent{\bf{Concurrent Programs}} A \emph{concurrent program} $\program$ is given by a set of threads $\thread_1, \dots, \thread_k$, with $\thread_i$ having identifier $i$. Let $\eventset$ be the set of all events appearing in $\prog$.  There is a natural \emph{program order} $\po$ induced on $\eventset$: for $e_1, e_2 \in \eventset$, we say $e_1~\po~e_2$ if $e_1, e_2$ belong to the same thread, and $e_1$ immediately precedes $e_2$ in the thread sequence. An \emph{interleaving} $\inter$ of $\program$ is an enumeration of $\eventset$ such that the program order is maintained. A \emph{partial interleaving} is an interleaving of some subset of $\eventset$. Any interleaving is also a partial interleaving.
 
 
 \smallskip 
 
 \noindent{\bf{Conflicting Pair of Read and Write}} A write $\wt(x,d)$ and a read $\rd(x,d')$ are said to be in conflict when they are on the same variable $x$ 
 and $d \neq d'$. 
- 
+
+\smallskip
+
+\noindent{\bf{Architecture  Topology}} We will define this as given by Chalupa et al. \cite{Data-centricDPOR} Let $\mathcal{G}(V,E)$ be a graph induced by a program $\prog$ such that $V=\{\thread\mid \thread \text{ is a threads of }\prog\}$ and $E=\{(\thread_1,\thread_2)\mid \thread_1,\thread_2 \text{ are two threads of }\prog \text{ and they access a common variable in } \varset \}$. We call $\mathcal{G}$ the communication graph of $\prog$. A program has an acyclic architecture if $\mathcal{G}$ is acyclic. Figure~\ref{fig:acyclic} shows the differentiation between acyclic and non-acyclic architectures.  Examples of acyclic architecture includes all architectures with two processes, star architectures, pipelines, tree-like and hierarchical
+architectures.
+
+\begin{figure*}[t]
+\centering
+
+\begin{tikzpicture}
+
+% =========================================================
+% LEFT: EXAMPLE
+% =========================================================
+
+\node[anchor=north west] at (0,0) {%
+\begin{minipage}[t]{0.43\textwidth}
+\centering
+\textbf{Example: Acyclic topology}
+
+\vspace{0.4cm}
+
+% ---------------------------------------------------------
+% Threads
+% ---------------------------------------------------------
+\begin{tikzpicture}[
+    op/.style={
+        draw,
+        rounded corners,
+        minimum width=1.7cm,
+        minimum height=0.55cm,
+        align=center,
+        font=\small
+    },
+    po/.style={
+        ->,
+        >=stealth
+    }
+]
+
+% T1
+\node[op] (t1a) at (0,0) {$\wt(x,1)$};
+\node[above=0.08cm of t1a]  {\small $T_1$};
+
+% T2
+\node[op] (t2a) at (2,0) {$\rd(x,1)$};
+\node[op, below=0.55cm of t2a] (t2b) {$\wt(y,1)$};
+\node[op, below=0.55cm of t2b] (t2c) {$\wt(z,1)$};
+\node[above=0.08cm of t2a] {\small $T_2$};
+
+\draw[po] (t2a) -- (t2b);
+\draw[po] (t2b) -- (t2c);
+
+% T3
+\node[op] (t3a) at (4,0) {$\rd(y,1)$};
+\node[op, below=0.55cm of t3a] (t3b) {$\wt(u,1)$};
+\node[above=0.08cm of t3a] {\small $T_3$};
+
+\draw[po] (t3a) -- (t3b);
+
+% T4
+\node[op] (t4a) at (0,-4) {$\wt(z,2)$};
+\node[op, below=0.55cm of t4a] (t4b) {$\rd(z,1)$};
+\node[above=0.08cm of t4a] {\small $T_4$};
+
+\draw[po] (t4a) -- (t4b);
+
+% T5
+\node[op] (t5a) at (4,-4) {$\rd(u,1)$};
+\node[above=0.08cm of t5a] {\small $T_5$};
+
+\end{tikzpicture}
+
+\vspace{1.8cm}
+
+% ---------------------------------------------------------
+% Topology
+% ---------------------------------------------------------
+\begin{tikzpicture}[
+    vertex/.style={
+        circle,
+        draw,
+        minimum size=0.85cm,
+        font=\small
+    }
+]
+
+\node[vertex] (t1) at (2,2) {$T_1$};
+\node[vertex] (t2) at (4,0) {$T_2$};
+\node[vertex] (t3) at (6,2) {$T_3$};
+\node[vertex] (t4) at (6,0) {$T_4$};
+\node[vertex] (t5) at (8,2) {$T_5$};
+
+\draw (t1) -- node[above right=2pt] {$x$} (t2);
+\draw (t2) -- node[above left=2pt] {$y$} (t3);
+\draw (t2) -- node[below=2pt] {$z$} (t4);
+\draw (t3) -- node[above=2pt] {$u$} (t5);
+
+\end{tikzpicture}
+
+\vspace{1.2cm}
+
+\text{(a)}
+
+\end{minipage}
+};
+
+
+% =========================================================
+% VERTICAL SEPARATOR
+% =========================================================
+
+\draw[gray, thick] (7.2,0.2) -- (7.2,-8.3);
+
+
+% =========================================================
+% RIGHT: NON-EXAMPLE
+% =========================================================
+
+\node[anchor=north west] at (7.35,0) {%
+\begin{minipage}[t]{0.43\textwidth}
+\centering
+\textbf{Non-example: Contains a cycle}
+
+\vspace{0.4cm}
+
+% ---------------------------------------------------------
+% Threads
+% ---------------------------------------------------------
+\begin{tikzpicture}[
+    op/.style={
+        draw,
+        rounded corners,
+        minimum width=1.7cm,
+        minimum height=0.55cm,
+        align=center,
+        font=\small
+    },
+    po/.style={
+        ->,
+        >=stealth,
+        thick
+    }
+]
+
+% T1
+\node[op] (n1a) at (0,0) {$\wt(x,1)$};
+\node[op, below=0.55cm of n1a] (n1b) {$\wt(y,1)$};
+\node[above=0.08cm of n1a] {\small $T_1$};
+
+\draw[po] (n1a) -- (n1b);
+
+% T2
+\node[op] (n2a) at (2,0) {$\rd(x,1)$};
+\node[op, below=0.55cm of n2a] (n2b) {$\wt(z,1)$};
+\node[above=0.08cm of n2a] {\small $T_2$};
+
+\draw[po] (n2a) -- (n2b);
+
+% T3
+\node[op] (n3a) at (4,0) {$\rd(y,1)$};
+\node[op, below=0.55cm of n3a] (n3b) {$\wt(u,1)$};
+\node[above=0.08cm of n3a] {\small $T_3$};
+
+\draw[po] (n3a) -- (n3b);
+
+% T4
+\node[op] (n4a) at (2,-3) {$\rd(z,1)$};
+\node[op, below=0.55cm of n4a] (n4b) {$\rd(u,1)$};
+\node[above=0.08cm of n4a] {\small $T_4$};
+
+\draw[po] (n4a) -- (n4b);
+
+\end{tikzpicture}
+
+\vspace{0.8cm}
+
+% ---------------------------------------------------------
+% Topology
+% ---------------------------------------------------------
+\begin{tikzpicture}[
+    vertex/.style={
+        circle,
+        draw,
+        minimum size=0.85cm,
+        font=\small
+    }
+]
+
+\node[vertex] (n1) at (2,2.5) {$T_1$};
+\node[vertex] (n2) at (0,0) {$T_2$};
+\node[vertex] (n3) at (4,0) {$T_3$};
+\node[vertex] (n4) at (2,-2.5) {$T_4$};
+
+\draw (n1) -- node[above left] {$x$} (n2);
+\draw (n1) -- node[above right] {$y$} (n3);
+\draw (n2) -- node[below left] {$z$} (n4);
+\draw (n3) -- node[below right] {$u$} (n4);
+
+\end{tikzpicture}
+
+\vspace{0.2cm}
+
+\text{(b)}.
+
+\end{minipage}
+};
+
+\end{tikzpicture}
+
+\caption{ Example and a non-example of Acyclic Topology. The arrows within each thread represent $\po$. (a) The communication graph is acyclic (b) The communication graph  contains the cycle $T_1-T_2-T_4-T_3-T_1$. 
+}
+\label{fig:acyclic}
+\end{figure*}
+
 \section{Sequential Consistency}
 
 The model has been first proposed by \cite{SC-Lamport78}. Under  sequentially consistent memory any write or read operations  involving the memory is immediately visible to all the processes of the program. Also, the execution of events in a thread sequence respects the program order ($\po$).
@@ -51,38 +261,50 @@ Let us recall the probem of verifying sequential consistency (VSC) as given in \
   }
 \end{center}
 
-The set of sequences $S_1, \dots, S_k$ forms our observed execution. A ``Yes'' answer to the question above indicates that the observed execution admits an SC behaviour, while a ``No'' answer shows the memory implementation can violate sequential consistency.
+The set of sequences $\thread_1, \dots, \thread_k$ forms our observed execution. A ``Yes'' answer to the question above indicates that the observed execution admits an SC behaviour, while a ``No'' answer shows the memory implementation can violate sequential consistency.
 
 Gibbons and Korach~\cite{gibbons} established that the VSC problem is $\NP$-complete. It seems exhaustively exploring all exponentially many possible interleavings is unavoidable. Naturally one might try to find some tractable fragmant of the VSC-problem by bounding other parameters of the program like threads or variables. But the problem still remained hard (see Table 1 of [\cite{gibbons}]).
 
 In Part A of this thesis we have studied the problem by restricting the number of preemtions to be allowed in an interleaving. A preemption occurs when the control switches from one  process to another process without completely executing  the former process. The following definition would make the concept clear. 
 
-\noindent{\bf{Preemptions}} Take a concurrent program $\prog = (S_1, \dots, S_k)$. Let $\sigma = a_1 a_2 \dots a_m$, with each $a_j \in \eventset$, be a partial interleaving of $\prog$. We say that a \emph{preemption} occurs at position $j \in \{1, \dots, m-1\}$ if $a_j$ and $a_{j+1}$ belong to different threads, and $a_j$ is not the last event of its thread. For $\pp \in \nats$, we say that $\sigma$ has $\pp$ preemptions if there are exactly $\pi$ positions in $\sigma$ where preemptions occur. Figure~\ref{fig-onewriter-example} shows some examples.
+\noindent{\bf{Preemptions}} Take a concurrent program $\prog = (\thread_1, \dots, \thread_k)$. Let $\sigma = a_1 a_2 \dots a_m$, with each $a_j \in \eventset$, be a partial interleaving of $\prog$. We say that a \emph{preemption} occurs at position $j \in \{1, \dots, m-1\}$ if $a_j$ and $a_{j+1}$ belong to different threads, and $a_j$ is not the last event of its thread. For $\pp \in \nats$, we say that $\sigma$ has $\pp$ preemptions if there are exactly $\pi$ positions in $\sigma$ where preemptions occur. Figure~\ref{fig-onewriter-example} shows some examples.
 
 \begin{figure}[h]
    \def\ystep{0.5}
 
 \centering
 	\scalebox{.7}{
-\begin{tikzpicture}[yscale=1]
-\node (t01) at (-.2, 1.5*\ystep) {$P_1$};
-\node (t02) at (1.5, 1.5*\ystep) {$P_2$};
-\node (t03) at (3.2, 1.5*\ystep) {$P_3$};
+\begin{tikzpicture}[yscale=1.5,xscale=2,op/.style={
+        draw,
+        rounded corners,
+        minimum width=1.7cm,
+        minimum height=0.55cm,
+        align=center,
+        font=\small
+    },
+    po/.style={
+        ->,
+        >=stealth,
+        thick
+    }]
+\node[op] (t01) at (-.2, 1.5*\ystep) {$P_1$};
+\node[op] (t02) at (1.5, 1.5*\ystep) {$P_2$};
+\node[op] (t03) at (3.2, 1.5*\ystep) {$P_3$};
 
 
 
-  \node (t11) at (-.2, 0*\ystep) {$1:\wt(x,1)$};
-    \node (t12) at (1.5, 0*\ystep) {$2:\rd(x,2)$};
+  \node[op] (t11) at (-.2, 0*\ystep) {$1:\wt(x,1)$};
+    \node[op] (t12) at (1.5, 0*\ystep) {$2:\rd(x,2)$};
   
-    \node (t13) at (3.2, 0*\ystep) {$3:\rd(x,1)$};
+    \node[op] (t13) at (3.2, 0*\ystep) {$3:\rd(x,1)$};
     
-    \node (t21) at (-.2, -2*\ystep) {$1:\wt(x,2)$};
-    \node (t22) at (1.5, -2*\ystep) {$2:\wt(y,1)$}; 
+    \node[op] (t21) at (-.2, -2*\ystep) {$1:\wt(x,2)$};
+    \node[op] (t22) at (1.5, -2*\ystep) {$2:\wt(y,1)$}; 
     
   
     
     
-    \node (t31) at (-.2, -4*\ystep) {$1:\rd(y,1)$};
+    \node[op] (t31) at (-.2, -4*\ystep) {$1:\rd(y,1)$};
    
  
     \draw[po] (t11) -- (t21);
@@ -91,7 +313,7 @@ In Part A of this thesis we have studied the problem by restricting the number o
     \draw[po] (t12) -- (t22);
     \end{tikzpicture}}
     
-     \caption{The partial interleaving $(1:w(x,1))(3:r(x,1))(1:w(x,2))$ has only one preemption  at $(1:w(x,1))$ while the interleaving $(1:w(x,1))(3:r(x,1))(1:w(x,2)) (2:r(x,2)) (2:w(y,1)) (1:r(y,1))$ has two preemptions at $(1:w(x,1))$ and $(1:w(x,2))$.}\label{fig-onewriter-example}
+     \caption{\small The partial interleaving $(1:\wt(x,1))(3:\rd(x,1))(1:\wt(x,2))$ has only one preemption  at $(1:\wt(x,1))$ while the interleaving $(1:\wt(x,1))(3:\rd(x,1))(1:\wt(x,2)) (2:\rd(x,2)) (2:\wt(y,1)) (1:\rd(y,1))$ has two preemptions at $(1:\wt(x,1))$ and $(1:\wt(x,2))$.}\label{fig-onewriter-example}
      
 \end{figure}
 
@@ -127,7 +349,7 @@ With this motivation let us define the following variation of VSC-problem $\pi$.
 
 The complexity of the above problem differs with the structure of the program. We have classified the programs into \onewriter~, \twowriter~, and \threewriter~ and studied the corresponding complexity.   
 
-\noindent{\bf{Classification of programs}} In our analysis, we classify programs based on the number of threads that write to a variable. A concurrent program is said to be \onewriter\ if for every variable $x$, there is a single thread with write operations of the form $\wt(x, d)$. Multiple threads can have read operations $\rd(x, d)$ though. Similarly, a concurrent program is said to be \twowriter\ (resp. \threewriter) if there are at most two (resp. three) threads with write operations to each variable. Figures~\ref{fig-onewriter-example} and \ref{fig:example-algo} give examples of \onewriter\ programs.
+\noindent{\bf{Classification of programs}} In our analysis, we classify programs based on the number of threads that write to a variable. A concurrent program is said to be \onewriter\ if for every variable $x$, there is a single thread with write operations of the form $\wt(x, d)$. Multiple threads can have read operations $\rd(x, d)$ though. Similarly, a concurrent program is said to be \twowriter\ (resp. \threewriter) if there are at most two (resp. three) threads with write operations to each variable. Figures~\ref{fig-onewriter-example} and \ref{fig:acyclic} (b) give examples of \onewriter\ programs. 
 
 In later chapters we shall show how the  the complexity of VSC$^\pp$ differs based on whether the program of interest is \onewriter{} or \twowriter{} or \threewriter{} and prove the following theorems. 
 
@@ -147,6 +369,12 @@ The third result gives a conditional lower bound under the Exponential Time Hypo
 
 \begin{theorem} \label{scFinegrained}\label{th:Finegrained}
 Under ETH, there is no $2^{o(k)} \cdot n^{\mathcal{O}(1)}$ algorithm for \vscp where $k$ is the number of threads, $n$ is the total number of operations.
+\end{theorem}
+
+We further study the VSC$^\pp$ problem for acyclic architecture which is also a special case of $\twowriter$ programs, and  claim the restriction makes the problem polynomial. We have the following theorem from   Chapter~\ref{sc-acyclic}  to support our claim.
+
+\begin{theorem} \label{th:scacyclic}
+\vscp  admits a polynomial-time solution  when the program architecture is acyclic.  
 \end{theorem}
 
 
