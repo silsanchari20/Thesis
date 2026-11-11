@@ -1,31 +1,441 @@
+%\section{Motivation and Background}
+
+Concurrent programs are now a routine part of computing. A program may run several threads that communicate with each other through various mechanisms and can make progress at overlapping times. Most common mechanisms being message passing and shared memory.
+Message-passing systems allow processes to communicate by explicitly sending and receiving messages while  in shared-memory systems, multiple threads communicate by reading from and writing to common memory locations. This style of programming is useful for exploiting parallelism in multi-core processors, making  efficient use of available computational resources, and allowing different parts of a program to work together by sharing information through shared  memory. At the same time, it makes program behaviour more difficult to understand. The result of a concurrent execution not only depends  on the instructions written by the programmer, but it also depends on the order in which operations from different threads are executed and become visible to one another. 
+
+In this thesis, we focus on shared-memory concurrent programs. A natural way to reason about a shared-memory program is to imagine that all its memory operations occur one at a time in a single global order. The order of operations within each thread (program order) is preserved, but operations from different threads may be interleaved. This is the central idea of sequential consistency (SC), introduced by Lamport \cite{SC-Lamport78}. Under SC, a read returns the value written by the most recent preceding write to the same memory location in the global order. This gives programmers a relatively simple model: even though the program is concurrent, its behaviour can be understood as some sequential ordering of its operations.
+
+The simplicity of SC comes at a cost. Modern processors use techniques such as store buffers, caches, pipelining, and out-of-order execution to improve performance. Compilers may also reorder instructions when they consider the transformation valid under the language rules. These optimisations mean that the order in which memory operations are observed by different threads need not be the same as a single global order that preserves every program order relation. For example, a processor may keep a store in a buffer while executing a later load as in case of Total Store Order (TSO) and Partial Store Order (PSO) \cite{sun1991sparc}, \cite{sparc1994architecture}, \cite{gharachorloo1990memory}, \cite{dubois1986memory}.
  
+Weak memory models capture these behaviours by specifying which ordering constraints must be respected and which may be relaxed. The intention is not to permit arbitrary behaviour. Rather, a memory model defines a set of allowed executions that balances implementation efficiency with guarantees that programmers can rely on. Stronger models restrict more behaviours and are often easier to reason about. Weaker models can provide greater freedom to hardware and compiler optimisations, but they also make it harder to predict the outcome of a concurrent program.
+
+With the development of memory models, it also became necessary to test whether an implementation of a memory model satisfies underlying constraints provided by the respective memory model. The earliest work on consistenct testing, by Gibbons and Korach \cite{Gibbons}, provided a formal and systematic study of the complexity of testing the correctness of an execution of a shared memory based on the reads and writes observed by the individual processors. Related works on SC and other memory models have been discussed in Section \ref{intro:consistency-testing}. 
+
+The next section gives the history of memory models from the early  foundations of concurrent shared-memory systems, through the hardware models that relaxed SC, to the language-level models used today. This progression also adds to  the explaination why the problem of consistency testing is studied. 
+
+
+
+
+%The issue is not limited to hardware. Programming-language memory models must also account for compiler transformations and for the synchronisation mechanisms exposed to programmers. The Java Memory Model, as well as the C11 and C++11 memory models, formalise how concurrent threads interact through ordinary and atomic memory operations. In C11-style models, atomic operations can have different ordering constraints, including relaxed, acquire, release, acquire-release, and sequentially consistent orderings. This allows programmers to choose the strength of ordering needed for an operation, but it also makes the set of possible behaviours more involved.
+
+%Because a memory model defines which executions are permitted, an important verification question is whether a given observed execution is consistent with that model. This is the focus of consistency testing. If an execution is inconsistent, it cannot be explained by the specified memory model; if it is consistent, the model permits that behaviour. The question is relevant both to checking implementations and to understanding whether a particular observation could arise under the rules of the programming environment. It also gives a precise mathematical problem on which algorithms and complexity results can be studied.
+
+\section{History of memory Models}
+
+\subsection{Early works on shared memory multiprocessors}
+
+The problem of coordinating concurrent activities predates modern multicore processors. Early work on concurrent systems asked how several processes could safely access shared objects when their operations overlap in time. An important abstraction was the \emph{atomic} read or write: although an operation may take time to carry out, it should appear as if it took effect at one instant between its invocation and completion. This abstraction makes it possible to reason about a concurrent system using discrete events rather than the details of the underlying hardware.
+
+Lamport's work on concurrent reading and writing \cite{10.1145/359863.359878} helped establish a formal basis for reasoning about shared memory. His work on the ordering of events in distributed systems \cite{Lamport78} introduced the happened-before relation, which captures causal precedence without assuming a single global clock. A year later, in his paper on multiprocessor correctness, Lamport formulated sequential consistency as a condition on the observable behaviour of a multiprocessor \cite{lamport1979sc}. An execution is sequentially consistent when it can be explained by some total order of all memory operations that preserves the order in which each processor issued its own operations.
+SC specifies the behaviour that the system must present to a programmer. The hardware may execute instructions in parallel, overlap memory requests, or use private caches, as long as the resulting observations can still be explained by one global order preserving each thread's program order. 
+
+
+%In this sense, SC became a clean reference point for both architecture design and the semantics of concurrent programs.
+
+%It is also useful to separate three notions that are sometimes confused. \emph{Atomicity} concerns whether an individual operation appears indivisible. \emph{Cache coherence} concerns the values and ordering of writes to one memory location. \emph{Memory consistency} concerns the ordering constraints among operations, including operations on different locations, as seen by different processors. A system may maintain a coherent order for every individual location and still fail to provide SC, because the observations across several locations may not fit one common global order.
+
+By the late 1980s, researchers were already exploring ways to improve the efficiency of parallel programs without giving up sequential consistency. An important contribution in this direction was the work Efficient and Correct Execution of Parallel Programs that Share Memory by Shasha and Snir \cite{10.1145/42190.42277}. They studied shared-memory multiprocessors in which a processor need not wait for one memory access to finish before issuing another. In other words, several memory accesses can be in progress at the same time, and they need not be carried out in the order in which the processor issued them. This creates an interesting challenge: how can a system allow memory accesses to overlap while ensuring that the resulting execution still satisfies SC? One straightforward solution would be to delay every memory access until the previous access from the same processor has completed. Although this would guarantee the required ordering, it would also prevent independent accesses from proceeding concurrently and thereby limit the available parallelism. Shasha and Snir showed that such a strict restriction is unnecessary. Using a conflict graph, similar to those employed in the scheduling of database transactions, they identified the dependencies between memory operations and derived a minimal set of delays sufficient to preserve SC. Their analysis also has implications for compiler optimisation. Rather than enforcing an order on every memory access, a compiler can use these dependencies to determine where delays are necessary and where operations can safely proceed concurrently. Thus, their approach aimed to make SC executions more efficient without changing the consistency guarantee provided to the programmer. The conflict-graph perspective is also significant because it represents the ordering constraints between operations explicitly. This way of reasoning about dependencies and ordering will be useful again when we study the consistency-testing problems considered in this thesis.
+
+\subsection{How hardware optimization led to weaker behaviours}
+
+The pressure to relax SC came from the way multiprocessors were built. Processor speeds increased faster than the latency of main memory, and architects introduced caches, write (or store)  buffers, pipelines, and out-of-order execution to keep processors busy. These mechanisms solve different performance problems. Caches avoid repeated accesses to slower memory; pipelines overlap stages of instruction processing; store buffers allow a processor to continue after issuing a store but before that store has propagated through the memory system; and out-of-order execution allows independent instructions to make progress while an earlier instruction is waiting. In a multiprocessor, however, these mechanisms affect what another processor can observe.
+
+A store buffer gives a particularly simple example. Suppose two threads start with $x=y=0$ in the main memory and execute the following code:
+\[
+\begin{array}{llll}
+ & Init: x=y=0 & \\[1.5mm]
+
+P_0 & & P_1\\[1.5mm]
+
+\wt(x,1) & & \wt(y,1)\\[1mm]
+
+\rd(y,0) & & \rd(x,0)\\
+\end{array}
+\]
+If each processor keeps its store in a local buffer, it may perform the later load before the store has become visible to the other processor. Both loads $\rd(y,0)$ and $\rd(x,0)$ can then return $0$. This is the familiar store-buffering outcome. It cannot be explained by an SC interleaving: for $\rd(y,0)$ to execute, the read of $y$ must precede $\wt(y,1)$ while for $\rd(x,0)$ to execute, the read of $x$ must precede $\wt(x,1)$. These requirements conflict with the program order of both threads.
+
+The store-buffering outcome is not an arbitrary anomaly. It reflects a relaxation that appeared in early architectural memory models: a processor may let a later load pass an earlier store to a different location. The IBM System/370 model \cite{ibm370principles1975}  \cite{ibm3701983}, documented in the late 1970s, was an early example of this behaviour \cite{DBLP:journals/computer/AdveG96}. It was later associated with the family of Total Store Order (TSO) models. SPARC specified TSO and Partial Store Order (PSO) \cite{sun1991sparc}, which also permits stores to different locations to become visible out of program order, and later introduced Relaxed Memory Order (RMO) \cite{sparc1994architecture}, which relaxes still more ordering constraints. DEC Alpha \cite{alpha1992} and PowerPC \cite{powerpc1993} are further examples of architectures that adopted relaxed memory-consistency models. They made different choices about dependencies, memory barriers, and the propagation of writes and a program relying on one architecture's guarantees could behave differently on another. 
+
+As these architectures developed, researchers began to describe the guarantees more systematically. Dubois, Scheurich, and Briggs studied memory-access buffering in multiprocessors in 1986 \cite{dubois1986memory}. Goodman \cite{goodman1989cache} studied the relationship between cache coherence and sequential consistency, highlighting that consistency at individual memory locations does not necessarily guarantee a consistent global view of memory. He discussed the cost of enforcing sequential consistency and distinguished it from weaker guarantees such as cache consistency (writes to each memory location are observed in a consistent order) and processor consistency (different processors may observe writes from other processors in different orders). %Processor consistency is not defined identically in every paper, so it is best treated as a family of related proposals rather than as one universal definition.
+
+A further step was to make synchronisation, rather than every ordinary data access, the main point at which ordering is enforced. Adve and Hill's \emph{Weak Ordering} formalised this approach in 1990 \cite{adve1990}. Its central idea is that ordinary stores and loads need not all be globally ordered with respect to one another. Instead, the model imposes ordering constraints around synchronisation operations like such as locks, fences, and release-acquire accesses. When a program uses synchronisation operations correctly, they establish the necessary ordering between threads and ensure that shared data is communicated as intended. Outside these ordering constraints, ordinary memory accesses may be executed concurrently or reordered, respecting constraints of the underlying memory model.
+
+Gharachorloo et al. developed this synchronisation-centred approach further in their work on release consistency \cite{gharachorloo1990memory}.  Release consistency distinguishes ordinary accesses from synchronisation operations and gives special roles to acquire and release actions. Informally, an acquire prevents later accesses from moving before the acquire, while a release orders earlier accesses before the release becomes effective. This permits more buffering and pipelining than a model that insists on one global order for every access. Later  works distinguished two variants of Release Consistency: RCsc, which requires synchronisation operations to be sequentially consistent, and RCpc, which requires them to satisfy processor consistency \cite{GHARACHORLOO1992399}.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[>=stealth, thick]
+  \node[align=center, text width=3.1cm] at (0, 3) {Thread $T_0$};
+  \node[align=center, text width=3.1cm] at (7, 3) {Thread $T_1$};
+
+  \node[draw, rounded corners, fill=blue!5, align=center, text width=3.1cm, minimum height=0.9cm] (wx) at (0,1.9) {$\wt(x,2)$};
+  \node[draw, rounded corners, fill=blue!10, align=center, text width=3.1cm, minimum height=0.9cm] (rely) at (0,0.35) {release  $\wt(y,1)$};
+  \node[draw, rounded corners, fill=orange!10, align=center, text width=3.1cm, minimum height=0.9cm] (acqy) at (7,1.9) {acquire $\rd(y,1)$};
+  \node[draw, rounded corners, fill=orange!5, align=center, text width=3.1cm, minimum height=0.9cm] (rx) at (7,0.35) {$\rd(x,2)$};
+  
+  \draw[->] (wx.south)--(rely.north);
+  \draw[->] (acqy.south)--(rx.north);
+  \draw[->, dashed] (rely.east)--node[above, align=center, font=\small, ,text width=3.0cm, sloped]{reads-from}(acqy.west);
+\end{tikzpicture}
+\caption{acquire--release synchronization: When the acquire reads from the release, the write on $x$ is ordered before the read on $x$.}
+\label{fig:intro-acquire-release}
+\end{figure}
+
+Adve and Hill then helped connect the architecture-level models to a programming discipline. They introduced a data-race-free approach in Weak Ordering \cite{advehill1990wo}. The model was named DRF-0. The idea was to guarantee SC for programs that obey certain  synchronization constraints. 
+Adve and Hill later extended this approach through the DRF-1 model \cite{advehill1993}. Unlike DRF-0, DRF-1 distinguishes between paired acquire-release operations and unpaired synchronization operations. This distinction provides a more precise description of the role of synchronization and allows implementations to avoid unnecessary ordering constraints. Consequently, an implementation need not wait for all previous data operations to complete before executing a release. Instead, it can keep track of incomplete operations and communicate this information to the processor performing the corresponding acquire. The acquiring processor then delays only those subsequent operations that conflict (two memory operations access the same memory location, and at least one of them is a write) with the incomplete operations. This allows synchronisation operations and independent memory accesses to proceed earlier, while preserving sequentially consistent behaviour for data-race-free programs. The work on DRF-1 also provides a unified formalisation of four memory models: weak ordering, release consistency with sequentially consistent synchronization operations, the VAX memory model \cite{vaxarchitecture1981}, and DRF-0. Gharachorloo et al. also studied how programs should be written for different consistency models, making clear that the programmer’s synchronisation discipline and the machine’s ordering rules have to be considered together \cite{GHARACHORLOO1992399}.
+
+Entry Consistency (EC) introduced by Bershad, Zekauskas, and Sawdon  in their work `Midway distributed shared-memory system' \cite{bershad1993midway}, explicitly associates shared variables with the synchronisation variables that protect them. Acquiring a synchronisation object makes the variable associated with it consistent, rather than requiring updates of all shared variables. This could reduce unnecessary communication, at the cost of requiring the programmer or system to identify which synchronisation objects protect which data.
+
+Adve and Gharachorloo's 1996 tutorial, \emph{Shared Memory Consistency Models: A Tutorial}  \cite{DBLP:journals/computer/AdveG96}, brought together the growing family of hardware consistency models and explained their implications for performance, programmability, and portability. They highlighted two complementary ways of understanding a memory consistency model: A system-centred description, which explains the hardware optimisations a model permits, and a programmer-centred description, which describes the executions a program is allowed to exhibit. The two views are complementary. Hardware mechanisms explain why a model may be attractive to implement; the programmer-centred view gives a verifier a precise set of behaviours to reason about.
+
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[>=stealth, thick]
+
+  \draw[->] (0,0)--(0,10);
+
+  \foreach \y/\date/\entry in {
+    0.5/{1970--1979}/{
+      Sequential Consistency (SC)
+    },
+    1.5/{1980--1989}/{
+      IBM-370; PRAM; Processor Consistency
+    },
+    3.1/{1990--1999}/{
+      Weak Ordering (WO); Release Consistency (RCsc, RCpc);
+      Entry Consistency (EC); DRF-0 and DRF-1;
+      DEC Alpha; PowerPC; SPARC TSO, PSO and RMO;
+      Causal Memory (CM)
+    },
+    5/{2000--2009}/{
+      Java Memory Model (JMM); x86-TSO
+    },
+    7/{2010--2019}/{
+      C11/C++11; Strong Release-Acquire (SRA); POWER; ARMv8;
+      Linux Kernel Memory Model (LKMM);
+      RISC-V RVWMO; causal consistency (CC); causal convergence (CCv)
+    },
+    9/{2020--2026}/{
+      RC20; Weak Release-Acquire (WRA); XMM/XC20; CBM
+    }
+  }
+  {
+  \fill (0,\y) circle (2pt);
+    \node[anchor=east, align=right, text width=1.35cm, font=\small] at (-0.2,\y) {\date};
+    
+    \node[draw, rounded corners, fill=blue!4, align=left, text width=10.0cm, inner sep=5pt, font=\small, anchor=west] at (0.35,\y) {\entry};
+  }
+
+\end{tikzpicture}
+
+\caption{Memory consistency models developed between
+1970 and 2026.}
+\label{fig:intro-memory-timeline}
+\end{figure}
+
+
+As processor architectures evolved, different manufacturers adopted different choices about the ordering guarantees exposed to programmers. The x86 architecture, for example, provides relatively strong ordering guarantees, but does not enforce sequential consistency in all cases.  In 2010 Owens, Sarkar, and Sewell \cite{Sewell:2010} gave a formal specification of x86-TSO, presenting both an operational model based on store buffers and an axiomatic description. Other architectures, particularly IBM POWER \cite{powerpc1993} and ARM \cite{furberwilson1987} \cite{alglave2009semantics}, allowed a wider range of memory-operation reorderings. Their memory models require careful treatment of dependencies between instructions, as well as explicit synchronisation and barrier instructions. POWER, in particular, permits non-multi-copy-atomic propagation of writes, meaning that a write may become visible to some processors before others, so that different processors may temporarily observe different values for the same shared variable. Mador-Haim et al. \cite{mador-haim2012} developed an axiomatic specification of the POWER memory model, capturing the ordering constraints arising from dependencies and memory barriers. Subsequently, Alglave, Maranget, and Tautschnig \cite{alglave2014herding} proposed a general framework for specifying and analysing weak memory models. Their work covered models such as TSO, POWER, and ARM, and introduced the \texttt{herd} tool for exploring the possible outcomes of concurrent programs under different memory models. This provided a systematic way to compare architectural guarantees and to investigate behaviours that might otherwise be difficult to identify through informal reasoning alone.
+
+The formalisation of ARM memory ordering also developed further. Earlier ARM models permitted non-multi-copy-atomic behaviour. Pulte et al. \cite{pulte2018armv8} presented a revised axiomatic and operational model for ARMv8 that adopted multi-copy atomicity where a write becomes visible to all processors at the same   point. The revised model also provided a more systematic treatment of dependencies and ordering constraints, making the architecture easier to describe and reason about formally.
+
+A more recent development is the RISC-V architecture, which specifies its memory behaviour through the RISC-V Weak Memory Ordering (RVWMO) model \cite{waterman2019riscv}. Rather than requiring every memory operation to preserve program order, RVWMO defines a global memory order subject to constraints arising from preserved program order, dependencies, and synchronisation instructions. Explicit \texttt{FENCE} instructions and acquire-release annotations on atomic operations allow programmers to impose additional ordering when required. 
+
+These developments show that the evolution of memory consistency models has been closely connected to advances in processor architecture. As hardware became more sophisticated, the ordering guarantees of different architectures became increasingly varied, making informal descriptions insufficient for precise reasoning. Operational and axiomatic models therefore became important tools for specifying the allowed behaviours of an architecture and for analysing concurrent programs. An \emph{operational model} describes an abstract machine and the steps by which instructions are issued, executed, buffered, and made visible while an \emph{axiomatic model} describes an execution using events and relations, then declares it valid when those relations satisfy a collection of mathematical conditions. This also brings us to a central question in the study of memory models: given a concurrent execution, how can we determine whether it has an outcome allowed by the specified consistency model? Answering this question is the problem of consistency testing, which forms the main subject of this thesis.
+
+We will now see how compiler optimizations has affected the development of programming language memory models.  
+
+\subsection{How compiler optimization led to weaker behaviours}
+
+The hardware story alone is not enough. Between the program written by the programmer and the instructions executed by the processor sits the compiler. A compiler removes redundant work, keeps frequently used values in registers, moves independent instructions to improve scheduling, and simplifies control flow. Such transformations are essential for performance. For sequential programs, their correctness is usually explained by showing that the transformed program has the same observable behaviour as the source program. In a concurrent program, however, another thread may access the same memory location between two operations, so the transformation can change what that thread observes.
+
+Consider two consecutive reads of a shared variable:
+\[
+\begin{array}{ll}
+r_1 := x;\\
+r_2 := x.
+\end{array}
+\]
+
+If the language semantics allow the compiler to assume that no relevant write can occur between the reads, it may reuse the first value and replace the second load by an assignment, $r_2 := r_1$. This is a familiar optimisation known as load reuse or common-subexpression elimination. In a concurrent program, though, another thread might write to $x$ between the two source-level reads. Whether the compiler must preserve that possibility depends on the language's concurrency rules. The point is not that compilers may arbitrarily change the order of shared-memory operations, it is that a language memory model must say precisely which transformations are valid in the presence of other threads. In languages such as C and C++, unsynchronised conflicting accesses to a non-atomic object constitute a data race, so this example should not be read as a portable way for threads to communicate. A program that needs communication must use the synchronisation mechanisms provided by the language, such as locks or atomic operations.
+
+A similar issue appears in a producer-consumer pattern (See Figure~\ref{fig:producer-consumer-ra}). The producer writes a data item and then sets a flag. If the program uses no synchronisation that orders these actions, the compiler and processor may have freedom that the programmer did not intend. For example, in Figure~\ref{fig:producer-consumer-ra}(a), the write to $x$ is not ordered before the consumer's read of $x$, and the consumer may still observe the initial value $0$. With a release store to the flag and an acquire load by the consumer, the language model can establish the required synchronisation: the data write is ordered before the release, and the acquire that reads from it orders subsequent operations after the acquire as in Figure~\ref{fig:producer-consumer-ra}(b). The exact guarantees depend on the language and memory order, but the central idea is that synchronisation constrains both compiler transformations and hardware execution.
+
+\begin{figure}[ht]
+\centering
+
+\tikzset{
+    pcEvent/.style={
+        draw,
+        rounded corners,
+        align=center,
+        text width=2.5cm,
+        minimum height=9mm,
+        font=\small,
+        inner sep=4pt
+    },
+    pcPO/.style={
+        -{Stealth[length=2mm]},
+        thick
+    },
+    pcRF/.style={
+        -{Stealth[length=2mm]},
+        thick,
+        blue
+    },
+    pcHB/.style={
+        -{Stealth[length=2mm]},
+        thick
+    }
+}
+
+%================================================
+% (a) Without synchronisation
+%================================================
+
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\textbf{(a) Without synchronisation}
+
+\vspace{4mm}
+
+\begin{tikzpicture}
+
+\node[align=center] at (1.85, 3) {Init: $x=0$, $flag=0$};
+
+\node[font=\small\bfseries] at (0,2.1) {Producer};
+\node[font=\small\bfseries] at (3.8,2.1) {Consumer};
+
+% Producer events
+\node[pcEvent,fill=blue!20] (a1) at (0,1.35)
+    {$\wt(x,2)$};
+
+\node[pcEvent,fill=blue!20] (a2) at (0,0)
+    {$\wt(flag,1)$};
+
+% Consumer events
+\node[pcEvent,fill=blue!20] (a3) at (3.8,1.35)
+    {$\rd(flag,1)$};
+
+\node[pcEvent,fill=blue!20] (a4) at (3.8,0)
+    {$\rd(x,0)$};
+
+% Program order
+\draw[pcPO] (a1.south) --
+    node[left,font=\scriptsize] {$\po$} (a2.north);
+
+\draw[pcPO] (a3.south) --
+    node[right,font=\scriptsize] {$\po$} (a4.north);
+
+% Reads-from relation
+\draw[pcRF] (a2.east)
+    to[out=20,in=160]
+    node[midway,above,sloped,font=\scriptsize] {$\rf$}
+    (a3.west);
+
+\end{tikzpicture}
+
+\vspace{2mm}
+
+$\rd(x,0)$ is not intended but allowed.
+\end{minipage}
+\hfill
+%================================================
+% (b) With release-acquire synchronisation
+%================================================
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\textbf{(b) With release--acquire synchronisation}
+
+
+\begin{tikzpicture}
+\node[align=center] at (1.85, 3) {Init: $x=0$, $flag=0$};
+
+\node[font=\small\bfseries] at (0,2.1) {Producer};
+\node[font=\small\bfseries] at (3.8,2.1) {Consumer};
+
+% Producer events
+\node[pcEvent,fill=blue!20] (b1) at (0,1.35)
+    {$\wt(x,2)$};
+
+\node[pcEvent,fill=orange!10] (b2) at (0,0)
+    {$\wt(flag,1)$\\[-1mm]
+     \scriptsize release};
+
+% Consumer events
+\node[pcEvent,fill=orange!10] (b3) at (3.8,1.35)
+    {$\rd(flag,1)$\\[-1mm]
+     \scriptsize acquire};
+
+\node[pcEvent,fill=blue!20] (b4) at (3.8,0)
+    {$\rd(x,2)$};
+
+% Program order
+\draw[pcPO] (b1.south) --
+    node[left,font=\scriptsize] {$\po$} (b2.north);
+
+\draw[pcPO] (b3.south) --
+    node[right,font=\scriptsize] {$\po$} (b4.north);
+
+% Reads-from relation
+\draw[pcRF] (b2.east)
+    to[out=20,in=160]
+    node[midway,above,sloped,font=\scriptsize] {$\rf$}
+    (b3.west);
+
+% Happens-before induced by synchronisation
+\draw[pcHB] (b1.east)
+    to[out=-20,in=160]
+    node[midway,above,pos=.7,font=\scriptsize] {$\hb$}
+    (b4.west);
+
+\end{tikzpicture}
+
+$\rd(x,0)$ is not allowed.
+\end{minipage}
+
+\caption{Producer--consumer communication.}
+\label{fig:producer-consumer-ra}
+\end{figure}
+
+This problem became particularly important in C and C++, where concurrency was initially provided mainly through threading libraries, while the language specifications themselves were largely designed around sequential execution. In his paper, \emph{Threads Cannot Be Implemented as a Library} \cite{boehm2005threads}, Boehm explained why a library alone cannot provide correct thread support. Compilers perform optimisations such as register promotion, load reuse, and code motion based on the assumptions permitted by the language semantics. These optimisations may be valid for sequential programs but can lead to unexpected behaviour when multiple threads access shared memory. Therefore, the compiler must be aware of the language's concurrency rules and ensure that its transformations preserve the guarantees required by those rules. This established an important point: concurrency cannot be added to a programming language merely through a library; it must be supported by the language semantics and the compiler.
+
+The Java Memory Model, revised for Java 5 and formalised by Manson, Pugh, and Adve \cite{manson2005}, addressed the same problem for a language with built-in threads. It specifies the legal behaviours of multithreaded Java programs,  including the guarantees provided by synchronisation and the treatment of data races. One of its central goals is to give data-race-free programs a simple semantics while still allowing useful compiler and hardware optimisations. The model also places constraints on racy executions so that optimisations do not produce behaviours that violate fundamental safety properties.
+
+Boehm and Adve's `Foundations of the C++ Concurrency Memory Model' developed a corresponding account for C++ \cite{boehm2008}. Their work explains why the language must define the meaning of threads, ordinary memory accesses, atomic operations, and data races together. The resulting C++11 \cite{Batty:2011}  model introduced atomic operations with several memory orders, including relaxed, acquire, release, acquire-release, and sequentially consistent. This allowed the programmers to explicitly specify the ordering requirements of shared-memory operations instead of leaving it  singly to the implicit and compiler-specific behaviour of the underlying implementation. Following the introduction of the C/C++11 memory model, researchers further investigated the consistency guarantees provided by its release-acquire (RA) fragment. An important development was Strong Release-Acquire (SRA), introduced by Lahav et al. \cite{Lahav:2016} as a strengthening of the C11 release-acquire model. SRA rules out certain undesirable behaviours while retaining the implementation guarantees of the original RA fragment. Subsequent work studied SRA alongside Weak Release-Acquire (WRA) \cite{Lahav:2022}, a weaker model that captures the minimal guarantees required for causal consistency. In terms of allowed behaviours, WRA is weaker than RA, whereas SRA is stronger than RA. These models provide alternative ways of understanding and reasoning about causal ordering in concurrent shared-memory systems.
+
+Subsequent investigations revealed limitations in the original C/C++11 memory model, particularly in its treatment of sequentially consistent operations and the correctness of compiler mappings to hardware memory models. Lahav et al. \cite{Lahav2017} addressed these issues by introducing RC11, a repaired version of the C11 model that provides a more robust treatment of sequentially consistent operations, while preserving the DRF-SC guarantee and supporting sound compilation mappings to the Power architecture. Another important development during this period was the introduction of Strong Release-Acquire (SRA) by Lahav et al.  \cite{Lahav:2016} which provides stronger ordering guarantees than the original release-acquire semantics.
+
+Alongside axiomatic approaches, researchers developed operational models for relaxed-memory concurrency. An important example is Promising Semantics, introduced by Kang et al. \cite{Kang2017}, which models executions through individual steps and supports a broad range of C++11 memory-model features. Its key idea is that threads can promise future writes, subject to a certification mechanism that prevents out-of-thin-air behaviours. Promising 2.0 later extended this approach to accommodate global compiler optimisations \cite{Kang2020}.
+
+In parallel, Podkopaev et al. \cite{Podkopaev2019} introduced the Intermediate Memory Model (IMM), which provides a common framework for reasoning about the compiler correctness  between programming-language memory models and hardware memory models, such as those of ARM and POWER architectures. IMM facilitates modular proofs of compiler correctness and establishes connections between operational language semantics and axiomatic hardware models. These developments highlighted the importance of considering not only the consistency guarantees of a memory model but also its compatibility with compiler transformations and hardware implementations.
+
+The standardisation of C++20 and subsequent research further motivated the development of formal models for relaxed-memory concurrency. In particular, the RC20 consistency model provides an axiomatic framework for reasoning about C/C++-style concurrent executions \cite{MargalitLahav2021}. Building on this direction, Moiseenko et al. introduced the re-execution-based memory model (XMM) \cite{Moiseenko2025}, which combines axiomatic consistency conditions with operational re-execution. They instantiate XMM with C/C++20 consistency conditions to obtain XC20 and develop a sound model checker, XMC, supporting compiler optimisations, hardware mappings, and thread sequentialisation.
+
+The evolution of hardware and programming-language memory models has been closely interconnected. While hardware memory models describe the ordering guarantees provided by processors, programming-language memory models specify the behaviours permitted by concurrent programs.
+Compilers form the bridge between these two levels. The language model constrains the compiler, the compiler maps source-level operations to machine instructions, and the architecture specifies the behaviours those instructions may produce. A correct implementation must preserve the guarantees at each layer.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[>=stealth, thick]
+  \node[draw, rounded corners, fill=blue!5, text width=2.45cm, minimum height=1cm, align=center] (lang) at (0,1.0) {Concurrent source\\program};
+  \node[draw, rounded corners, fill=blue!5, text width=2.45cm, minimum height=1cm, align=center] (comp) at (3.2,1.0) {Compiler\\optimisations};
+  \node[draw, rounded corners, fill=blue!5, text width=2.45cm, minimum height=1cm, align=center] (arch) at (6.4,1.0) {Hardware\\optimizations};
+  \node[draw, rounded corners, fill=blue!5, text width=2.45cm, minimum height=1cm, align=center] (obs) at (9.6,1.0) {Observable\\execution};
+  \draw[->] (lang)--(comp);
+  \draw[->] (comp)--(arch);
+  \draw[->] (arch)--(obs);
+\end{tikzpicture}
+\caption{The path from source code to observed execution.}
+\label{fig:intro-compilation-pipeline}
+\end{figure}
+
+We have studied the history map for both hardware and language memory models (Figure~\ref{fig:intro-memory-timeline}). Parallelly it is also interesting to explore how memory models have developed in the distributed paradigm. 
+
+\subsection{History of Memory models for Distributed Systems}
+
+The study of consistency in distributed systems is closely related to the development of memory consistency models for multiprocessors, but the underlying setting is different. In a shared-memory multiprocessor, several processors access a common address space. In a distributed system, processes run on different machines, each with its own local memory, and communicate through messages. Some systems provide the abstraction of a shared memory even though the physical memory is distributed, while others maintain multiple replicas of the same data at different nodes. In both cases, the central question is how operations performed by different processes are ordered and what values a process is allowed to observe.
+
+An important foundation for reasoning about distributed computations was provided by Lamport in his work on logical clocks \cite{lamport1978time}. In this work, he introduced the `happened-before'  relation to describe the causal ordering of events in a distributed system. The relation captures three situations: the order of events within a process, the relationship between sending and receiving a message, and the transitive closure of these relations. It defines a partial order rather than a total order, since two events that cannot causally affect one another may remain unordered. Lamport also showed how logical clocks can assign timestamps that respect this causal order. This idea became important in the study of distributed consistency because it provides a way to distinguish causally related operations from concurrent ones.
+
+Sequential Consistency, which Lamport formally defined in 1979 for multiprocessor systems, also became an important model for distributed shared-memory systems \cite{lamport1979sc}. Under SC, all operations must be explainable by a single sequential order that preserves the program order of each process. However, maintaining such a common order becomes expensive when the processes are located on different machines and communicating their updates requires network messages. An early effort to provide a shared-memory abstraction over physically distributed memories was made by Li and Hudak \cite{lihudak1986memory}. They studied shared virtual memory systems in which machines with separate physical memories appear to share a common address space. Their work examined how memory coherence could be maintained using distributed algorithms. The cost of maintaining a common view of memory also motivated weaker shared-memory abstractions. Lipton and Sandberg proposed the Pipelined RAM (PRAM) system in 1988 \cite{liptonsandberg1988pram}. In  their design, a processor performs a write to its local memory and sends the update to the other processors without waiting for acknowledgements that the update has reached them. As a result, different processors may temporarily have different views of memory. This avoids making every write wait for communication across the system and allows memory operations to proceed independently of communication delays. 
+
+Another important correctness condition for distributed and concurrent systems is `linearizability', introduced by Herlihy and Wing \cite{herlihywing1990linearizability}. Linearizability requires that every operation appear to take effect at a single point between its invocation and its response. In addition, if one operation completes before another begins, the first must precede the second in the resulting sequential order. Thus, linearizability preserves real-time ordering in addition to requiring a legal sequential ordering of operations. This makes it stronger than sequential consistency, which preserves the program order of each process but does not necessarily preserve the real-time order between operations performed by different processes.
+
+As distributed systems grew in size, maintaining a single global order of all operations became increasingly expensive. This led researchers to investigate consistency models that preserve only the orderings necessary for correct communication. One such model is `causal memory', formally developed by Ahamad et al. \cite{Ahamad1995}. The model requires all processes to agree on the relative order of operations that are causally related, while allowing concurrent operations to be observed in different orders. For example, if one process writes a value and another process reads that value before performing a subsequent write, the first write causally precedes the second. Causal memory requires this order to be preserved when the operations are observed by other processes. However, two writes that are independent of one another need not be observed in the same order everywhere. Ahamad et al. also described an implementation based on message passing and vector timestamps. 
+
+In replicated distributed systems, consistency models were developed to allow updates at different replicas to proceed without requiring constant coordination. Terry et al. \cite{terry1994session} proposed four session guarantees to ensure that clients observe a consistent order of their own operations. The Bayou system \cite{terry1995bayou} demonstrated how replicas could accept updates independently, even during network disconnections, and later converge through update propagation and conflict resolution (eventual consistency). Shapiro et al. \cite{shapiro2011crdt} further developed this idea through Conflict-Free Replicated Data Types (CRDTs), which guarantee convergence even when replicas receive updates in different orders. Viotti and Vukolić   \cite{viotti2016consistency} provide a systematic survey of more than 50 consistency models for distributed storage systems, ranging from strong consistency and linearizability to causal and eventual consistency. They classify these models according to their guarantees and also establish a hierarchy based on consistency strength.
+
+Subsequent work examined different ways of formalising causal consistency, particularly in systems where multiple sites maintain and update shared data. Perrin, Mostefaoui and Jard \cite{DBLP:journals/corr/PerrinMJ16} studied how causal dependencies can be defined for more general shared objects, such as queues and counters. They distinguished several forms of causal consistency, including weak causal consistency, causal convergence, and causal consistency.  Causal convergence preserves the order of causally related operations. For operations that are independent of one another, it uses a common ordering to ensure that replicas receiving the same updates eventually stores the same values for the shared variables.
+
+Bouajjani et al. \cite{BouajjaniEGH17} studied three variants of causal consistency: Causal Consistency ($\ccmm$), Causal Memory ($\cmmm$), and Causal Convergence ($\cvmm$). All three models preserve the order of causally related operations, but differ in how they handle concurrent operations. $\ccmm$ places the weakest restrictions, allowing different processes to observe concurrent operations in different orders and even revise their earlier ordering decisions. $\cmmm$ requires each process to maintain a consistent sequential view of the operations it has observed, although different processes may still disagree on the order of concurrent operations. The difference from $\ccmm$ is that a  process cannot change its earlier ordering decision about concurrent operations. $\cvmm$ imposes a stronger requirement by requiring a common total order of operations that respects causal dependencies. This ensures that processes observing the same set of updates agree on their order.
+
+These models illustrate that causal consistency is not a single consistency guarantee but a family of related models with different restrictions on the observations of distributed processes. They preserve the ordering imposed by causal dependencies while allowing different  amount freedom in the treatment of concurrent operations. Understanding these differences is important when studying the correctness of  implementations, since an execution permitted by one causal consistency model may not be permitted by another.
+
+An interesting connection between these distributed consistency models and shared-memory models was established by Lahav and Boker \cite{Lahav:2022}. They showed that $\ccmm$ is equivalent to Weak Release-Acquire ($\wramm$) fragement of C11, while $\cvmm$ is equivalent to Strong Release-Acquire ($\sramm$) fragment of C11, when considering read and write operations without RMWs. In terms of the executions they permit, the standard Release-Acquire ($\ramm$) model lies between these two models: $\sramm$ is stronger than $\ramm$, while $\wramm$ is weaker than $\ramm$. This connection provides a direct relationship between causal consistency in distributed systems and the Release-Acquire memory models studied in shared-memory concurrency.
  
- When a multi-threaded program with a shared memory executes, the order in which memory operations become visible can affect the behavior of the program. The easiest reasoning for such behaviour is to assume that all memory operations occur in a single global order. This assumption is captured by Sequential Consistency (SC)[\cite{SC-Lamport78}]. Under SC, the operations of all processors can be viewed as being interleaved in some sequential order, while the order of operations within each processor is preserved. However, implementing sequential consistency at the hardware level is expensive. Modern processors use several techniques to improve performance, such as store buffers, caches, pipelining, and out-of-order execution. Example, under a memory model called Total Store Order (TSO) \cite{sun1991sparc}, a processor may temporarily keep a store in a buffer while continuing to execute later instructions.  Therfore, the order in which memory operations are observed by different processors may not  always correspond to a single global order. This motivated the development of weak memory models. A weak memory model deviates from SC by setting rules that allow specific memory operations to be observed in an order different from their program order. This encourages hardware optimization while still providing certain guarantees to the programmer.
-
-Several hardware memory models were proposed. Examples include processor consistency (PC) \cite{gharachorloo1990memory}, release consistency (RC) \cite{gharachorloo1990memory}, Weak Ordering \cite{dubois1986memory}, Total Store Order (TSO), Partia Store Order (PSO) \cite{sun1991sparc,sparc1994architecture}.  
-Different architecture provided different guarantees. Gharachorloo in 1992  \cite{GHARACHORLOO1992399} summarized the behviours of all these models.
-
- Besides hardwares, compilers also perform optimizations that can change the order of memory operations thus introducing  additional behaviors that need to be considered. This led to the development of weak memory models extended to programming languages. But weaker model led to more behaviours of the concurrent program. Now it became necessary to check if an observed behaviour is faithful to the permitted model. 
- In 1997, Gibbons and Korach had  studied the problem of testing whether an observed execution of a shared-memory system is consistent with Sequential Consistency. Given the observed reads and writes, their problem asks whether there exists a sequential ordering of these operations that respects the program order of each processor and explains the observed behavior. They showed that this problem is computationally difficult in general, establishing NP-completeness results for several variants. There are several works on testing consistency of SC by varying . \cite{CantinLS05} proved that the problem remains NP-complete even with a single memory
+ Among recent works, researchers in 2026 has continued to explore the relationship between distributed-system consistency and weak-memory semantics. Karniel and Lahav \cite{Karniel2026} introduced Causal-Broadcast Memory (CBM), a weak-memory model that characterises the consistency guarantees of distributed shared-memory implementations based on causal broadcast. They established its relationship with existing models of causal and release-acquire consistency and investigated the complexity of consistency testing and program verification under CBM. In particular, they showed that consistency testing of an individual execution graph under CBM is polynomial-time solvable, whereas control-state reachability for programs executing under this model is undecidable.
  
- 
- 
- 
-location (but with unboundedly many threads), which also implies NP-completness for all memory
-models that adhere to the “SC-per-location” property, such as TSO, PSO, RA, SRA and Relaxed 
+ This thesis also deals with the problem of consistency testing under the distributed setting: given an execution of a distributed system, determine whether its observed reads and writes can be explained by the axioms of a particular consistency model. The complexity of this problem for $\ccmm$, $\cmmm$, and $\cvmm$ is among the questions considered in this thesis.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-This led to the development of programming-language memory models, where the language specification itself defines the behavior of concurrent programs. Example include Java Memory Model (JMM), 
+The history of memory models did not produce one universal memory model. Instead, it produced a collection of models owing to different interfaces and programming disciplines: hardware models describe instruction-level behaviour, language models constrain source-level programs and compiler transformations. Their definitions differ, but they share the common question of consistency testing. For SC, this amounts to searching for an interleaving. For a weak memory model, the verifier may need to reason about relations such as program order, reads-from,  modification order, and synchronisation. It is not necessary that all these relations would be already provided in which case these relations must also be synthesized. We will look at such problems in this thesis.
+
+The next section reviews previous work on consistency testing and discusses the known complexity results for different memory models.
+
+\section{Consistency Testing of Memory Models}\label{intro:consistency-testing}
+
+The first systematic study of consistency testing was presented by Gibbons and Korach \cite{Gibbons} in their work on Verifying Sequential Consistency (VSC). They established that VSC is NP-complete even when syntactic parameters are bounded.  They also considered the variant VSC-read, in which the reads-from mapping is provided as part of the input, and showed that it remains NP-complete. Subsequent work extended the complexity analysis to weaker memory models. Cantin et al. \cite{CantinLS05} studied the complexity of checking memory coherence and consistency. They proved that checking coherence (Sequential Consistency restricted to a single memory location) is NP-complete. They further showed that consistency testing remains NP-complete for SC even when coherence is already known to hold. This suggests that consistency testing for  any memory model that guarantees SC-per-location is NP-Complete. Furbach et al. in 2015 provided a unified complexity analysis for several hardware and distributed memory models \cite{Unified_Furbach}.
+
+A different line of work considers consistency testing when the reads-from ($\rf$) relation is given. In this setting, the input specifies the events, program order, and the source write of every read. The task is to determine whether a suitable total  order on writes called modification order ($\mo$) exists. Bui et al. \cite{tso_rf_bui2021reads} developed algorithms for this problem under TSO and PSO. Later, Tun\c{c} et al. \cite{Tunc2023} studied several C11-style models, including RC20, $\ramm$, $\sramm$, $\wramm$, and $\rlxmm$. They obtained nearly linear-time algorithms for RC20, $\wramm$, RMW-free $\sramm$, and $\rlxmm$, while also establishing hardness results for other variants.
+
+When $\rf$ is not given, the consistency checker must determine both the reads-from relation and the modification order. Chakraborty et al. \cite{chakraborty2024weak} established NP-completeness for several weak memory models, including $\ramm$, $\sramm$, $\wramm$, POWER, and causal consistency models, even when the number of threads, memory locations, and values is bounded. In contrast, bounded consistency testing for TSO, PSO, and Relaxed admits polynomial-time algorithms.
+
+Studying the problem of Consistency Testing is also motivated by the following applications.
+
+\paragraph*{Litmus Testing} A litmus test is a small concurrent program designed to expose particular memory-ordering behaviours. Given a candidate execution of such a test, consistency checking determines whether the execution is permitted by the specified memory model and help distinguish between the behaviours permitted by different memory models \cite{MadorHaimAM11}. Several tools have been developed to support the generation and analysis of litmus tests for weak memory models  \cite{Alglave2012,LustigWPG17,herdtools7}.
+
+\paragraph*{Hardware and memory-system verification.} Processor manufacturers need to check whether a hardware implementation follows its specified memory model. Consistency testing can be used to examine executions produced by a processor and determine whether they are permitted by its architectural specification. Litmus tests are commonly used for this purpose \cite{Alglave2011}.  Alglave et al. \cite{alglave2014herding} used this approach to investigate POWER and ARM memory models and reported previously unknown behaviours in ARM processors. They introduced the \texttt{herd7} \cite{herdtools7} tool that simulates behaviours of a formal model to analyse the possible outcomes of litmus tests.
+
+\paragraph*{Compiler verification.} Compiler optimisations must preserve the guarantees of the programming-language memory model when translating programs into machine instructions. Similarly, the processor must implement the ordering requirements of its instruction set. Trippel et al. \cite{trippel2017tricheck} developed TriCheck to examine these interactions across the programming language, compiler, instruction set, and hardware implementation. Their study of C11 compilation to RISC-V identified 144 outcomes forbidden by C11 among the 1,701 litmus tests examined. This demonstrates how consistency testing can help identify problems in the interaction between different layers of a system. 
+
+\paragraph*{Program verification and model checking.} Consistency checking is also an important component of stateless model checking. A model checker explores different possible executions of a concurrent program and checks whether each candidate execution is consistent with the underlying memory model. This prevents the verifier from exploring executions that are inconsistent with the memory model. For example, Kokologiannakis and Vafeiadis \cite{GenMC-CAV-21} developed GenMC, which verifies concurrent C/C++ programs under memory models such as RC11 and IMM. It can detect data races, assertion violations, and other errors in concurrent data structures and synchronisation algorithms.
 
 
-. The Java memory model was revised significantly in Java 5, providing a formal description of how threads interact through shared memory. This work highlighted the importance of distinguishing ordinary memory operations from synchronization operations. Similar issues later became central to the design of the C and C++ memory models.
+\paragraph*{Runtime and predictive bug detection.} An execution observed during testing may not exhibit a bug even though a different execution of the same program can lead to an error. Predictive testing techniques use an observed execution to construct alternative candidate executions and then use consistency  testing to determine whether those candidates are permitted by the memory model. This helps distinguish feasible bug reports from behaviours that cannot occur under the specified model \cite{Mathur20,10.1145/3276516,Huang14,10.1145/3371085,Liu25}.
+
+These applications show that consistency testing is useful for validating hardware, compilers, and concurrent programs. Hence study of complexity of this problem is also important. This thesis deals with study of complexity of consistency testing under structural restrictions.  
 
 
-This approach became an important part of the C11 and C++11 memory models. These standards introduced atomic operations with different memory-ordering constraints, including relaxed, acquire, release, acquire-release, and sequentially consistent orderings. Consequently, programmers can select the amount of ordering required for a particular operation instead of having every operation follow sequential consistency.
+This thesis studies consistency testing under $\scmm$, $\ramm$ and its variants without a given reads-from relation. Our results provide a complexity landscape based on the number of writers per memory location. When each variable has a single writer, the program order of that writer constrains the order of its writes. With multiple writers, the verifier must also resolve how writes from different threads are ordered, subject to the consistency axioms and the values observed by reads. The thesis develops algorithms and reductions that show how this difference affects the complexity of consistency testing. We have divided the thesis into two parts.
 
-With the development of formal memory models, the way in which executions are represented has also changed. In earlier discussions, weak memory behavior was often described informally as a processor "reordering" instructions. Modern approaches generally describe an execution using a set of memory events together with relations between those events. For example, program order captures the order of operations within a thread, while a reads-from relation identifies the write from which a read obtains its value. Other relations are used to represent synchronization and ordering constraints. A memory model then specifies which combinations of these events and relations constitute a valid execution.
+\section{Part A: Consistency Testing under Sequential Consistency}
 
-This formal view is particularly useful for verification. Given an observed execution of a concurrent program, one can ask whether the execution is allowed by a particular memory model. This is the basis of the memory consistency checking problem. Such questions are important because an execution that appears impossible under sequential consistency may nevertheless be valid under a weaker model. Determining whether an observed behavior is consistent with the underlying memory model therefore becomes an important problem in the verification of concurrent programs.
+Qadeer and Rehof \cite{motivation_qadeer2005context} introduced context-bounded model checking, restricting the number of context switches to make safety  verification of concurrent programs decidable. Subsequently, Musuvathi and Qadeer \cite{DBLP:conf/pldi/MusuvathiQ07} proposed iterative context bounding,  prioritising executions with fewer preemptions based on the observation that many concurrency bugs can be exposed with a small number of preemptions. So naturally one might want to explore the complexity of  consistency testing when bounded by a fixed number of preemptions (a particular type of context switch). This is the motivation behind part A of the thesis. Part A studies the problem denoted by VSC$^\pp$, where $\pp$ is a fixed bound on the number of preemptions. Given a concurrent program, the question is whether it has an SC-consistent interleaving containing at most $\pp$ preemptions. The parameter  $\pp$ is fixed in the main algorithmic result, rather than being part of the input. This distinction matters: an algorithm whose running time has an exponent depending on $\pp$ is polynomial for every fixed $\pp$, but it does not necessarily give a fixed-parameter tractable algorithm when $\pp$ is an input parameter.
 
-The history of weak memory models can thus be viewed as a gradual movement from a simple global-order view of concurrency towards more flexible and formal descriptions of concurrent executions. Sequential consistency provided a simple starting point, while hardware memory models introduced controlled relaxations to improve performance. Programming-language memory models subsequently had to account for compiler optimizations and synchronization. More recently, formal execution-based models have provided a common framework for studying these behaviors and for developing algorithms to verify them.
+For $\onewriter$ programs where atmost one thread writes to a location, the thesis gives a polynomial-time algorithm for VSC$^\pp$. Its main idea is to guess the preemption points and divide each thread into blocks. Each block is a contiguous sequence of operations, and the guessed preemption points determine where a thread can be interrupted. The blocks are further divided into inner blocks and outer blocks. Since the number of preemptions is bounded by $\pp$, the number of inner blocks is bounded by $\pp$, while there is one outer block per thread.
 
-Overall, the development of weak memory models reflects a fundamental trade-off between performance and programmability. Stronger memory ordering makes concurrent programs easier to reason about, but it can restrict hardware and compiler optimizations. Weaker ordering provides greater freedom for optimization, but makes reasoning about program behavior more difficult. The study of weak memory models is therefore not only about describing hardware behavior; it is also about finding an appropriate balance between these two requirements.
+The algorithm uses this structure to avoid enumerating every possible ordering of all blocks. It considers permutations of the inner blocks and analyses conflicts between outer blocks. In a $\onewriter$ program, certain read-write conflicts induce forced orderings between outer blocks. These orderings can be represented by a conflict graph. If the graph contains a cycle, the chosen set of preemption points cannot yield an $\scmm$-consistent interleaving. Otherwise, the algorithm attempts to place the outer blocks around a chosen permutation of $\pp$ is fixed.
+
+The result illustrates how a structural restriction can make a difficult verification problem tractable. VSC is NP-hard even for $\onewriter$ programs, but fixing the preemption bound changes the picture: VSC$^\pp$ can be solved in polynomial time for $\onewriter$ programs. The algorithm relies on a property that does not extend directly to multi-writer programs. With multiple threads writing per location, a conflict between a read and a write does not always determine a forced order between the corresponding blocks, because a write from another writer may provide the value required by the read. This makes the conflict analysis less decisive.
+
+We establish that the tractability result does not extend to all programs. VSC$^\pp$ is NP-complete for every fixed $\pp$ when programs with at most two writers per variable are allowed. The hardness therefore already appears in the $\twowriter$ case, even when the number of preemptions is fixed. In addition, for $\threewriter$ programs, the thesis proves a conditional lower bound under the Exponential Time Hypothesis (ETH)  \cite{CyganFKLMPPS15,fine-grained-complexity}: there is no algorithm with running time $2^{o(k)}n^{\mathcal{O}(1)}$, where $k$ is the number of threads and $n$ is the number of operations, unless ETH fails. This gives a stronger indication that an algorithm with a subexponential dependence on the number of threads is unlikely in this setting.
+
+The role of the preemption parameter is also examined when $\pp$ is not fixed. In that case, the thesis proves W[1]-hardness when $\pp$ is treated as a parameter. This result suggests that there is no Fixed Parameter Tractable algorithm for VSC$^{\pp}$ when $\pp$ is an input parameter unless standard assumptions in parameterized complexity fail. 
+
+Part A also studies programs with acyclic architecture. The communication graph has one vertex for each thread, and two threads are connected when they access a common variable. If this graph is acyclic, the architecture is a special case of a $\twowriter$ system. We give a polynomial-time algorithm for VSC$^{\pp}$ on acyclic architectures. This is significant because the general $\twowriter$ case is NP-complete: the graph structure provides a further restriction that restores tractability. The result also raises a natural question about the unrestricted VSC problem on acyclic architectures when the reads-from mapping is not given, which remains an open direction discussed in the thesis.
+
+\section{Part B: Consistency Testing under Weak Memory Models}
+
+Part B moves from sequential consistency to weak memory models. Here we represent an execution of a concurrent program by its execution graph consisting of the set of memory operations as vertices and the ordering on events as edges. The problem, which we denote by VM, takes a partial execution graph and a memory model and asks whether reads-from and modification-order relations exist that make the graph consistent with that model. The models considered include $\ramm$ and its strong and weak variants, Relaxed and Relaxed-Acyclic, and the causal models Causal Consistency (CC), Causal Convergence (CCv), and Causal Memory (CM). The thesis uses axiomatic definitions of these models, so that the consistency question can be expressed in terms of relations and their properties.
+
+The different memory models impose different constraints. In $\ramm$-memory models, synchronisation is captured through reads-from edges and the happens-before relation derived from program order and reads-from. The variants differ in the coherence conditions they require. Strong Release-Acquire (SRA) imposes stronger write-coherence guarantees, while Weak Release-Acquire (WRA) does not impose restrictions on modification order between writes. The Relaxed model has weaker synchronisation constraints: its coherence conditions use program order rather than the stronger happens-before relation. Relaxed-Acyclic additionally requires acyclicity of the union of program order and reads-from. These distinctions affect the constraints that a consistency-testing algorithm must satisfy.
+
+The first set of results for Part B concerns RA and its variants. We establish a polynomial-time algorithm for the $\onewriter$ case and determine a conditional lower bound of this tractability. The algorithm takes advantage of the structure created when each variable has a unique writer. In that case, the modification order of writes to a variable is constrained by the writer's program order. The remaining task is to choose reads-from edges while maintaining the required consistency conditions. We prove structural properties of $\onewriter$ execution graphs and use them to construct a polynomial-time algorithm.
+
+The polynomial-time upper bound is accompanied by a conditional lower bound based on the Boolean Matrix Multiplication (BMM) hypothesis. For $\onewriter$ instances, the thesis shows that, under this hypothesis, no $\mathcal{O}(n^{3-\epsilon})$-time algorithm exists for any $\epsilon > 0$ for the relevant RA variants. This does not contradict polynomial-time solvability. Instead, it provides a finer picture of the possible running time. When the number of writers increases, the complexity changes. For $\twowriter$ programs, the consistency-testing problem is NP-complete. For $\threewriter$  programs, the thesis proves a conditional lower bound under ETH: there is no $2^{o(k)}n^{\mathcal{O}(1)}$-time algorithm, where $k$ is the number of threads and $n$ is the number of events. These results show that the writer restriction gives a useful dividing line. The $\onewriter$ case admits a polynomial-time algorithm, whereas allowing two writers already permits NP-hard instances. The 3-Writer construction gives a stronger conditional lower bound in terms of the number of threads.
+
+The discussion then turns to the Relaxed memory model. For the Relaxed-Acyclic variant, we provide a polynomial-time algorithm for $onewriter$ systems. Because Relaxed-Acyclic is stronger than Relaxed, the corresponding upper bound also applies to Relaxed. The thesis also establishes a conditional lower bound under ETH for $\threewriter$ systems and NP-completeness for $\twowriter$  systems. Thus, the same broad pattern observed for $\ramm$ and its variants also appears in the Relaxed setting,  even though the models use different consistency axioms.
+
+Finally, the thesis extends the study to causal consistency models. Causal Consistency ($\ccmm$), Causal Convergence ($\cvmm$), and Causal Memory ($\cmmm$) express constraints related to causality and the views of writes observed by threads. The thesis uses known correspondences between $\ccmm$ and $\wramm$, and between $\cvmm$ and $\sramm$, to relate the verification problems. For $\cmmm$, an additional observed-order relation captures constraints on the order in which a thread observes conflicting writes. We show that the complexity picture also extends to these causal models: the $\twowriter$ case is NP-complete, the $\threewriter$ case has the stated ETH-based lower bound, and the $\onewriter$ case has a polynomial-time algorithm together with a BMM-based lower bound on the running time.
+
+Taken together, the results in Part B show that the number of writer threads per variable is a useful parameter for comparing consistency-testing problems across several memory models. Although the axioms differ, multiple writers introduce a common source of difficulty: the verifier must resolve the order of writes to the same location while also ensuring that reads obtain values consistent with the model.
+
+Bounded-writer restrictions arise in several practical concurrent and distributed systems. For example, single-writer designs are used in producer–consumer systems and CROW (Concurrent-Read Owner-Write) PRAM, introduced by Dymond and Ruzzo in 1986 \cite{Dymond86}. In CROW, every shared memory location is assigned a unique owner, and only that processor can write to it. The Linux kernel uses single-producer single-consumer circular buffers for communication between concurrent execution  contexts. Another practical example is the multi-producer single-consumer queue Jiffy, proposed by Adas and Friedman \cite{adas2020jiffy}, which is motivated by applications such as sharded in-memory key-value stores, data-flow computation, and load sharing. Multiple producer threads update shared queue metadata using atomic operations; restricting the number of producers to two or three gives corresponding bounded-writer instances. Similar situations occur in distributed storage systems. Oliveira et al. \cite{oliveira_et_al:LIPIcs.OPODIS.2016.30} studied multi-writer replicated registers implemented over cloud key-value stores, where multiple processes can concurrently update the same logical register.
+
+
+
+
+We will now look at the structure of the thesis before we proceed with the main chapters.
+
+
+\section{Organisation of the Thesis}
+
+The thesis is organised into eleven chapters, following the two-part structure described above.
+
+Chapter 2 introduces the general  preliminaries. It defines concurrent programs, sequential consistency, preemptions, and everything that supports understanding of the thesis.  
+
+Part A consists of Chapters 3–5 and focuses on sequential consistency under bounded preemptions. Chapter 3 presents the polynomial-time algorithm for $\onewriter$ programs. Chapter 4 develops the hardness results for multiple writers and the parameterised version of the problem. Chapter 5 gives the algorithm for programs with acyclic architecture.
+
+Part B begins with Chapter 6, which introduces weak memory models and the execution-graph framework used in the remainder of the thesis. Chapter 7 studies verification under Release-Acquire consistency, including the $\onewriter$ algorithm and its structural properties. Chapter 8 presents the hardness results for RA and its variants. Chapter 9 considers the Relaxed memory model, and Chapter 10 extends the analysis to causal memory models, namely $\ccmm$, $\cvmm$ and $\cmmm$. Finally, Chapter 11 discusses the overall findings and directions for future work.
+

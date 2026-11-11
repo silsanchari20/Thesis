@@ -9,6 +9,7 @@
             bottom=1in]{geometry}
 
 \input{packages.tex}
+\usepackage{cleveref}
 \input{declarations.tex}
  \newcommand*\circl[1]{\tikz[baseline=(char.base)]{
     \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}           
@@ -42,7 +43,7 @@ Chennai Mathematical Institute
 }
 \vspace{.3cm}
 
-
+ 
 \medskip
 \bigskip
 %%%%%%%%Author%%%%%%%%
@@ -142,31 +143,22 @@ S Krishna, Indian Institute of Technology, Bombay
 % MAIN THESIS
 %%%%%%%%%%%%%%%%%%%%%%%
 
-\newpage
+\newpage 
 \pagenumbering{arabic}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\chapter{Introduction} 
 
 \input{introduction} 
-
-\section{Background and Related Work}
-
-\subsection{Verifying Memory Models}
-
-\section{Contributions}
-
-\section{Organization of the Thesis}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Preliminaries}\label{prelim} 
 \input{Prelims-sc.tex} 
- We also have to talk about parameterized reduction somewhere.
+
 \begin{center}
     \chapter*{\centering Part A}
     \addcontentsline{toc}{chapter}{Part A}
 \end{center}
-
 
 
 
@@ -183,10 +175,9 @@ S Krishna, Indian Institute of Technology, Bombay
 %\chapter{Verifying Hardware  Memory Models  under fixed preemptions}
 %\input{chap-tso.tex} 
 
-\chapter{VSC$^\pp$ for Acyclic Architectures} 
+\chapter{VSC$^\pp$ for Acyclic Architectures}
 \label{sc-acyclic} 
 \input{acyclic.tex}
-
 
 \begin{center}
     \chapter*{\centering Part B}
@@ -207,12 +198,12 @@ We shall formally charaterize the behaviours of these memory models using axioma
 
 \chapter{Verifying Release-Acquire Consistency}\label{RA-ptime}
 \input{chap-vra.tex} 
-\input{ptime-ra.tex}  
+\input{ptime-ra.tex} 
 \chapter{Hardness Results for VRA}\label{RA-hard}
 \input{hardness-ra.tex} 
 %\input{app-hardness.tex}
 %%%%%%%%%%%%%
-\chapter{Verifying Relaxed Memory Model}\label{Relaxed}
+\chapter{Verifying Relaxed Memory Model} \label{Relaxed}
 \input{relaxed.tex} 
 
 %%%%%%%%%%%%%%
@@ -220,11 +211,23 @@ We shall formally charaterize the behaviours of these memory models using axioma
 \chapter{Verifying Causal Memory Models}
   
 \input{causal.tex}
-\chapter{What happens to VRA when the modification order on writes is fixed?}
+%\chapter{What happens to VRA when the modification order on writes is fixed?}
+ 
+%\input{mo-fixed.tex}
+ 
+\chapter{Discussions and Future Work}
 
-\input{mo-fixed.tex}
+\section{Implication of results}
 
- \chapter{Discussions and Future Work}\label{Conclusion} 
+The results of this thesis show that the difficulty of consistency testing depends on two things: the memory model and the structure of the program being checked. The same general question—whether an observed execution can be explained by a set of permitted ordering relations—can have very different computational behaviour under different restrictions. Bounding preemptions helps in the sequentially consistent setting when each variable has a unique writer. Acyclic communication structure provides another tractable case. Under weak memory models, the number of writer threads per variable gives a recurring distinction between the polynomial-time 1-Writer case and the hard 2-Writer case.
+
+The results also show why upper and lower bounds are both needed for a useful complexity picture. An algorithm explains which structural properties can be exploited to solve a problem efficiently. A hardness reduction identifies how a seemingly small relaxation can encode a difficult computational problem. Conditional lower bounds refine this picture by describing which improvements would contradict widely used complexity assumptions. Studying all three kinds of results gives a more complete view than considering upper bounds alone.
+
+Several questions remain open. The thesis points to the problem of consistency testing on acyclic architectures when the reads-from mapping is not supplied, and to further exploration of bounded-switch verification for other memory models and verification procedures. More generally, it would be useful to understand which additional restrictions on write ordering, communication topology, or execution structure can lead to efficient algorithms. The results presented here provide a starting point for investigating these questions across sequentially consistent and weak-memory settings.
+
+
+
+\label{Conclusion} 
 
 \bibliographystyle{IEEEtran}
 \bibliography{m}

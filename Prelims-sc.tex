@@ -354,7 +354,7 @@ The complexity of the above problem differs with the structure of the program. W
 In later chapters we shall show how the  the complexity of VSC$^\pp$ differs based on whether the program of interest is \onewriter{} or \twowriter{} or \threewriter{} and prove the following theorems. 
 
 
-First theorem is a tractable result for VSC$^\pp$ when the progam is  \onewriter{}. Note that the VSC-problem for \onewriter{} was $\np$-hard \cite{gibbons}.
+First theorem is a tractable result for VSC$^\pp$ when the progam is  \onewriter{}. Note that the VSC-problem for \onewriter{} was $\np$-hard \cite{Gibbons}.
 
 \begin{theorem}\label{th:onewriter} \vscp  admits a polynomial-time solution for \onewriter\ programs.  
 \end{theorem}
@@ -365,7 +365,7 @@ The second theorem states that for multiple writers the VSC$^\pp$ problem become
 \vscp is $\NP$-complete, for all $\pi \ge 0$. Hardness holds even for \twowriter\ programs. 
 \end{theorem}
 
-The third result gives a conditional lower bound under the Exponential Time Hypothesis (ETH). ETH states that there is no $2^{o(k)} \cdot (k + m)^{\mathcal{O}(1)}$ algorithm for 3-CNF satisfiability, with $k$ being the number of variables and $m$ the number of clauses. 
+The third result gives a conditional lower bound under the Exponential Time Hypothesis (ETH) \cite{CyganFKLMPPS15,fine-grained-complexity}. ETH states that there is no $2^{o(k)} \cdot (k + m)^{\mathcal{O}(1)}$ algorithm for 3-CNF satisfiability, with $k$ being the number of variables and $m$ the number of clauses. 
 
 \begin{theorem} \label{scFinegrained}\label{th:Finegrained}
 Under ETH, there is no $2^{o(k)} \cdot n^{\mathcal{O}(1)}$ algorithm for \vscp where $k$ is the number of threads, $n$ is the total number of operations.
@@ -378,7 +378,32 @@ We further study the VSC$^\pp$ problem for acyclic architecture which is also a 
 \end{theorem}
 
 
-The proofs of all the above theorem constitute of Part A of this thesis. Part B shall deal with the VSC problem through the lense of weak memory model. These memory models may deviate from stringent SC behaviour and allow re-ordering of memory operations to enhance performance. This would lead to more possible interleavings of a concurrent program as was allowed under $\scmm$.
+Theorem~\ref{th:Finegrained} has been established using a parameterized reductions from 3SAT instance. 
+
+\paragraph*{Parameterized reduction}   is a well-known concept in Parameterized Complexity  \cite{FlumGrohe2006,DowneyFellows2013} and is defined as follows: Let $P$ and $Q$ be two
+parameterized decision problems. A  reduction from $P$ to $Q$ is
+a mapping that transforms an instance $(I,k)$ of $P$ into an instance
+$(I',k')$ of $Q$, such that
+\[
+(I,k) \in P \iff (I',k') \in Q.
+\]
+Furthermore, the reduction must run in time
+\[
+f(k)\cdot |I|^{O(1)},
+\]
+for some computable function $f$, and the resulting parameter must
+satisfy $k' \leq g(k),$ for some computable function $g$ depending only on $k$. Here, $I$ and $I'$ denote the input instances of $P$ and $Q$, respectively, while $k$ and $k'$ denote their corresponding
+parameter values. Furthermore, the reduction must run in time $f(k)\cdot |I|^{O(1)},$ where $f$ is a computable function depending only on the parameter $k$, and $|I|$ denotes the size of the input instance.
+The exponent hidden in $O(1)$ is a constant independent of $k$. Additionally, the parameter of the resulting instance must satisfy $ k' \leq g(k),$ where $g$ is a computable function depending only on $k$. Note that standard polynomial-time reductions require the reduction to run in polynomial time in the input size and do not necessarily impose any restriction on how the parameter changes. 
+
+We shall use such reductions multiple times in this thesis to establish conditional lower bound for different versions of the consistency testing problem. 
+
+\smallskip
+
+The proofs of all the theorem stated in this chapter constitute of Part A of this thesis.
+Part B shall deal with the VSC problem through the lense of weak memory model which deviate from stringent SC behaviour and allow re-ordering of memory operations to enhance performance. This would lead to more possible interleavings of a concurrent program as was allowed under $\scmm$.
 
 We particularly care about C-11  memory models in this thesis and shall formally define all the axioms along with the C-11 variant of the problem later in Part B. 
+
+
 

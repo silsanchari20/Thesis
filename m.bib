@@ -9,6 +9,17 @@
   year         = {2013}
 }
 
+@inproceedings{Lahav2017,
+  author = {Ori Lahav and Viktor Vafeiadis and Jeehoon Kang
+            and Chung-Kil Hur and Derek Dreyer},
+  title = {Repairing Sequential Consistency in C/C++11},
+  booktitle = {Proceedings of the 38th ACM SIGPLAN Conference
+               on Programming Language Design and Implementation},
+  pages = {618--632},
+  year = {2017},
+  doi = {10.1145/3062341.3062352}
+}
+
 @article{Margalit:2021,
 	title        = {{Verifying Observational Robustness against a C11-Style Memory Model}},
 	author       = {Margalit, Roy and Lahav, Ori},
@@ -64,6 +75,43 @@ month = {apr},
 articleno = {8},
 numpages = {55},
 }
+@article{10.1145/2666356.2594315,
+author = {Huang, Jeff and Meredith, Patrick O'Neil and Rosu, Grigore},
+title = {Maximal sound predictive race detection with control flow abstraction},
+year = {2014},
+issue_date = {June 2014},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {49},
+number = {6},
+issn = {0362-1340},
+url = {https://doi.org/10.1145/2666356.2594315},
+doi = {10.1145/2666356.2594315},
+abstract = {Despite the numerous static and dynamic program analysis techniques in the literature, data races remain one of the most common bugs in modern concurrent software. Further, the techniques that do exist either have limited detection capability or are unsound, meaning that they report false positives. We present a sound race detection technique that achieves a provably higher detection capability than existing sound techniques. A key insight of our technique is the inclusion of abstracted control flow information into the execution model, which increases the space of the causal model permitted by classical happens-before or causally-precedes based detectors. By encoding the control flow and a minimal set of feasibility constraints as a group of first-order logic formulae, we formulate race detection as a constraint solving problem. Moreover, we formally prove that our formulation achieves the maximal possible detection capability for any sound dynamic race detector with respect to the same input trace under the sequential consistency memory model. We demonstrate via extensive experimentation that our technique detects more races than the other state-of-the-art sound race detection techniques, and that it is scalable to executions of real world concurrent applications with tens of millions of critical events. These experiments also revealed several previously unknown races in real systems (e.g., Eclipse) that have been confirmed or fixed by the developers. Our tool is also adopted by Eclipse developers.},
+journal = {SIGPLAN Not.},
+month = jun,
+pages = {337–348},
+numpages = {12},
+keywords = {prediction, maximal sound, data race, control flow}
+}
+
+@inproceedings{Huang14,
+author = {Huang, Jeff and Meredith, Patrick O'Neil and Rosu, Grigore},
+title = {Maximal sound predictive race detection with control flow abstraction},
+year = {2014},
+isbn = {9781450327848},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/2594291.2594315},
+doi = {10.1145/2594291.2594315},
+booktitle = {Proceedings of the 35th ACM SIGPLAN Conference on Programming Language Design and Implementation},
+pages = {337–348},
+numpages = {12},
+keywords = {prediction, maximal sound, data race, control flow},
+location = {Edinburgh, United Kingdom},
+series = {PLDI '14}
+}
+
 
 @inproceedings{Fidge1988,
   author    = {Fidge, Colin J.},
@@ -72,6 +120,24 @@ numpages = {55},
   booktitle = {Proceedings of the 11th Australian Computer Science Conference},
   pages     = {56--66},
   year      = {1988}
+}
+
+@article{10.1145/3276516,
+author = {Kalhauge, Christian Gram and Palsberg, Jens},
+title = {Sound deadlock prediction},
+year = {2018},
+issue_date = {November 2018},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {2},
+number = {OOPSLA},
+url = {https://doi.org/10.1145/3276516},
+doi = {10.1145/3276516},
+journal = {Proc. ACM Program. Lang.},
+month = {oct},
+articleno = {146},
+numpages = {29},
+keywords = {Prediction, Deadlocks}
 }
 
 @inproceedings{DBLP:conf/icdcs/HuttoA90,
@@ -115,7 +181,29 @@ numpages = {55},
 	numpages     = 16,
 }
 
+@article{Podkopaev2019,
+  author  = {Anton Podkopaev and Ori Lahav and Viktor Vafeiadis},
+  title   = {Bridging the Gap between Programming Languages and
+             Hardware Weak Memory Models},
+  journal = {Proceedings of the ACM on Programming Languages},
+  volume  = {3},
+  number  = {POPL},
+  pages   = {69:1--69:31},
+  year    = {2019},
+  doi     = {10.1145/3290382}
+}
 
+@article{MargalitLahav2021,
+  author  = {Roy Margalit and Ori Lahav},
+  title   = {Verifying Observational Robustness against a
+             C11-Style Memory Model},
+  journal = {Proceedings of the ACM on Programming Languages},
+  volume  = {5},
+  number  = {POPL},
+  articleno = {4},
+  year    = {2021},
+  doi     = {10.1145/3434285}
+}
 @inproceedings{Lahav:2016,
   author = {Ori Lahav and Nick Giannarakis and Viktor Vafeiadis},
   title = {Taming release-acquire consistency},
@@ -178,17 +266,75 @@ booktitle={ASPLOS'21},
 pages={630-646},
 }
 
+@inproceedings{alglave2009semantics,
+  author    = {Jade Alglave and Anthony Fox and Samin Ishtiaq
+               and Magnus O. Myreen and Susmit Sarkar
+               and Peter Sewell and Francesco Zappa Nardelli},
+  title     = {The Semantics of Power and ARM Multiprocessor
+               Machine Code},
+  booktitle = {Proceedings of the 4th ACM SIGPLAN Workshop
+               on Declarative Aspects of Multicore Programming},
+  pages     = {13--24},
+  year      = {2009},
+  publisher = {ACM},
+  doi       = {10.1145/1481839.1481842}
+}
+
+@article{Alglave2012,
+  author  = {Jade Alglave and Luc Maranget and Susmit Sarkar
+             and Peter Sewell},
+  title   = {Fences in Weak Memory Models},
+  journal = {Formal Methods in System Design},
+  volume  = {40},
+  number  = {2},
+  pages   = {170--205},
+  year    = {2012},
+  doi     = {10.1007/s10703-011-0135-z}
+}
+
+@inproceedings{LustigWPG17,
+  author    = {Daniel Lustig and Andrew Wright and
+               Alexandros Papakonstantinou and Olivier Giroux},
+  title     = {Automated Synthesis of Comprehensive Memory
+               Model Litmus Test Suites},
+  booktitle = {Proceedings of the 22nd ACM International
+               Conference on Architectural Support for
+               Programming Languages and Operating Systems},
+  pages     = {661--675},
+  year      = {2017},
+  publisher = {ACM},
+  doi       = {10.1145/3037697.3037723}
+}
+
+@inproceedings{Alglave2011,
+  author = {Jade Alglave and Luc Maranget and
+            Susmit Sarkar and Peter Sewell},
+  title = {Litmus: Running Tests Against Hardware},
+  booktitle = {Tools and Algorithms for the Construction
+               and Analysis of Systems},
+  pages = {41--44},
+  year = {2011},
+  publisher = {Springer},
+  doi = {10.1007/978-3-642-19835-9_5}
+}
+
+@inproceedings{MadorHaimAM11,
+  author = {Sela Mador-Haim and Rajeev Alur and
+            Milo M. K. Martin},
+  title = {Litmus Tests for Comparing Memory Consistency
+           Models: How Long Do They Need to Be?},
+  booktitle = {Proceedings of the 48th Design Automation
+               Conference},
+  pages = {504--509},
+  year = {2011},
+  publisher = {ACM},
+  doi = {10.1145/2024724.2024842}
+}
+
 @inproceedings{10.1145/3062341.3062352,
 author = {Lahav, Ori and Vafeiadis, Viktor and Kang, Jeehoon and Hur, Chung-Kil and Dreyer, Derek},
 title = {Repairing sequential consistency in C/C++11},
 year = {2017},
-isbn = {9781450349888},
-publisher = {Association for Computing Machinery},
-address = {New York, NY, USA},
-url = {https://doi.org/10.1145/3062341.3062352},
-doi = {10.1145/3062341.3062352},
-abstract = {The C/C++11 memory model defines the semantics of concurrent memory accesses in C/C++, and in particular supports racy "atomic" accesses at a range of different consistency levels, from very weak consistency ("relaxed") to strong, sequential consistency ("SC"). Unfortunately, as we observe in this paper, the semantics of SC atomic accesses in C/C++11, as well as in all proposed strengthenings of the semantics, is flawed, in that (contrary to previously published results) both suggested compilation schemes to the Power architecture are unsound. We propose a model, called RC11 (for Repaired C11), with a better semantics for SC accesses that restores the soundness of the compilation schemes to Power, maintains the DRF-SC guarantee, and provides stronger, more useful, guarantees to SC fences. In addition, we formally prove, for the first time, the correctness of the proposed stronger compilation schemes to Power that preserve load-to-store ordering and avoid "out-of-thin-air" reads.},
-booktitle = {Proceedings of the 38th ACM SIGPLAN Conference on Programming Language Design and Implementation},
 pages = {618–632},
 numpages = {15},
 keywords = {C++11, Weak memory models, declarative semantics, sequential consistency},
@@ -274,27 +420,16 @@ keywords = {C++11, Weak memory models, declarative semantics, sequential consist
   year         = {2018}
 }
 
-% @article{Williams18,
-%   author       = {Virginia {Vassilevska Williams}},
-%   title        = {Some Open Problems in Fine-Grained Complexity},
-%   journal      = {{SIGACT} News},
-%   volume       = {49},
-%   number       = {4},
-%   pages        = {29--35},
-%   year         = {2018}
-% }
-
-
 
 @INPROCEEDINGS{Valmari:reduced:state-space,
-        Author = "Antti Valmari",
+        Author = {Antti Valmari},
         Title = {Stubborn Sets for Reduced State Space Generation},
         Booktitle = {Advances in Petri Nets 1990},
         Editor = {Rozenberg, Grzegorz},
         Publisher = {Springer-Verlag},
         Series = {LNCS},
         Volume = {483},
-        Pages = "491--515",
+        Pages = {491--515},
         Year = {1991},
         Address = {London, UK},
         Url = {https://link.springer.com/chapter/10.1007/3-540-53863-1_36},
@@ -310,8 +445,8 @@ keywords = {C++11, Weak memory models, declarative semantics, sequential consist
 	Volume    = {697},
         Pages     = {409--423},
 	Year      = {1993},
-        Publisher = "Springer-Verlag",
-	Address   = "London, UK",
+        Publisher = {Springer-Verlag},
+	Address   = {London, UK},
         Url       = {https://link.springer.com/chapter/10.1007/3-540-56922-7_34},
         Doi       = {10.1007/3-540-56922-7_34}}
 
@@ -330,14 +465,42 @@ keywords = {C++11, Weak memory models, declarative semantics, sequential consist
   doi       = {10.1145/2535838.2535845},
 }
 
+@techreport{goodman1989cache,
+  author      = {James R. Goodman},
+  title       = {Cache Consistency and Sequential Consistency},
+  institution = {IEEE Scalable Coherent Interface (SCI) Working Group},
+  number      = {61},
+  year        = {1989},
+  month       = {mar},
+  note        = {Originally prepared in February 1989}
+}
+
+@manual{ibm370principles1975,
+  author       = {{International Business Machines Corporation}},
+  title        = {{IBM System/370 Principles of Operation}},
+  organization = {IBM},
+  number       = {GA22-7000-4},
+  year         = {1974},
+  note         = {Fourth Edition, revised September 1, 1975}
+}
+
+@manual{ibm3701983,
+  author       = {{International Business Machines Corporation}},
+  title        = {{IBM System/370 Principles of Operation}},
+  organization = {IBM},
+  number       = {GA22-7000-9},
+  year         = {1983},
+  month        = {may}
+}
+
 @article{optimal-dpor-jacm,
   author = {Abdulla, Parosh Aziz and Aronis, Stavros and Jonsson, Bengt and Sagonas, Konstantinos},
   title = {Source Sets: A Foundation for Optimal Dynamic Partial Order Reduction},
-  journal = JACM,
+  journal = {JACM},
   issue_date = {September 2017},
   volume = {64},
   number = {4},
-  month = sep,
+  month = {sep},
   year = {2017},
   issn = {0004-5411},
   pages = {25:1--25:49},
@@ -351,13 +514,13 @@ keywords = {C++11, Weak memory models, declarative semantics, sequential consist
 }
 
 @PHDTHESIS{Godefroid:thesis,
-  author = "Patrice Godefroid",
-  title = "Partial-Order Methods for the Verification of Concurrent Systems: An Approach to the State-Explosion Problem",
-  school = "University of {Li{\`e}ge}",
+  author = {Patrice Godefroid},
+  title = {Partial-Order Methods for the Verification of Concurrent Systems: An Approach to the State-Explosion Problem},
+  school = {University of {Li{\`e}ge}},
   year = 1996,
   url = {http://www.springer.com/gp/book/9783540607618},
   doi = {10.1007/3-540-60761-7},
-  note = "Also, volume~1032 of {LNCS}, Springer.",
+  note = {Also, volume~1032 of {LNCS}, Springer.},
 }
 
 @ARTICLE{CGMP:partialorder,
@@ -388,7 +551,7 @@ number = {2},
 url = {https://doi.org/10.1145/3326938.3326942},
 doi = {10.1145/3326938.3326942},
 journal = {ACM SIGLOG News},
-month = apr,
+month = {apr},
 pages = {43–56},
 numpages = {14}
 }
@@ -475,13 +638,19 @@ numpages = {14}
   volume    = {3},
   number    = {{OOPSLA}},
   pages     = {124:1--124:29},
-  month     = oct,
+  month     = {oct},
   year      = {2019},
   url       = {https://doi.org/10.1145/3360550},
   doi       = {10.1145/3360550}
 }
 
-
+@misc{herdtools7,
+  author       = {Jade Alglave and Luc Maranget},
+  title        = {Herdtools7: A Tool Suite for
+                  Testing Weak Memory Models},
+  howpublished = {\url{https://github.com/herd/herdtools7}},
+  note         = {Software repository, accessed November 2026}
+}
 
 @article{Gibbons,
   author       = {Phillip B. Gibbons and
@@ -512,6 +681,41 @@ numpages = {14}
   pages        = {713--727},
   publisher    = {{ACM}},
   year         = {2020}
+}
+@article{Liu25,
+author = {Liu, Shuyang and Lea, Doug and Palsberg, Jens},
+title = {Soundness of Predictive Concurrency Analyses},
+year = {2025},
+issue_date = {April 2025},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {9},
+number = {OOPSLA1},
+url = {https://doi.org/10.1145/3720435},
+doi = {10.1145/3720435},
+journal = {Proc. ACM Program. Lang.},
+month = {apr},
+articleno = {101},
+numpages = {27},
+keywords = {Concurrency, Dynamic Program Analysis, Soundness, Weak Memory Models}
+}
+
+@article{10.1145/3371085,
+author = {Pavlogiannis, Andreas},
+title = {Fast, sound, and effectively complete dynamic race prediction},
+year = {2019},
+issue_date = {January 2020},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {4},
+number = {POPL},
+url = {https://doi.org/10.1145/3371085},
+doi = {10.1145/3371085},
+journal = {Proc. ACM Program. Lang.},
+month = {dec},
+articleno = {17},
+numpages = {29},
+keywords = {concurrency, predictive analyses, race detection}
 }
 
 @article{rf-equivalence,
@@ -546,12 +750,77 @@ numpages = {14}
   year         = {2021}
 }
 
+@inproceedings{trippel2017tricheck,
+  author    = {Caroline Trippel and Yatin A. Manerkar and
+               Daniel Lustig and Michael Pellauer and
+               Margaret Martonosi},
+  title     = {TriCheck: Memory Model Verification at the
+               Trisection of Software, Hardware, and ISA},
+  booktitle = {Proceedings of the 22nd International
+               Conference on Architectural Support for
+               Programming Languages and Operating Systems},
+  pages     = {119--133},
+  year      = {2017},
+  doi       = {10.1145/3037697.3037719}
+}
+
+@article{alglave2014herding,
+  author  = {Jade Alglave and Luc Maranget and
+             Michael Tautschnig},
+  title   = {Herding Cats: Modelling, Simulation,
+             Testing, and Data Mining for Weak Memory},
+  journal = {ACM Transactions on Programming
+             Languages and Systems},
+  volume  = {36},
+  number  = {2},
+  pages   = {7:1--7:74},
+  year    = {2014},
+  doi     = {10.1145/2627752}
+}
+
+@manual{waterman2019riscv,
+  editor       = {Andrew Waterman and Krste Asanovic},
+  title        = {The RISC-V Instruction Set Manual,
+                  Volume I: Unprivileged ISA},
+  organization = {RISC-V Foundation},
+  year         = {2019},
+  month        = {dec},
+  note         = {Document Version 20191214;
+                  includes the RVWMO memory model}
+}
+
+@inproceedings{mador-haim2012,
+author = {Mador-Haim, Sela and Maranget, Luc and Sarkar, Susmit and Memarian, Kayvan and Alglave, Jade and Owens, Scott and Alur, Rajeev and Martin, Milo M. K. and Sewell, Peter and Williams, Derek},
+title = {An axiomatic memory model for POWER multiprocessors},
+year = {2012},
+isbn = {9783642314230},
+publisher = {Springer-Verlag},
+address = {Berlin, Heidelberg},
+url = {https://doi.org/10.1007/978-3-642-31424-7_36},
+doi = {10.1007/978-3-642-31424-7_36},
+booktitle = {Proceedings of the 24th International Conference on Computer Aided Verification},
+pages = {495–512},
+numpages = {18},
+location = {Berkeley, CA},
+series = {CAV'12}
+}
+
+@article{furberwilson1987,
+  author  = {Furber, S. B. and Wilson, A. R.},
+  title   = {The Acorn RISC Machine -- An Architectural View},
+  journal = {Electronics and Power},
+  volume  = {33},
+  number  = {6},
+  pages   = {402--405},
+  year    = {1987},
+  doi     = {10.1049/ep.1987.0249}
+}
 
 @techreport{QadeerMusuvati,
-  author      = "Madanlal Musuvathi and Shaz Qadeer",
-  title       = "Partial-Order Reduction for Context-bounded State Exploration.",
-  institution = "Microsoft Research",
-  year        = "2007"
+  author      = {Madanlal Musuvathi and Shaz Qadeer},
+  title       = {Partial-Order Reduction for Context-bounded State Exploration.},
+  institution = {Microsoft Research},
+  year        = {2007}
 }
 
 @article{ImpagliazzoPZ01,
@@ -638,7 +907,7 @@ numpages = {14}
 }
 
 
-@article{SC-Lamport78,
+@article{Lamport78,
   author       = {Leslie Lamport},
   title        = {Time, Clocks, and the Ordering of Events in a Distributed System},
   journal      = {Commun. {ACM}},
@@ -648,6 +917,17 @@ numpages = {14}
   year         = {1978}
 }
 
+@article{lamport1979sc,
+  author  = {Leslie Lamport},
+  title   = {How to Make a Multiprocessor Computer
+             That Correctly Executes Multiprocess Programs},
+  journal = {IEEE Transactions on Computers},
+  volume  = {C-28},
+  number  = {9},
+  pages   = {690--691},
+  year    = {1979},
+
+}
 
 @article{ChakrabortyKMP24,
   author       = {Soham Chakraborty and
@@ -946,6 +1226,38 @@ keywords = {NP-completeness, SAT, Weak memory models, complexity analysis, testi
 A. Memory access buf-
 fering in multiprocessors. 
 
+@article{10.1145/42190.42277,
+author = {Shasha, Dennis and Snir, Marc},
+title = {Efficient and correct execution of parallel programs that share memory},
+journal = {ACM Trans. Program. Lang. Syst.},
+pages = {282–312},
+year = {1988},
+}
+
+@article{10.1145/359863.359878,
+author = {Lamport, Leslie},
+title = {Concurrent reading and writing},
+volume = {20},
+number = {11},
+journal = {Commun. ACM},
+pages = {806–811},
+year = {1977},
+}
+
+  
+
+
+@inproceedings{bershad1993midway,
+  author    = {Brian N. Bershad and Matthew J. Zekauskas
+               and Wayne A. Sawdon},
+  title     = {The Midway Distributed Shared Memory System},
+  booktitle = {Proceedings of CompCon Spring '93},
+  pages     = {528--537},
+  year      = {1993},
+  publisher = {IEEE},
+  doi       = {10.1109/CMPCon.1993.289730}
+}
+
 @article{DBLP:journals/computer/AdveG96,
   author       = {Sarita V. Adve and
                   Kourosh Gharachorloo},
@@ -1040,6 +1352,18 @@ fering in multiprocessors.
   bibsource    = {dblp computer science bibliography, https://dblp.org}
 }
 
+@article{pulte2018armv8,
+  author  = {Christopher Pulte and Shaked Flur and Will Deacon
+             and Jon French and Susmit Sarkar and Peter Sewell},
+  title   = {Simplifying ARM Concurrency: Multicopy-Atomic
+             Axiomatic and Operational Models for ARMv8},
+  journal = {Proceedings of the ACM on Programming Languages},
+  volume  = {2},
+  number  = {POPL},
+  pages   = {19:1--19:29},
+  year    = {2018},
+  doi     = {10.1145/3158107}
+}
 
 @Article{Godefroid:verisoft-journal,
   author    = {Patrice Godefroid},
@@ -1052,6 +1376,55 @@ fering in multiprocessors.
   pages     = {77-101},
   url       = {http://dx.doi.org/10.1007/s10703-005-1489-x},
   doi       = {10.1007/s10703-005-1489-x}
+}
+
+@inproceedings{boehm2005threads,
+  author    = {Hans-J. Boehm},
+  title     = {Threads Cannot Be Implemented as a Library},
+  booktitle = {Proceedings of the 26th ACM SIGPLAN
+               Conference on Programming Language
+               Design and Implementation},
+  pages     = {261--268},
+  year      = {2005},
+  publisher = {ACM},
+  doi       = {10.1145/1065010.1065042}
+}
+
+@inproceedings{10.1145/1040305.1040336,
+author = {Manson, Jeremy and Pugh, William and Adve, Sarita V.},
+title = {The Java memory model},
+year = {2005},
+isbn = {158113830X},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/1040305.1040336},
+doi = {10.1145/1040305.1040336},
+abstract = {This paper describes the new Java memory model, which has been revised as part of Java 5.0. The model specifies the legal behaviors for a multithreaded program; it defines the semantics of multithreaded Java programs and partially determines legal implementations of Java virtual machines and compilers.The new Java model provides a simple interface for correctly synchronized programs -- it guarantees sequential consistency to data-race-free programs. Its novel contribution is requiring that the behavior of incorrectly synchronized programs be bounded by a well defined notion of causality. The causality requirement is strong enough to respect the safety and security properties of Java and weak enough to allow standard compiler and hardware optimizations. To our knowledge, other models are either too weak because they do not provide for sufficient safety/security, or are too strong because they rely on a strong notion of data and control dependences that precludes some standard compiler transformations.Although the majority of what is currently done in compilers is legal, the new model introduces significant differences, and clearly defines the boundaries of legal transformations. For example, the commonly accepted definition for control dependence is incorrect for Java, and transformations based on it may be invalid.In addition to providing the official memory model for Java, we believe the model described here could prove to be a useful basis for other programming languages that currently lack well-defined models, such as C++ and C#.},
+booktitle = {Proceedings of the 32nd ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages},
+pages = {378–391},
+numpages = {14},
+keywords = {Java, multithreading, memory model, concurrency},
+location = {Long Beach, California, USA},
+series = {POPL '05}
+}
+
+@article{manson2005,
+author = {Manson, Jeremy and Pugh, William and Adve, Sarita V.},
+title = {The Java memory model},
+year = {2005},
+issue_date = {January 2005},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {40},
+number = {1},
+issn = {0362-1340},
+url = {https://doi.org/10.1145/1047659.1040336},
+doi = {10.1145/1047659.1040336},
+journal = {SIGPLAN Not.},
+month = {jan},
+pages = {378–391},
+numpages = {14},
+keywords = {Java, concurrency, memory model, multithreading}
 }
 
 
@@ -1129,22 +1502,6 @@ publisher = {IEEE},
   keywords = {Relaxed memory model, model checking},
 }
 
-
-@article{Lahav2021,
-  author       = {Ori Lahav and
-                  Udi Boker},
-  title        = {What's Decidable About Causally Consistent Shared Memory?},
-  journal      = {{ACM} Trans. Program. Lang. Syst.},
-  volume       = {44},
-  number       = {2},
-  pages        = {8:1--8:55},
-  year         = {2022},
-  url          = {https://doi.org/10.1145/3505273},
-  doi          = {10.1145/3505273},
-  timestamp    = {Sun, 19 Jan 2025 13:56:12 +0100},
-  biburl       = {https://dblp.org/rec/journals/toplas/LahavB22.bib},
-  bibsource    = {dblp computer science bibliography, https://dblp.org}
-}
 
 
 @book{Jaja1992ParallelAlgorithms,
@@ -1308,18 +1665,18 @@ series = {OOPSLA '13}
 }
 
 @InProceedings{TSO-context-bounding,
-author="Atig, Mohamed Faouzi
+author={Atig, Mohamed Faouzi
 and Bouajjani, Ahmed
-and Parlato, Gennaro",
-editor="Bensalem, Saddek
+and Parlato, Gennaro},
+editor={Bensalem, Saddek
 and Lakhneck, Yassine
-and Legay, Axel",
-title="Context-Bounded Analysis of TSO Systems",
-booktitle="From Programs to Systems. The Systems perspective in Computing",
-year="2014",
-publisher="Springer Berlin Heidelberg",
-address="Berlin, Heidelberg",
-pages="21--38",
+and Legay, Axel},
+title={Context-Bounded Analysis of TSO Systems},
+booktitle={From Programs to Systems. The Systems perspective in Computing},
+year={2014},
+publisher={Springer Berlin Heidelberg},
+address={Berlin, Heidelberg},
+pages={21--38},
 }
 
 @book{DowneyFellows1999,
@@ -1330,6 +1687,22 @@ pages="21--38",
   year      = {1999},
   isbn      = {978-0-387-94883-6},
   doi       = {10.1007/978-1-4612-0515-9}
+}
+
+@book{FlumGrohe2006,
+  author    = {J{\"o}rg Flum and Martin Grohe},
+  title     = {Parameterized Complexity Theory},
+  publisher = {Springer},
+  year      = {2006},
+  doi       = {10.1007/3-540-29953-X}
+}
+
+@book{DowneyFellows2013,
+  author    = {Rodney G. Downey and Michael R. Fellows},
+  title     = {Fundamentals of Parameterized Complexity},
+  publisher = {Springer},
+  year      = {2013},
+  doi       = {10.1007/978-1-4471-5559-1}
 }
 
 @misc{govind2026verifyingsequentialconsistencybounded,
@@ -1408,6 +1781,25 @@ pages="21--38",
   isbn      = {0-13-099227-5}
 }
 
+@manual{alpha1992,
+  author       = {{Digital Equipment Corporation}},
+  title        = {Alpha Architecture Handbook},
+  organization = {Digital Equipment Corporation},
+  number       = {EC-H1689-10},
+  year         = {1992},
+  publisher    = {Digital Press}
+}
+
+@manual{powerpc1993,
+  author       = {{International Business Machines Corporation}},
+  title        = {PowerPC Architecture},
+  organization = {IBM},
+  number       = {SR28-5124-00},
+  year         = {1993},
+  month        = {may},
+  note         = {First Edition}
+}
+
 @inproceedings{dubois1986memory,
   author    = {Michel Dubois and Christoph Scheurich and Faye A. Briggs},
   title     = {Memory Access Buffering in Multiprocessors},
@@ -1415,6 +1807,33 @@ pages="21--38",
   pages     = {434--442},
   year      = {1986},
   doi       = {10.1145/17356.17406}
+}
+@manual{vaxarchitecture1981,
+  author       = {{Digital Equipment Corporation}},
+  title        = {VAX Architecture Handbook},
+  organization = {Digital Equipment Corporation},
+  year         = {1981},
+  address      = {Maynard, Massachusetts}
+}
+@inproceedings{advehill1990wo,
+  author    = {Sarita V. Adve and Mark D. Hill},
+  title     = {Weak Ordering -- A New Definition},
+  booktitle = {Proceedings of the 17th Annual
+               International Symposium on Computer Architecture},
+  pages     = {2--14},
+  year      = {1990},
+  publisher = {ACM},
+  doi       = {10.1145/325164.325100}
+}
+@article{advehill1993,
+  author  = {Sarita V. Adve and Mark D. Hill},
+  title   = {A Unified Formalization of Four Shared-Memory Models},
+  journal = {IEEE Transactions on Parallel and Distributed Systems},
+  volume  = {4},
+  number  = {6},
+  pages   = {613--624},
+  year    = {1993},
+  doi     = {10.1109/71.242161}
 }
 
 @article{GHARACHORLOO1992399,
@@ -1482,4 +1901,172 @@ numpages = {12},
 keywords = {relaxed memory models, program verification, lossy channel systems, infinite state systems}
 }
 
+@inproceedings{lihudak1986memory,
+  author    = {Kai Li and Paul Hudak},
+  title     = {Memory Coherence in Shared Virtual Memory Systems},
+  booktitle = {Proceedings of the Fifth Annual ACM
+               Symposium on Principles of Distributed Computing},
+  pages     = {229--239},
+  year      = {1986},
+  publisher = {ACM},
+  doi       = {10.1145/10590.10610}
+}
 
+@techreport{liptonsandberg1988pram,
+  author      = {Richard J. Lipton and Jonathan S. Sandberg},
+  title       = {PRAM: A Scalable Shared Memory},
+  institution = {Princeton University},
+  number      = {CS-TR-180-88},
+  year        = {1988},
+  month       = {sep}
+}
+
+@article{herlihywing1990linearizability,
+  author  = {Maurice P. Herlihy and Jeannette M. Wing},
+  title   = {Linearizability: A Correctness Condition
+             for Concurrent Objects},
+  journal = {ACM Transactions on Programming Languages
+             and Systems},
+  volume  = {12},
+  number  = {3},
+  pages   = {463--492},
+  year    = {1990},
+  doi     = {10.1145/78969.78972}
+}
+
+@inproceedings{terry1994session,
+  author    = {Douglas B. Terry and Alan J. Demers and
+               Karin Petersen and Mike J. Spreitzer and
+               Marvin Theimer and Brent B. Welch},
+  title     = {Session Guarantees for Weakly Consistent
+               Replicated Data},
+  booktitle = {Proceedings of the Third International Conference
+               on Parallel and Distributed Information Systems},
+  pages     = {140--149},
+  year      = {1994},
+  publisher = {IEEE},
+  doi       = {10.1109/PDIS.1994.331722}
+}
+
+@inproceedings{terry1995bayou,
+  author    = {Douglas B. Terry and Marvin M. Theimer and
+               Karin Petersen and Alan J. Demers and
+               Mike J. Spreitzer and Carl H. Hauser},
+  title     = {Managing Update Conflicts in Bayou,
+               a Weakly Connected Replicated Storage System},
+  booktitle = {Proceedings of the Fifteenth ACM Symposium
+               on Operating Systems Principles},
+  pages     = {172--182},
+  year      = {1995},
+  publisher = {ACM},
+  doi       = {10.1145/224056.224070}
+}
+
+@incollection{shapiro2011crdt,
+  author    = {Marc Shapiro and Nuno Pregui{\c c}a and
+               Carlos Baquero and Marek Zawirski},
+  title     = {Conflict-Free Replicated Data Types},
+  booktitle = {Stabilization, Safety, and Security
+               of Distributed Systems},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {6976},
+  pages     = {386--400},
+  publisher = {Springer},
+  year      = {2011},
+  doi       = {10.1007/978-3-642-24550-3_29}
+}
+
+@article{viotti2016consistency,
+  author  = {Paolo Viotti and Marko Vukoli{\'c}},
+  title   = {Consistency in Non-Transactional
+             Distributed Storage Systems},
+  journal = {ACM Computing Surveys},
+  volume  = {49},
+  number  = {1},
+  pages   = {19:1--19:34},
+  year    = {2016},
+  doi     = {10.1145/2926965}
+}
+
+@inproceedings{oliveira_et_al:LIPIcs.OPODIS.2016.30,
+  author    = {Tiago Oliveira and Ricardo Mendes
+               and Alysson Bessani},
+  title     = {Exploring Key-Value Stores in
+               Multi-Writer Byzantine-Resilient
+               Register Emulations},
+  booktitle = {20th International Conference on
+               Principles of Distributed Systems},
+  series    = {LIPIcs},
+  volume    = {70},
+  pages     = {30:1--30:17},
+  year      = {2017},
+  publisher = {Schloss Dagstuhl},
+  doi       = {10.4230/LIPIcs.OPODIS.2016.30}
+}
+
+@misc{adas2020jiffy,
+  author        = {Dolev Adas and Roy Friedman},
+  title         = {Jiffy: A Fast, Memory Efficient,
+                   Wait-Free Multi-Producers
+                   Single-Consumer Queue},
+  year          = {2020},
+  eprint        = {2010.14189},
+  archivePrefix = {arXiv}
+}
+
+@inproceedings{Dymond86,
+author = {Dymond, Patrick W. and Ruzzo, Walter L.},
+title = {Parallel RAMs with Owned Global Memory and Deterministic Context-Free Language Recognition (Extended Abstract)},
+year = {1986},
+isbn = {3540167617},
+publisher = {Springer-Verlag},
+address = {Berlin, Heidelberg},
+booktitle = {Proceedings of the 13th International Colloquium on Automata, Languages and Programming},
+pages = {95–104},
+numpages = {10},
+series = {ICALP '86}
+}
+
+@inproceedings{Moiseenko2025,
+  author = {Moiseenko, Evgeniy and Meluzzi, Matteo
+            and Meleshchenko, Innokentii and
+            Kabashnyi, Ivan and Podkopaev, Anton
+            and Chakraborty, Soham},
+  title = {Relaxed Memory Concurrency Re-executed},
+  booktitle = {POPL},
+  year = {2025},
+  doi = {10.1145/3704908}
+}
+
+@inproceedings{Karniel2026,
+  author = {Karniel, Amir and Lahav, Ori},
+  title = {Causal-Broadcast Memory},
+  booktitle = {ESOP},
+  year = {2026}
+}
+
+@inproceedings{Kang2017,
+  author    = {Jeehoon Kang and Chung-Kil Hur and Ori Lahav
+               and Viktor Vafeiadis and Derek Dreyer},
+  title     = {A Promising Semantics for Relaxed-Memory Concurrency},
+  booktitle = {Proceedings of the 44th ACM SIGPLAN Symposium
+               on Principles of Programming Languages},
+  pages     = {175--189},
+  year      = {2017},
+  publisher = {ACM},
+  doi       = {10.1145/3009837.3009850}
+}
+
+@inproceedings{Kang2020,
+  author    = {Sung-Hwan Lee and Minki Cho and Anton Podkopaev
+               and Soham Chakraborty and Chung-Kil Hur
+               and Ori Lahav and Viktor Vafeiadis},
+  title     = {Promising 2.0: Global Optimizations in
+               Relaxed Memory Concurrency},
+  booktitle = {Proceedings of the 41st ACM SIGPLAN Conference
+               on Programming Language Design and Implementation},
+  pages     = {362--376},
+  year      = {2020},
+  publisher = {ACM},
+  doi       = {10.1145/3385412.3386010}
+}

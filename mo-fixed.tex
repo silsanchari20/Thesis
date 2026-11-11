@@ -1,2 +1,92 @@
-This chapter deals with VRA when the modification order is also fixed.
+We have seen that VM is NP-Complete even for programs with two writers, but becomes PTIME solvable when  number of writers per variable is one. It has been shown in \cite{Tunc2023} that when an $\rf$ is given, VM again becomes PTIME solvable. One natural question thus arises. How does the hardness changes when the $\mo$ is provided. For $\scmm$, the VSC problem remains NP-Complete even when a write order is provided \cite{gibbons}. In this chapter, we will see if the write order has any affect on the complexity of VM for relevant models. We have studied models where the respecive memory axioms involve $\mo$ as otherwise providing an order on writes is futile. The formal modified version of VM is given below.   
+
+
+\begin{center}
+  \fbox{%
+    \begin{minipage}{0.98\textwidth}
+      \noindent \textsc{Verifying weak memory consistency} (The $\vm$-problem)
+
+      \medskip
+
+      \noindent \textbf{Instance:} A partial execution graph $\expartial=\tuple{\E, \po, \mo}$ and a memory model $\MemModel \in \{\ramm, \sramm, \rlxmm\}$
+
+      \medskip
+
+      \noindent \textbf{Question:} Do there exists an $\rf$  relation on $\E$ such that the complete execution graph $\ex = \tuple{\E, \po, \rf, \mo}$ satisfies the consistency axioms of the memory model  $\MemModel$?
+    \end{minipage}%
+  }
+\end{center}
+
+We shall see how the above modified version of the $\vm$ problem can be solved in polynomial time when the underlying models are $\ramm$ and $\sramm$. For this we reduce a given partial execution graph $\expartial$ of a given program to an execution graph $\expartial'$  of a $\onewriter$ program so that the $\mo$ orderings doesn't change.
+
+We shall see the reduction for $\ramm$ and $\sramm$  in the following sections in details. 
+
+
+\section{Hardness under $\ramm$}
+
+We want to transform a given execution graph $\ex=(\E, \po, \mo)$ on a program $\prog$ into an execution graph $\ex'= (\E', \po', \mo)$ of a $\onewriter$ program. There are two types of total order in $\expartial$. One on the events of same thread  given by $\po$ and the other on the writes on same variable given by $\mo$. The reduction intends to maintain these   total orders among events in $\expartial$. 
+
+\paragraph*{Reduction.} Given $\expartial$, all writes on the same variable will be shifted to a single thread to make the constructed graph a single writer. For this we define for each variable $x$, a thread $t_x$. For each write $\wt(x,v)$ we introduce new variables $a^x_v$ and $b^x_v$. Say  $\wt(x,v)$ appeared in thread $\thread$ in $\expartial$. Then replace $\wt(x,v)$ in $\thread$ by $\wt(a^x_v)~\po~\rd(b^x_v)$. Now in $t_x$ add the events $\rd(a^x_v)~\po~\wt(x,v)~\po~\wt(b^x_v)$. Note that the variables $a^x_v$ and $b^x_v$ are unique to the write $\wt(x,v)$. If there are multiple writes like $\wt(x,v)$, then their corresponding $a^x_v$ and $b^x_v$ variables will be defined uniquely. We then can use some different suffix for these variables. The $\rf$-synthesis for these new variables should have no  discrepency. If there are $p$ variables, number of new variables would be $2p$ and if there are $m$ writes, number of new events would be $4m$ and these events together with the original events of $\expartial$ forms $\E'$ the event set of $\expartial'$. 
+
+Example: 
+
+After we add the trivial $\rf$'s corresponding to the newly introduced events, the $\po$ order between two events involving a write is replaced as follows:
+\begin{itemize}
+ \item $\wt(x,v)~\po~\wt(y,v')$ is now replaced by $\wt(x,v)~\po~\wt(b^x_v)~\rf~\rd(b^x_v)~\po~\wt(a^y_{v'})~\rf~\rd(a^y_{v'})~\po~\wt(y,v')$.
+ \item $\wt(x,v)~\po~\rd(y,v')$ is now replaced by $\wt(x,v)~\po~\wt(b^x_v)~\rf~\rd(b^x_v)~\po~\rd(y,v')$.
+ \item $\rd(x,v)~\po~\wt(y,v')$ is now replaced by $\rd(x,v)~\po~\wt(a^x_v)~\rf~\rd(a^x_v)~\po~\wt(y,v')$.
+ 
+\end{itemize}
+In other words, any two events of $\expartial$,  $e~\po^+~e'$ such that one of the event is a read, is related as  $e~\hb~e'$ in $\expartial'$.
+
+Now we make the necessary  changes to maintain the total order on writes from $\expartial$. 
+
+If $\wt(x,v)$ immediately preceeds $\wt(x,v')$ in $\mo$, then $t_x$ should have the following order of events: $\rd(a^x_v)~\po~\wt(x,v)~\po~\wt(b^x_v)~\po~\rd(a^x_{v'})~\po~\wt(x,v')~\po~\wt(b^x_{v'})$. Thus in $\expartial'$ any $\wt(x,v)~\mo~\wt(x,v')$ is replaced by $\wt(x,v)~\po^{+} ~\wt(x,v')$. 
+
+After constructing $\expartial'$ as above, we   give the following lemma to prove the correctness of the construction under both $\ramm$ and $\sramm$ memory models. 
+
+\begin{lemma}
+ $\expartial\models \ramm~   $ if and only if $\expartial' \models \ramm~  $. 
+\end{lemma}
+\begin{proof}
+ Let $\expartial$ has an $\rf$-synthesis such that $\ex=(\E, \po, \mo, \rf)$ is $\ramm$-consistent. We want to synthesize $\rf'$, reads-from function for $\expartial'$ so that the resulting execution graph $\ex'=(\E', \po, \mo, \rf)$ is $\ramm$-consistent. For all reads $r$ in $\E$, $\rf'(r)=\rf(r)$ and we draw the $\rf$ edges accordingly. For reads in $\E' \backslash \E$ the $\rf$ edges will be trivial. Now we need to show that the synthesis of $\rf'$ makes $\expartial'$ $\ramm$-consistent.
+ 
+ Observe that $\ex'$ has a single writer structure. So, from Lemma~\ref{lem:one-writer-reduces-to-wra}, we just need to show \PORF{} and \WRCoh{} for $\ex'$. 
+ 
+ \paragraph*{\PORF{}} 
+$\ex$ is \PORF{} and satisfies \WCoh{}. By construction, $\mo=\po$ in $\ex'$. So if for any pair of events $e$, $e'$ in $\E$ if $e~\mo~e'$ in $\ex$, then $e~\po~e'$ in $\ex'$. Thus there may be some pairs of events in $E$ which were not in $\hb$ in $\ex$, but are in $\hb$ in $\ex'$. If there is a cycle in $\ex'$ then there are events $e~\po^+~e'~\hb~e$ where $e$ is a read and $e'$ is a write. If both $e$ and $e'$ are in $\E\backslash \E'$, 
+
+
+ First we shall show that if $e~\hb~e'$ in $\expartial'$ then $e~\hb~e'$ in $\expartial$.
+ 
+ Consider the shortest $\hb$ path between $e$ and $e'$ in $\expartial'$. Then we do the following.
+ 
+ If there is a read $\rd$ and a write $\wt(x,v)$ in $\E$ such that $\rd~\po^+~\wt(a^x_v)~\rf~\rd(a^x_v)~\po^+~\wt(x,v)$, there is a path $\rd~\po~\wt(x,v)$ in $\expartial$.
+ 
+ Similarly, if $\wt(x,v)~\po~$
+ 
+ \paragraph*{Read-Coherence}
+ 
+ \paragraph*{Write-Coherence} 
+ 
+ 
+ On the other direction,  let $\expartial' \models  \ramm$ and let $\rf'$ be the corresponding synthesized $\rf$-edges. We want to synthesize $\rf$ for $\expartial$.  Define reads-from function $\rf$ on the set of reads in $\E$ as $\rf(r)=\rf'(r)$. We will now check if $\rf$ respects the axioms of $\ramm$. 
+ 
+ \paragraph*{\PORF{}} 
+ 
+ 
+ If there is a porf-cycle in $\expartial$, then there are write events $w_1$,  $w_2$ and read events $r_1$, $r_2$ such that $w_1~\rf~r_1~\hb~w_2~\rf~r_2~\hb~w_1$. $\rf'|_E$ is same as $\rf$. $e~\po+~e'$ in $\expartial$ is by construction $e~\hb~e'$ in $\expartial'$. Hence, $\expartial'$ also should have the cycle  $w_1~\rf~r_1~\hb~w_2~\rf~r_2~\hb~w_1$, a contradiction.   
+ 
+ \paragraph*{Read-Coherence}
+ 
+ \paragraph*{Write-Coherence}
+ 
+\end{proof}
+
+
+
+
+
+
+
 
