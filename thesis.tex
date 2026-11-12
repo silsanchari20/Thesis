@@ -217,13 +217,21 @@ We shall formally charaterize the behaviours of these memory models using axioma
  
 \chapter{Discussions and Future Work}
 
-\section{Implication of results}
+\section{Conclusion}
 
-The results of this thesis show that the difficulty of consistency testing depends on two things: the memory model and the structure of the program being checked. The same general question—whether an observed execution can be explained by a set of permitted ordering relations—can have very different computational behaviour under different restrictions. Bounding preemptions helps in the sequentially consistent setting when each variable has a unique writer. Acyclic communication structure provides another tractable case. Under weak memory models, the number of writer threads per variable gives a recurring distinction between the polynomial-time 1-Writer case and the hard 2-Writer case.
+This thesis studies the computational complexity of consistency testing for concurrent programs under weak memory models. The main objective is to understand how restrictions on the structure of a program, particularly the number of writer threads per shared variable, affect the complexity of deciding whether an observed execution is consistent with a given memory model.
 
-The results also show why upper and lower bounds are both needed for a useful complexity picture. An algorithm explains which structural properties can be exploited to solve a problem efficiently. A hardness reduction identifies how a seemingly small relaxation can encode a difficult computational problem. Conditional lower bounds refine this picture by describing which improvements would contradict widely used complexity assumptions. Studying all three kinds of results gives a more complete view than considering upper bounds alone.
+The first part of the thesis focuses on sequential consistency under a bounded number of preemptions. We establish a polynomial-time algorithm for programs in which each shared variable has at most one writer thread. For programs with two writers per variable, we establish NP-completeness for every fixed preemption bound. We further establish ETH-based lower bounds for the three-writer restriction and W[1]-hardness when the preemption bound is treated as an input  parameter. In addition, we study programs with acyclic communication architecture and present a polynomial-time algorithm for bounded-preemption consistency testing on such programs.
 
-Several questions remain open. The thesis points to the problem of consistency testing on acyclic architectures when the reads-from mapping is not supplied, and to further exploration of bounded-switch verification for other memory models and verification procedures. More generally, it would be useful to understand which additional restrictions on write ordering, communication topology, or execution structure can lead to efficient algorithms. The results presented here provide a starting point for investigating these questions across sequentially consistent and weak-memory settings.
+The second part of the thesis investigates consistency testing under weak and causal memory models. We first study Release-Acquire consistency and its variants. For these models, we establish polynomial-time algorithms for the 1-Writer restriction, together with a  conditional lower bound based on the Boolean Matrix Multiplication hypothesis. We also establish NP-completeness for the $\twowriter$ restriction and ETH-based lower bounds for the $\threewriter$ restriction.
+
+We then extend the study to the $\rlxmm$ memory model and the causal memory models $\ccmm$, $\cvmm$, and $\cmmm$. For these models, we establish polynomial-time algorithms for the $\onewriter$ restriction and NP-completeness for the $\threewriter$ restriction. We also obtain ETH-based lower bounds for the $\threewriter$ restriction.
+
+Thus, the thesis provides a complexity-theoretic study of consistency testing of various memory models. It presents polynomial-time algorithms for several restricted classes of programs and establishes corresponding hardness results when these restrictions are relaxed. In particular, it identifies the significance of the number of writer threads per variable across the memory models considered. Besides  Part A of the thesis also demonstrates the role of bounded preemptions and acyclic communication architecture in the sequentially consistent setting.
+
+Several questions remain open. 
+
+The thesis points to the problem of consistency testing on acyclic architectures when the reads-from mapping is not supplied, and to further exploration of bounded-switch verification for other memory models and verification procedures. More generally, it would be useful to understand which additional restrictions on write ordering, communication topology, or execution structure can lead to efficient algorithms. The results presented here provide a starting point for investigating these questions across sequentially consistent and weak-memory settings.
 
 
 
